@@ -1,18 +1,21 @@
-\section{Model selection}\label{Model selection}
+\section{Model training and evaluation}\label{Model training and evaluation}
 
-Artificial Intelligence (AI) models used in this paper.
+\subsection{Bias-Variance dilemma}\label{Bias-Variance dilemma}
 
-\subsection{Artificial Neural Network (ANN)}
+The bias-variance dilemma is a fundamental problem in machine learning and involves the issues of model optimization and generalization. In the case of optimization (reducing the model error) a model eventually starts to overfit the training data, this results in high error of the models predictions on the test/validation datasets (high variance). The opposite is aiming to increase model generalization (reduction of model complexity) however this in turn causes underfitting or high error of the models predictions on the training dataset (high bias). This counterposed behaviour of both bias and variance enables the easy assessment of model suitability for use in the prediction of unseen data \cite{ibm-ensemble,ibm-regularization,svm-2}. 
 
-
-
-\subsection{Support Vector Machine (SVM)}
-
-
-
-\subsection{Random Forest (RF)}
+% Juxtaposed
+% 
+% In the case of generalization (reduction of model complexity) a model starts to underfit the training data, this results in high error of the models predictions on the training dataset (high bias).
+% 
+% The opposite is aiming to increase model optimization (reducing the model error) however this in turn pushed to far causes overfitting or high error of the models predictions on the test/validation datasets (high variance).
 
 
-\subsubsection{Decision Tree}
+\subsection{Training}\label{Training}
 
+Data set split
+
+\subsection{Evaluation}\label{Evaluation}
+
+Accuracy metrics
 
