@@ -2,18 +2,15 @@
 
 \subsection{The Foreign Exchange (FOREX) market}\label{The Foreign Exchange (FOREX) market}
 
-The Foreign Exchange (FOREX) market is the largest liquid financial market in the world. It is a global over-the-counter (OTC) market (there is no central market place or exchange) closest to the ideal of perfect competition. It operates 24 hours a day 5 days a week and allows banks, businesses, investment firms, hedge funds, retail traders and individuals to buy, sell and exchange currencies.
+The Foreign Exchange (FOREX) market is the largest liquid financial market in the world. It is a global over-the-counter (OTC) market (there is no central market place or exchange) closest to the ideal of perfect competition. It operates 24 hours a day 5 days a week and allows banks, businesses, investment firms, hedge funds, retail traders and individuals to buy, sell and exchange currencies \cite{forex}.
 
 \subsection{Exchange rate prediction}\label{Exchange rates}
 
-Since the fall of the Bretton Woods system of fixed exchange rates in 1976 and the establishment of floating exchange rates with the Jamaica Accords, the need for accurate forecasting of exchange rates has become increasingly important. The primary reason for this is the need for effective risk management. Knowing whether the value of a currency will rise or fall ahead of time allows not only for the mitigation of adverse currency movements, but also for well-timed and potentially highly profitable investment decisions.
+Since the fall of the Bretton Woods system of fixed exchange rates in 1976 and the establishment of floating exchange rates with the Jamaica Accords, the need for accurate forecasting of exchange rates has become increasingly important. The primary reason for this is the need for effective risk management. Knowing whether the value of a currency will rise or fall ahead of time allows not only for the mitigation of adverse currency movements, but also for well-timed and potentially highly profitable investment decisions \cite{lstm_mlp_rf,deep-learning}.
 
-[comparison\/lstm\_mlp\_random-forest.pdf]
-[comparison\/deep-learning-machine-learning.pdf]
+According to the Efficient Market Hypothesis (EMH) \cite{efficient-market-hypothesis} financial markets are efficient and their prices reflect all information available at a given point in time. An implication of this is the inability to predict future prices on the basis of historical values. As such proponents argue that market prices follow a 'random walk' where price movements are random and independent from one another. However this hypothesis is highly contested and numerous papers have shown that currency markets exhibit inefficiencies resulting in a delay between information availability and price adjustment \cite{adaptive-markets,event-study-analysis}.
 
-According to the Efficient Market Hypothesis (EMH) [Eugene Fama 1960] financial markets are efficient and their prices reflect all information available at a given point in time. An implication of this is the inability to predict future prices on the basis of historical values. On this basis proponents argue that market prices follow a 'random walk' where price movement are random and independent from one another. However this hypothesis is highly contested and numerous papers have shown that currency markets exhibit inefficiencies resulting in a delay between information availability and price adjustment [Neely, Weller \& Ulrich 2009][Campbell \& MacKinley [13]].
-
-Unfortunately, even so exchange rates are notoriously difficult to predict and rarely outperform a 'random walk' model. They exhibit a complex non-linear nature that is dependant on a wide range of variables including macroeconomic and microeconomic factors [general/factors.pdf].  As such there is no single model that performs well for all combinations of predictors, forecast horizons, sample periods, forecasting evaluation methods and exchange rates. At short horizons (days, weeks, months) the fluctuations of the exchange rates are significantly greater and harder to predict. At longer horizons (years) various models have been proven to be able to make predictions better than the random walk [general/predicatbility.pdf].
+Unfortunately, even so exchange rates are notoriously difficult to predict and rarely outperform a 'random walk' model. They exhibit a complex non-linear nature that is dependant on a wide range of variables including macroeconomic and microeconomic factors \cite{factors}.  As such there is no single model that performs well for all combinations of predictors, forecast horizons, sample periods, forecasting evaluation methods and exchange rates. At short horizons (days, weeks, months) the fluctuations of the exchange rates are significantly greater and harder to predict. At longer horizons (years) various models have been proven to be able to make predictions better than the random walk \cite{predictability}.
 
 Given the challenges in forecasting exchange rates using traditional econometric models, in recent years researchers have increasingly turned to the application of artificial intelligence (AI) algorithms as a potential solution.
 
@@ -21,52 +18,57 @@ Given the challenges in forecasting exchange rates using traditional econometric
 
 AI-based approaches, such as Artificial Neural Networks (ANN), Support Vector Machine (SVM) and ensemble machine learning methods like the Random Forest (RF), have shown promise in their ability to capture the complex, nonlinear relationships inherent in exchange rate dynamics. These methods have the potential to outperform traditional forecasting models by identifying patterns and relationships that may be difficult for human analysts to discern.
 
-\subsubsection{Artificial Neural Network (ANN)}
+\subsubsection{Models}\label{Models}
 
-Artificial Neural Networks are systems composed of interconnected nodes imitating in behaviour and structure a biological system of neurons. They take in a set of input signals and according to a set of rules produce a set of outputs. Unlike other Artificial Intelligence methods they do not make any assumptions about their input data. ANN's are categorized as non-parametric (nonlinear) statistical methods and are used as universal function approximators for any continuous function. There a many types of Artificial Neural Networks including: Recurrent Neural Networks (RNN), Convolutional Neural Networks (CNN), Long Short-Term Memory (LSTM) and Feedforward networks among others. One of the most commonly used types of neural networks is the Multi Layer Perceptron (MLP) which is a type of Feedforward ANN. ANN consist of the following components:
+\paragraph{Artificial Neural Network (ANN)}\label{Artificial Neural Network (ANN)}
+
+Artificial Neural Networks are systems composed of interconnected nodes imitating in behaviour and structure a biological system of neurons. They take in a set of input signals and according to a set of rules produce a set of outputs \cite{linear-vs-nn}. Unlike other Artificial Intelligence methods they do not make any assumptions about their input data \cite{ann-1}. ANN's are categorized as non-parametric (nonlinear) statistical methods and are used as universal function approximators for any continuous function \cite{svm-2}. There are many types of Artificial Neural Networks including: Recurrent Neural Networks (RNN), Convolutional Neural Networks (CNN), Long Short-Term Memory (LSTM) and Feedforward networks among others. One of the most commonly used types of neural networks is the Multi Layer Perceptron (MLP) which is a type of Feedforward ANN.
+
+An MLP consists of multiple layers made up of nodes (neurons). At its simplest we have a Single Layer Perceptron (SLP) a NN which consists of only two layers an input layer and an output layer. In more complex cases where non linear functions need to be modeled one or more intermediary hidden layers are added \cite{lstm-mlp-rf,svm-2}. The neurons of one layer are linked to the neurons of the following layer. Each connection between neurons is assigned a weight. Additionally bias neurons with a positive value of one can be attached to the neurons of the hidden and output layers. The weighted sum of inputs to a neuron is calculated via a propagation function. The calculated value is then fed to the activation function of the neuron which introduces a degree of non-linearity simulating an activation threshold. The most commonly used are: ReLU (Rectified Linear Unit), sigmoid, tanh (hyperbolic tangent) and linear activation functions \cite{svm-2}.
+
+\paragraph{Support Vector Machine (SVM)}\label{Support Vector Machine (SVM)}
+
+The Support Vector Machine (SVM) is a model designed for the supervised classification of labeled data belonging to two classes \cite{vapnik-svm}. It enables the discovery of an optimal line or hyperplane that maximizes the distance between each class in an N-dimensional space. SVM can handle the linear separation of data as well as the non-linear separation of data via a kernel trick \cite{non-linear-svm}. The most popular non-linear kernels are the: polynomial kernel, RBF (Radial Basis Function) and sigmoid kernel \cite{svm-ibm}. An extension of the original hard-margin SVM is the soft-margin SVM. The difference between them is that with the hard-margin data points will be perfectly separated outside of the support vectors while soft-margin classification will allow some misclassification through the use of a slack variable \cite{vapnik-svm}. Another extension of the SVM is Support Vector Regression (SVR) which enables the application of SVM to regression problems \cite{vapnik-svr,svr}.
+
+The primary tunable parameters of a SVM are \cite{scikit-svm,svr}:
 \begin{itemize}
-    \item Neurons (nodes) - individual units of the network, each described by a threshold and an activation function.
-    \item Layers - the network is organized into an input layer, one or more hidden layers, and an output layer.
-    \item Connections - the links between individual neurons that allow signals to be transmitted between them.
-\end{itemize}
-The tunable parameters of a neural network are the following:
-\begin{itemize}
-    \item Weights - the parameters that determine the strength of the connections between neurons.
-    \item Biases - nodes having a value of positive one providing a constant signal in the hidden and/or output layers.
-    \item Propagation function - the function that determines how the weighted inputs are combined to produce the activation of a neuron.
-    \item Learning rule - the algorithm used to adjust the weights and biases of the network during the training process.
-    \item Neuron activation function - output mapping of individual neurons. The most commonly used are: sigmoid, hyperbolic tangent and linear activation functions.
-    \item Hyperparameters - the learning rate, number of hidden layers, number of neurons per layer and regularization strength.
-\end{itemize}
-
-models\/comparison\/linear-models-vs-neural-networks.pdf
-models\/comparison\/lstm\_mlp\_random-forest.pdf
-models\/neural-networks\/ann-1.pdf
-models\/svm/svm-2.pdf
-
-\subsubsection{Support Vector Machine (SVM)}
-
-The Support Vector Machine (SVM) is a model designed for the supervised classification of labeled data belonging to two classes. It enables the discovery of an optimal line or hyperplane that maximizes the distance between each class in an N-dimensional space. SVM can handle the linear separation of data as well as the non-linear separation of data via a kernel trick. The most popular non-linear kernels are the: polynomial kernel, radial basis function and sigmoid kernel. An extension of the original hard-margin SVM is the soft-margin SVM. The difference between them is that with the hard-margin data points will be perfectly separated outside of the support vectors while soft-margin classification will allow some misclassification through the use of a slack variable. Another extension of the SVM is Support Vector Regression (SVR) which enables the application of SVM to regression problems.
-
-The primary tunable parameters of a SVM are:
-\begin{itemize}
-    \item The kernel function - determines the type of decision boundary. 
-    \item The regularization parameter (C) - controls the trade-off between maximizing the margin and minimizing the training error.
-    \item Error tolerance ($\epsilon$-insensitive tube) - slack variable.
-    \item Kernel coefficient ($\gamma$)
+    \item Kernel function - determines the type of decision boundary. 
+    \item Kernel hyperparameters - degree ($d$) for the polynomial kernel, gamma ($\gamma$) for the RBF, polynomial and sigmoid kernels and Gamma ($\gamma$) and intercept ($r$) for the polynomial and sigmoid kernels.
+    \item Regularization strength ($C$) - controls the trade-off between maximizing the margin and minimizing the training error.
+    \item Loss function - hinge loss for SVM classification and $\epsilon$-insensitive loss for SVR.
+    \item Epsilon-insensitive margin ($\epsilon$) - margin of tolerance where no penalty is associated in the training loss function
 \end{itemize}
 
-\subsubsection{Random Forest (RF)}
+\paragraph{Decision Tree (DT)}\label{Decision Tree (DT)}
 
-Random Forests are an instance of ensemble learning techniques. The base unit of a Random Forest is a Decision Tree. A large number of trees is trained and evaluated on different subsets of the data obtained from different splits. The final output of the model is the average of the outputs of all the trees.
+Decision trees are a non-parametric supervised learning algorithm which is used for both classification and regression tasks. They have a hierarchical recursive partitioning structure which consists of a root node, branches, internal nodes and leaf nodes. The advantages of decision trees are that they are easy to interpret, require little to no data preparation and are robust to outliers. Their disadvantages are that they are prone to overfitting, susceptible to large structural changes caused by small variations in the data and more costly than other similar techniques. Their learning strategy involves searching for optimal dataset splits using information gain or entropy based splitting criteria including the Gini impurity or Shannon entropy measures \cite{prediction,ibm-dt}.
 
-The tunable parameters of a Random Forest are:
+\paragraph{Random Forest (RF)}\label{Random Forest (RF)}
+
+Random Forests are an instance of ensemble learning techniques. Ensemble learning involves the aggregate use of more than one model in order to produce better results \cite{ibm-ensemble}. The base unit of a Random Forest (RF) is a Decision Tree (DT). A large number of decision trees (DT) is trained and evaluated on different subsets of the data obtained from different splits of the training set. Initial randomization is done via bootstrap samples drawn from the training set with replacement. Further randomization is then added via feature bagging which selects random subsets of features. The final output of the model is the majority vote or average of the outputs of all the trees. The biggest advantages of Random Forests (RF) are a reduced risk of overfitting and the easy determination of feature importance. Their greatest disadvantages are a more resource intensive and time consuming process of model training due to the use of multiple models and greater model complexity \cite{prediction, ibm-rf}.
+
+The primary tunable parameters of a Random Forest (RF) are \cite{prediction,ibm-rf}:
 \begin{itemize}
-    \item The number of trees
-    \item The maximum depth of the trees
+    \item The number of trees.
+    \item The maximum number of features to consider at each split.
+    \item Splitting criterion - based on impurity measures such as Shannon Entropy or Gini impurity.
 \end{itemize}
+
+% \subsection{Econometric models}\label{Econometric models}
+% 
+% \cite{comparing,linear-vs-nn}
+% 
+% \subsubsection{Purchasing Power Parity (PPP)}\label{Purchasing Power Parity (PPP)}
+% 
+% \subsubsection{Uncovered Interest Rate Parity (UIP)}\label{Uncovered Interest Rate Parity (UIP)}
+% 
+% \subsubsection{Sticky Price Monetary (SP)}\label{Sticky Price Monetary (SP)}
+
+% \subsection{Time series models}\label{Time series models}
+% 
+% \cite{deep-learning,linear-vs-nn}
 
 \subsection{Overview}\label{Overview}
 
-This research paper is organized as follows. Section one will be general introduction to the domain of foreign exchange (FOREX) rate forecasting and Artificial Intelligence (AI) techniques. Section two will cover past research techniques, methodologies and results from relevant articles. Section three will be a detailed description of data preparation steps carried out before model creation. Section four will cover the methodology of model selection. Section five Will contain the results of predictions for each of the models for each of the selected currencies alongside accuracy metrics. Section six will have the conclusions of the research.
+This research paper is organized as follows. Section one will be a general introduction to the domain of foreign exchange (FOREX) rate forecasting and Artificial Intelligence (AI) techniques. Section two will cover past research techniques, methodologies and results from relevant articles. Section three will be a detailed description of data preparation steps carried out before model creation. Section four will cover the methodology of model selection. Section five will contain the results of predictions for each of the models for each of the selected currencies alongside accuracy metrics. Section six will have the conclusions of the research.
 
