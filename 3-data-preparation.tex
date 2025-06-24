@@ -4,7 +4,7 @@ In this paper data preparation for use in Artificial Intelligence (AI) model cre
 
 \subsection{Acquisition}\label{Acquisition}
 
-The data chosen for this study was a set of euro foreign exchange reference rates obtained from the website of the European Central Bank (ECB). The data consists of the daily spot prices for 41 foreign currencies from 04.01.1999 to 02.05.2025. The currencies included in the dataset were: United States Dollar (USD), Japanese Yen (JPY), Bulgarian Lev (BGN), Cypriot Pound (CYP), Czech Koruna (CZK), Danish Krone (DKK), Estonian Kroon (EEK), British Pound (GBP), Hungarian Forint (HUF), Lithuanian Litas (LTL), Latvian Lats (LVL), Maltese Lira (MTL), Polish Zloty (PLN), Romanian Leu (ROL), Romanian Leu (RON), Swedish Krona (SEK), Slovenian Tolar (SIT), Slovak Koruna (SKK), Swiss Franc (CHF), Icelandic Krona (ISK), Norwegian Krone (NOK), Croatian Kuna (HRK), Russian Ruble (RUB), Turkish Lira (TRL), Turkish Lira (TRY), Australian Dollar (AUD), Brazilian Real (BRL), Canadian Dollar (CAD), Chinese Yuan (CNY), Hong Kong Dollar (HKD), Indonesian Rupiah (IDR), Israeli Shekel (ILS), Indian Rupee (INR), South Korean Won (KRW), Mexican Peso (MXN), Malaysian Ringgit (MYR), New Zealand Dollar (NZD), Philippine Peso (PHP), Singapore Dollar (SGD), Thai Baht (THB), South African Rand (ZAR).
+The data chosen for this study was a set of euro foreign exchange reference rates obtained from the website of the European Central Bank (ECB) \cite{forex-data}. The data consists of the daily spot prices for 41 foreign currencies from 04.01.1999 to 02.05.2025. The currencies included in the dataset were: United States Dollar (USD), Japanese Yen (JPY), Bulgarian Lev (BGN), Cypriot Pound (CYP), Czech Koruna (CZK), Danish Krone (DKK), Estonian Kroon (EEK), British Pound (GBP), Hungarian Forint (HUF), Lithuanian Litas (LTL), Latvian Lats (LVL), Maltese Lira (MTL), Polish Zloty (PLN), Romanian Leu (ROL), Romanian Leu (RON), Swedish Krona (SEK), Slovenian Tolar (SIT), Slovak Koruna (SKK), Swiss Franc (CHF), Icelandic Krona (ISK), Norwegian Krone (NOK), Croatian Kuna (HRK), Russian Ruble (RUB), Turkish Lira (TRL), Turkish Lira (TRY), Australian Dollar (AUD), Brazilian Real (BRL), Canadian Dollar (CAD), Chinese Yuan (CNY), Hong Kong Dollar (HKD), Indonesian Rupiah (IDR), Israeli Shekel (ILS), Indian Rupee (INR), South Korean Won (KRW), Mexican Peso (MXN), Malaysian Ringgit (MYR), New Zealand Dollar (NZD), Philippine Peso (PHP), Singapore Dollar (SGD), Thai Baht (THB), South African Rand (ZAR).
 
 \subsection{Preprocessing}\label{Preprocessing}
 
@@ -12,23 +12,31 @@ The cleaning and preparation of the data conducted in order to increase the accu
 
 \subsubsection{Selection of variables}\label{Selection of variables}
 
-The first step in the preparation of the dataset was the removal of variables with missing values of which there were 24 leaving behind 17 currency exchange rates: United States Dollar (USD), Japanese Yen (JPY), Czech Koruna (CZK), Danish Krone (DKK), British Pound (GBP), Hungarian Forint (HUF), Polish Zloty (PLN), Swedish Krona (SEK), Swiss Franc (CHF), Norwegian Krone (NOK), Australian Dollar (AUD), Canadian Dollar (CAD), Hong Kong Dollar (HKD), South Korean Won (KRW), New Zealand Dollar (NZD), Singapore Dollar (SGD), South African Rand (ZAR).
+The first step in the preparation of the dataset was the removal of variables with local missing values of which there were 24 leaving behind 17 currency exchange rates: United States Dollar (USD), Japanese Yen (JPY), Czech Koruna (CZK), Danish Krone (DKK), British Pound (GBP), Hungarian Forint (HUF), Polish Zloty (PLN), Swedish Krona (SEK), Swiss Franc (CHF), Norwegian Krone (NOK), Australian Dollar (AUD), Canadian Dollar (CAD), Hong Kong Dollar (HKD), South Korean Won (KRW), New Zealand Dollar (NZD), Singapore Dollar (SGD), South African Rand (ZAR).
 
-\subsubsection{Missing values}\label{Missing values}
+\subsubsection{Correlation analysis)\label{Correlation analysis}
 
-Even though variables with missing values were eliminated in the previous step the remaining exchange rates still had missing values which were the result of holidays and weekends, days where the exchange markets were closed and no value could be assigned. In order to alleviate this issue blanks were forward filled with the values preceeding them.
+Next a Pearson correlation matrix for the remaining exchange rates was constructed and variables with at least one other variable with a high linear correlation > 0.8 were removed: Czech Koruna (CZK), Hungarian Forint (HUF), Norwegian Krone (NOK), Hong Kong Dollar (HKD), Singapore Dollar (SGD), South African Rand (ZAR). This procedure was used in order to reduce the risk of amplifying or distoring effects during the training phases \cite{genetic}.
+
+\subsubsection{Forward fill}\label{Forward fill}
+
+Even though variables with missing values were eliminated in the previous step the remaining exchange rates still had global missing values which were the result of holidays and weekends, days where the exchange markets were closed and no value could be assigned. In order to alleviate this issue blanks were forward filled with the values preceeding them \cite{techniques,rf-svr}.
+
+\subsubsection{Log transformation}\label{Log transformation}
+
+Next a natural logarithm transformation of the data was applied in order to stabilize the variance in the data \cite{nn-vs-chaotic,robust-regression,gbp-usd-forecasting}.
 
 \subsubsection{Differencing}\label{Differencing}
 
-In the next step first-order differencing was applied to the dataset. This procedure causes the replacement of successive values with successive variations. This is a necessary step in the preparation of the data enabling the removal of trends, seasonality, and other non-stationary components from the original time series.
+In the next step first-order differencing was applied to the dataset. This procedure causes the replacement of successive values with successive variations. This is a necessary step in the preparation of the data enabling the removal of trends, seasonality, and other non-stationary components from the original time series \cite{nn-vs-chaotic,robust-regression,gbp-usd-forecasting}.
 
 \subsubsection{Normalization}\label{Normalization}
 
-The next step was the normalization of the data to the range [-1,1] which is a requirement for it's use in neural networks with the hyperbolic tangent activation function due to the limitations of how neural networks are structured. The normalization of the data also enables the more efficient training of Support Vector Machines (SVM).
+The next step was the normalization of the data to the range [-1,1] which is a requirement for it's use in neural networks with the hyperbolic tangent activation function due to the limitations of how neural networks are structured. The normalization of the data also enables the more efficient training of Support Vector Machines (SVM) \cite{nn-vs-chaotic,genetic,rf-svr,ann-2}.
 
 \subsubsection{Feature extraction}\label{Feature extraction}
 
-In this step each individual currency column was extracted into a seperate file alongside the Date column. Next, time lagged versions of each of the columns were created in new files alongside the original data ranging from 1 to 50 days enabling the easy testing of the effects of various sample windows on the forecasting ability of the models.
+In this step each individual currency column was extracted into a seperate file alongside the Date column. Next, time lagged versions of each of the columns were created in new files alongside the original data ranging from 1 to 50 days enabling the easy testing of the effects of various sample windows on the forecasting ability of the models \cite{rf-svr,gold}.
 
 \subsubsection{Data split}\label{Data split}
 
@@ -38,7 +46,4 @@ For the purpose of model training as well as the better assessment of the predic
     \item validation (20\%) - for the evaluation of forecasting ability during training via for e.g. k-fold cross-validation
     \item testing (10\%) - for the final evaluation of the selected model in order to prevent overfitting and enable a unbiased evaluation of the model on new unseen data
 \end{itemize}
-
-Such a spliting strategy enables the creation of a model with better generalization ability.
-
 
