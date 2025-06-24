@@ -14,7 +14,7 @@ The cleaning and preparation of the data conducted in order to increase the accu
 
 The first step in the preparation of the dataset was the removal of variables with local missing values of which there were 24 leaving behind 17 currency exchange rates: United States Dollar (USD), Japanese Yen (JPY), Czech Koruna (CZK), Danish Krone (DKK), British Pound (GBP), Hungarian Forint (HUF), Polish Zloty (PLN), Swedish Krona (SEK), Swiss Franc (CHF), Norwegian Krone (NOK), Australian Dollar (AUD), Canadian Dollar (CAD), Hong Kong Dollar (HKD), South Korean Won (KRW), New Zealand Dollar (NZD), Singapore Dollar (SGD), South African Rand (ZAR).
 
-\subsubsection{Correlation analysis)\label{Correlation analysis}
+\subsubsection{Correlation analysis}label{Correlation analysis}
 
 Next a Pearson correlation matrix for the remaining exchange rates was constructed and variables with at least one other variable with a high linear correlation > 0.8 were removed: Czech Koruna (CZK), Hungarian Forint (HUF), Norwegian Krone (NOK), Hong Kong Dollar (HKD), Singapore Dollar (SGD), South African Rand (ZAR). This procedure was used in order to reduce the risk of amplifying or distoring effects during the training phases \cite{genetic}.
 
@@ -43,7 +43,7 @@ In this step each individual currency column was extracted into a seperate file 
 For the purpose of model training as well as the better assessment of the predictive accuracy of the models each dataset was split into three subsets:
 \begin{itemize}
     \item training (70\%) - for model training
-    \item validation (20\%) - for the evaluation of forecasting ability during training via for e.g. k-fold cross-validation
+    \item validation (20\%) - for the evaluation of forecasting ability during training via for e.g. k-fold cross-validation/
     \item testing (10\%) - for the final evaluation of the selected model in order to prevent overfitting and enable a unbiased evaluation of the model on new unseen data
 \end{itemize}
 
