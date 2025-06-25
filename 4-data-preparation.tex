@@ -36,14 +36,13 @@ The next step was the normalization of the data to the range [-1,1] which is a r
 
 \subsubsection{Feature extraction}\label{Feature extraction}
 
-In this step each individual currency column was extracted into a seperate file alongside the Date column. Next, time lagged versions of each of the columns were created in new files alongside the original data ranging from 1 to 50 days enabling the easy testing of the effects of various sample windows on the forecasting ability of the models \cite{rf-svr,gold}.
+In this step each currency alongside its five best predictors was extracted into a new file. Next, time lagged versions of each of the predictors were created in the new files alongside the target column ranging from 1 to 150 days enabling the easy testing of the effects of various sample windows on the forecasting ability of the models \cite{rf-svr,gold}.
 
 \subsubsection{Data split}\label{Data split}
 
-For the purpose of model training as well as the better assessment of the predictive accuracy of the models each dataset was split into three subsets:
+For the purpose of model training as well as the better assessment of the predictive accuracy of the models each dataset was split into two subsets with a separation strip equal to the degree of generated time lags (150) in order to prevent information leakage from the training set to the test set:
 \begin{itemize}
-    \item training (70\%) - for model training
-    \item validation (20\%) - for the evaluation of forecasting ability during training via for e.g. k-fold cross-validation/
-    \item testing (10\%) - for the final evaluation of the selected model in order to prevent overfitting and enable a unbiased evaluation of the model on new unseen data
+    \item training $+$ validation (70\%) - for model training and k-fold cross-validation
+    \item testing (30\%) - for the final evaluation of the selected model in order to prevent overfitting and enable a unbiased evaluation of the model on new unseen data
 \end{itemize}
 
