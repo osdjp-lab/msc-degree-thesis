@@ -1,8 +1,19 @@
 \section{Model training and evaluation}\label{Model training and evaluation}
 
+This section presents an overview of the primary guideing principals used during the stages of model training and evaluation.
+
 \subsection{Bias-Variance dilemma}\label{Bias-Variance dilemma}
 
 The bias-variance dilemma is a fundamental problem in machine learning and involves the issues of model optimization and generalization. In the case of optimization (reducing the model error) a model eventually starts to overfit the training data, this results in high error of the models predictions on the test/validation datasets (high variance). The opposite is aiming to increase model generalization (reduction of model complexity) however this in turn causes underfitting or high error of the models predictions on the training dataset (high bias). This counterposed behaviour of both bias and variance enables the easy assessment of model suitability for use in the prediction of unseen data \cite{ibm-ensemble,ibm-regularization,svm-2}. 
+
+\subsection{Performance metrics}\label{Performance metrics}
+
+The accuracy of the model forecasts was evaluated on the basis of commonly used measures including:
+\begin{itemize}
+    \item Mean Absolute Percentage Error (MAPE) - calculates the average of the absolute percentage errors, where the percentage error is the difference between the actual and predicted values, divided by the actual value. MAPE provides a percentage-based error metric that is useful for interpreting the overall accuracy of a model, especially when the scale of the target variable varies \cite{scikit-mape}.
+    \item Directional Symmetry (DS) - is a metric that measures the ability of a forecasting model to correctly predict the direction of change in the target variable. It calculates the percentage of times the model correctly predicts whether the value will increase or decrease compared to the previous period \cite{svm-2}.
+    \item Out-of-bag (OOB) error - is a method for evaluating the performance of ensemble methods where during training on a random subset of the training data the generated model is evaluated on the data that was not part of its training dataset. It provides an unbiased estimate of the model's generalization performance without the need for a separate validation set \cite{scikit-oob}.
+\end{itemize}
 
 % Juxtaposed
 % 
@@ -10,12 +21,209 @@ The bias-variance dilemma is a fundamental problem in machine learning and invol
 % 
 % The opposite is aiming to increase model optimization (reducing the model error) however this in turn pushed to far causes overfitting or high error of the models predictions on the test/validation datasets (high variance).
 
+\subsection{Methodology}\label{Methodology}
 
-\subsection{Training}\label{Training}
+For the purpose of this paper one only one of the currency exchange rates was chosen as a target for forecasting alongside five currency exchange rates which were selected as the feature set. The chosen currencies were: NZD, SEK, CAD, DKK and PLN as predictors and USD as the target variable.
 
-Data set split
+\subsubsection{Sample window size selection}\label{Sample window size selection}
 
-\subsection{Evaluation}\label{Evaluation}
+In the first step the default parameters of each of the models were used. The only exception to this was the Multi Layer Perceptron (MLP) where the default activation function relu was switched out for tanh due to the normalization range of the data. Each models accuracy was evaluated on both in-sample (training set) and out-of-sample (test set) data.
 
-Accuracy metrics
+\begin{figure}[ht!]
+  \centering
+  \begin{tikzpicture}
+    \begin{groupplot}[
+      group style={
+        group size=1 by 2, % 1 column, 2 rows
+        vertical sep=2cm,  % space between plots
+      },
+      width=\linewidth,
+      height=8cm,
+      grid=major,
+      grid style={dashed,gray!30},
+      xlabel=Sample window,
+      x unit=\si{Days},
+      x tick label style={rotate=90,anchor=east},
+      legend style={at={(0.5,-0.2)}, anchor=north, legend columns=-1},
+      legend to name=sharedlegend
+    ]
+
+    \nextgroupplot[ylabel=MAPE, y unit=\si{\%}]
+    \addplot table[x=Offset,y=MAPE,col sep=comma] {data/usd/nn/test_mape.csv};
+    \addplot table[x=Offset,y=MAPE,col sep=comma] {data/usd/nn/train_mape.csv};
+
+    \nextgroupplot[ylabel=DS,  y unit=\si{\%}]
+    \addplot table[x=Offset,y=Hitrate,col sep=comma] {data/usd/nn/test_hitrate.csv};
+    \addplot table[x=Offset,y=Hitrate,col sep=comma] {data/usd/nn/train_hitrate.csv};
+
+    \addlegendentry{Test}
+    \addlegendentry{Train}
+
+    \end{groupplot}
+  \end{tikzpicture}
+
+  \vspace{1em}
+  %\ref{sharedlegend}
+  \pgfplotslegendfromname{sharedlegend}
+  \caption{USD Multi Layer Perceptron: MAPE and Directional Symmetry for different sample windows.}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \begin{tikzpicture}
+    \begin{groupplot}[
+      group style={
+        group size=1 by 3, % 1 column, 3 rows
+        vertical sep=2cm,  % space between plots
+      },
+      width=\linewidth,
+      height=6cm,
+      grid=major,
+      grid style={dashed,gray!30},
+      xlabel=Sample window,
+      x unit=\si{Days},
+      x tick label style={rotate=90,anchor=east},
+      legend style={at={(0.5,-0.2)}, anchor=north, legend columns=-1},
+      legend to name=sharedlegend
+    ]
+
+    \nextgroupplot[ylabel=MAPE, y unit=\si{\%}]
+    \addplot table[x=Offset,y=MAPE,col sep=comma] {data/usd/rf/test_mape.csv};
+    \addplot table[x=Offset,y=MAPE,col sep=comma] {data/usd/rf/train_mape.csv};
+
+    \nextgroupplot[ylabel=DS,  y unit=\si{\%}]
+    \addplot table[x=Offset,y=Hitrate,col sep=comma] {data/usd/rf/test_hitrate.csv};
+    \addplot table[x=Offset,y=Hitrate,col sep=comma] {data/usd/rf/train_hitrate.csv};
+
+    \nextgroupplot[ylabel=OOB Error]
+    \addplot table[x=Offset,y=OOB Error,col sep=comma] {data/usd/rf/oob_error.csv};
+
+    \addlegendentry{Test}
+    \addlegendentry{Train}
+
+    \end{groupplot}
+  \end{tikzpicture}
+
+  \vspace{1em}
+  %\ref{sharedlegend}
+  \pgfplotslegendfromname{sharedlegend}
+  \caption{USD Random Forest: MAPE and Directional Symmetry for different sample windows.}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \begin{tikzpicture}
+    \begin{groupplot}[
+      group style={
+        group size=1 by 2, % 1 column, 2 rows
+        vertical sep=2cm,  % space between plots
+      },
+      width=\linewidth,
+      height=8cm,
+      grid=major,
+      grid style={dashed,gray!30},
+        xlabel=Sample window,
+      x unit=\si{Days},
+      x tick label style={rotate=90,anchor=east},
+      legend style={at={(0.5,-0.2)}, anchor=north, legend columns=-1},
+      legend to name=sharedlegend
+    ]
+
+    \nextgroupplot[ylabel=MAPE, y unit=\si{\%}]
+    \addplot table[x=Offset,y=MAPE,col sep=comma] {data/usd/svm/test_mape.csv};
+    \addplot table[x=Offset,y=MAPE,col sep=comma] {data/usd/svm/train_mape.csv};
+
+    \nextgroupplot[ylabel=DS,  y unit=\si{\%}]
+   \addplot table[x=Offset,y=Hitrate,col sep=comma] {data/usd/svm/test_hitrate.csv};
+   \addplot table[x=Offset,y=Hitrate,col sep=comma] {data/usd/svm/train_hitrate.csv};
+
+    \addlegendentry{Test}
+    \addlegendentry{Train}
+
+    \end{groupplot}
+  \end{tikzpicture}
+
+  \vspace{1em}
+  %\ref{sharedlegend}
+  \pgfplotslegendfromname{sharedlegend}
+  \caption{USD Support Vector Regression: MAPE and Directional Symmetry for different sample windows.}
+\end{figure}
+
+The values where the sum of MAPE between the training and test sets was the smallest were selected as exhibiting the best performance. In the case of the MLP there was a significant drop in the value of the MAPE with a 30 day sample window. For the Random Forest (RF) the sample window appeared to have little effect on the forecasting accuracy of the model, as such the sample window of 30 days was selected on the basis of the minimal OOB error observed. For SVR the smallest MAPE was found to be with a 30 day sample window.
+
+\subsubsection{Grid search}\label{Grid search}
+
+With the sample window size selected in the previous step a grid search with 5-fold cross-validation was conducted for each of the models.
+
+For the Multi Layer Perceptron (MLP) the following parameter grid was chosen:
+\begin{itemize}
+    \item hidden\_layer\_sizes: (50), (100), (200)
+    \item solver: adam, sgd
+    \item alpha: 0.0001, 0.001, 0.01, 0.1
+    \item learning\_rate\_init: 0.001, 0.01
+    \item max\_iter: 1000
+\end{itemize}
+
+The most optimal configuration found was as follows:
+\begin{itemize}
+    \item hidden\_layer\_sizes: (100)
+    \item solver: adam
+    \item alpha: 0.01
+    \item learning\_rate\_init: 0.001
+    \item max\_iter: 1000
+\end{itemize}
+
+For the internal cross-validation the negative Mean Absolute Percentage Error (MAPE) was equal to -2.058. For the test set the results were:
+\begin{itemize}
+    \item MAPE: 2.960
+    \item Directional Symmetry (hit rate): 0.83
+\end{itemize}
+
+For the Random Forest (RF) the following parameter grid was chosen:
+\begin{itemize}
+    \item n\_estimators: 100, 200
+    \item max\_features: 1.0, sqrt, log2, 0.3
+    \item max\_depth: 1, 3, 7, 10
+    \item min\_samples\_split: 2, 5, 10
+    \item min\_samples\_leaf: 1, 2, 4
+\end{itemize}
+
+The most optimal configuration found was as follows:
+\begin{itemize}
+    \item n\_estimators: 100
+    \item max\_features: sqrt
+    \item max\_depth: 1
+    \item min\_samples\_split: 2
+    \item min\_samples\_leaf: 2
+\end{itemize}
+
+For the internal cross-validation the negative Mean Absolute Percentage Error (MAPE) was equal to -2.264. For the test set the results were:
+\begin{itemize}
+    \item MAPE: 2.521
+    \item Directional Symmetry (hit rate): 0.83
+\end{itemize}
+
+For the Support Vector Machine (SVM) the following parameter grid was chosen:
+\begin{itemize}
+    \item tol: 0.00001, 0.0001, 0.001, 0.01, 0.1
+    \item C: 1, 10, 100
+    \item epsilon: 0.1, 0.01, 0.001
+    \item gamma: scale, auto
+    \item kernel: rbf,poly,sigmoid
+\end{itemize}
+
+The most optimal configuration found was as follows:
+\begin{itemize}
+    \item tol: 0.1 
+    \item C: 100
+    \item epsilon: 0.1
+    \item gamma: auto
+    \item kernel: poly
+\end{itemize}
+
+For the internal cross-validation the negative Mean Absolute Percentage Error (MAPE) was equal to -1.398. For the test set the results were:
+\begin{itemize}
+    \item MAPE: 1.524
+    \item Directional Symmetry (hit rate): 0.83
+\end{itemize}
 
