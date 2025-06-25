@@ -1,467 +1,538 @@
-% Data
+%%%%%%%%%
+% Tools %
+%%%%%%%%%
 
-@misc{forex-data,
-  title = {{Euro foreign exchange reference rates}},
-  author = {European Central Bank (ECB)},
-  url = {https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html},
-  date = {2025-06-23}
+% Python 3
+
+@book{python,
+  title     = {Python reference manual},
+  author    = {Van Rossum, Guido and Drake Jr, Fred L},
+  year      = {1995},
+  publisher = {Centrum voor Wiskunde en Informatica Amsterdam}
 }
 
-% General
+% Jupyter
+
+@conference{jupyter,
+  title         = {Jupyter Notebooks -- a publishing format for reproducible computational workflows},
+  author        = {Thomas Kluyver and Benjamin Ragan-Kelley and Fernando P{\'e}rez and Brian Granger and Matthias Bussonnier and Jonathan Frederic and Kyle Kelley and Jessica Hamrick and Jason Grout and Sylvain Corlay and Paul Ivanov and Dami{\'a}n Avila and Safia Abdalla and Carol Willing},
+  booktitle     = {Positioning and Power in Academic Publishing: Players, Agents and Agendas},
+  editor        = {F. Loizides and B. Schmidt},
+  organization  = {IOS Press},
+  pages         = {87-90},
+  year          = {2016}
+}
+
+% Numpy
+
+@Article{numpy,
+  title     = {Array programming with {NumPy}},
+  author    = {Charles R. Harris and K. Jarrod Millman and St{\'{e}}fan J. van der Walt and Ralf Gommers and Pauli Virtanen and David Cournapeau and Eric Wieser and Julian Taylor and Sebastian Berg and Nathaniel J. Smith and Robert Kern and Matti Picus and Stephan Hoyer and Marten H. van Kerkwijk and Matthew Brett and Allan Haldane and Jaime Fern{\'{a}}ndez del R{\'{i}}o and Mark Wiebe and Pearu Peterson and Pierre G{\'{e}}rard-Marchant and Kevin Sheppard and Tyler Reddy and Warren Weckesser and Hameer Abbasi and Christoph Gohlke and Travis E. Oliphant},
+  year      = {2020},
+  month     = sep,
+  journal   = {Nature},
+  volume    = {585},
+  number    = {7825},
+  pages     = {357-362},
+  doi       = {10.1038/s41586-020-2649-2},
+  publisher = {Springer Science and Business Media {LLC}},
+  url       = {https://doi.org/10.1038/s41586-020-2649-2}
+}
+
+% Pandas
+
+@software{pandas,
+  author    = {The pandas development team},
+  title     = {pandas-dev/pandas: Pandas},
+  year      = {2020},
+  publisher = {Zenodo},
+  version   = {latest},
+  doi       = {10.5281/zenodo.3509134},
+  url       = {https://doi.org/10.5281/zenodo.3509134}
+}
+
+% Scikit-learn
+
+@article{scikit-learn,
+ title      = {Scikit-learn: Machine Learning in {P}ython},
+ author     = {Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.  and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.  and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},
+ journal    = {Journal of Machine Learning Research},
+ volume     = {12},
+ pages      = {2825-2830},
+ year       = {2011}
+}
+
+% Statsmodels
+
+@inproceedings{statsmodels,
+  title     = {statsmodels: Econometric and statistical modeling with python},
+  author    = {Seabold, Skipper and Perktold, Josef},
+  booktitle = {9th Python in Science Conference},
+  year      = {2010},
+}
+
+%%%%%%%%
+% Data %
+%%%%%%%%
+
+@misc{forex-data,
+  title     = {{Euro foreign exchange reference rates}},
+  author    = {European Central Bank (ECB)},
+  url       = {https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html},
+  date      = {2025-06-23}
+}
+
+%%%%%%%%%%%
+% General %
+%%%%%%%%%%%
 
 @article{comparing,
-  title = {Comparing Forecast Performance of Exchange Rate Models},
-  author = {Lillie Lam and Laurence Fung and Ip-wing Yu},
+  title     = {Comparing Forecast Performance of Exchange Rate Models},
+  author    = {Lillie Lam and Laurence Fung and Ip-wing Yu},
   publisher = {Hong Kong Monetary Authority},
-  year = {2008},
-  doi = {10.2139/ssrn.1330705}
+  year      = {2008},
+  doi       = {10.2139/ssrn.1330705}
 }
 
 @inproceedings{factors,
-  title = {Factors affecting Currency Exchange Rate, Economical Formulas and Prediction Models},
-  author = {Pareshkumar J. Patel and Narendra J. Patel and Ashok R. Patel and Hayley North},
-  journal = {International Journal of Application or Innovation in Engineering \& Management (IJAIEM)},
-  volume = {3},
-  issue = {3},
-  year = {2014},
-  issn = {2319-4847}
+  title		= {Factors affecting Currency Exchange Rate, Economical Formulas and Prediction Models},
+  author	= {Pareshkumar J. Patel and Narendra J. Patel and Ashok R. Patel and Hayley North},
+  journal	= {International Journal of Application or Innovation in Engineering \& Management (IJAIEM)},
+  volume	= {3},
+  issue		= {3},
+  year		= {2014},
+  issn		= {2319-4847}
 }
 
 @article{predictability,
-  title = {Exchange Rate Predictability},
-  author = {Barbara Rossi},
-  journal = {International Political Economy: Monetary Relations eJournal},
-  year = {2013}
+  title	    = {Exchange Rate Predictability},
+  author	= {Barbara Rossi},
+  journal	= {International Political Economy: Monetary Relations eJournal},
+  year      = {2013}
 }
 
 @article{redux,
-  title = {Exchange Rate Prediction Redux: New Models, New Data, New Currencies},
-  author = {Yin-Wong Cheung and Menzie Chinn and Antonio Garcia Pascual and Yi Zhang},
-  journal = {Econometric Modeling: Capital Markets - Forecasting eJournal},
-  year = {2017},
-  doi = {10.2139/ssrn.2916213}
+  title     = {Exchange Rate Prediction Redux: New Models, New Data, New Currencies},
+  author    = {Yin-Wong Cheung and Menzie Chinn and Antonio Garcia Pascual and Yi Zhang},
+  journal   = {Econometric Modeling: Capital Markets - Forecasting eJournal},
+  year      = {2017},
+  doi       = {10.2139/ssrn.2916213}
 }
 
 @article{review,
-  title = {A Review on Recent Advancements in FOREX Currency Prediction},
-  author = {Md. Saiful Islam and Emam Hossain and Abdur Rahman and Mohammad Shahadat Hossain and Karl Andersson},
-  journal = {Algorithms},
-  year = {2020},
-  volume = {13},
-  pages = {186}
+  title     = {A Review on Recent Advancements in FOREX Currency Prediction},
+  author    = {Md. Saiful Islam and Emam Hossain and Abdur Rahman and Mohammad Shahadat Hossain and Karl Andersson},
+  journal   = {Algorithms},
+  year      = {2020},
+  volume    = {13},
+  pages     = {186}
 }
 
-% Models
+%%%%%%%%%%
+% Models %
+%%%%%%%%%%
 
 % Comparison
 
 @inproceedings{deep-learning,
-  title = {Exchange Rates Prediction via Deep Learning and Machine Learning: A Literature Survey on Currency Forecasting},
-  author = {Oyiwona Ajumi and Abhishek Kaushik},
-  journal = {International Journal of Science and Research (IJSR)},
-  volume = {7},
-  issue = {12},
-  year = {2019},
-  issn = {2319-7064}
+  title     = {Exchange Rates Prediction via Deep Learning and Machine Learning: A Literature Survey on Currency Forecasting},
+  author    = {Oyiwona Ajumi and Abhishek Kaushik},
+  journal   = {International Journal of Science and Research (IJSR)},
+  volume    = {7},
+  issue     = {12},
+  year      = {2019},
+  issn      = {2319-7064}
 }
 
 @article{linear-vs-nn,
-  title = {A comparison of linear forecasting models and neural networks: an application to Euro inflation and Euro Divisia},
-  author = {Jane M. Binner and Rakesh K. Bissoondeeal and Thomas Elger and Alicia M. Gazely and Andrew W. Mullineux and},
-  journal = {Applied Economics},
-  volume = {37},
-  number = {6},
-  pages = {665-680},
-  year = {2005},
+  title     = {A comparison of linear forecasting models and neural networks: an application to Euro inflation and Euro Divisia},
+  author    = {Jane M. Binner and Rakesh K. Bissoondeeal and Thomas Elger and Alicia M. Gazely and Andrew W. Mullineux and},
+  journal   = {Applied Economics},
+  volume    = {37},
+  number    = {6},
+  pages     = {665-680},
+  year      = {2005},
   publisher = {Routledge},
-  doi = {10.1080/0003684052000343679}
+  doi       = {10.1080/0003684052000343679}
 }
 
 @article{lstm-mlp-rf,
-  title = {Evaluating Foreign Exchange Rate Forecasting: A Deep Dive into Lstm, Mlp, and Random Forest Approaches},
-  author = {Khan, Imran Ali},
-  year = {2024},
-  doi = {10.2139/ssrn.4968047}
+  title     = {Evaluating Foreign Exchange Rate Forecasting: A Deep Dive into Lstm, Mlp, and Random Forest Approaches},
+  author    = {Khan, Imran Ali},
+  year      = {2024},
+  doi       = {10.2139/ssrn.4968047}
 }
 
-
 @article{nn-vs-chaotic,
-  title = {A comparison between neural networks and chaotic models for exchange rate prediction},
-  author = {Francesco Lisi and Rosa A. Schiavo},
-  journal = {Computational Statistics \& Data Analysis},
-  volume = {30},
-  number = {1},
-  pages = {87-102},
-  year = {1999},
-  issn = {0167-9473},
-  doi = {10.1016/S0167-9473(98)00067-X}
+  title     = {A comparison between neural networks and chaotic models for exchange rate prediction},
+  author    = {Francesco Lisi and Rosa A. Schiavo},
+  journal   = {Computational Statistics \& Data Analysis},
+  volume    = {30},
+  number    = {1},
+  pages     = {87-102},
+  year      = {1999},
+  issn      = {0167-9473},
+  doi       = {10.1016/S0167-9473(98)00067-X}
 }
 
 @article{rf-svm,
-  title = {Evaluation of FOREX trading Strategies based in Random Forest and Support Vector Machines},
-  author = {Santuci, Armando and Sbruzzi, Elton and Araújo-Filho, Luiz and Leles, Michel},
-  journal = {IEEE Latin America Transactions},
-  year = {2022},
-  volume = {20},
-  number = {9},
-  pages = {2146-2152},
-  doi = {10.1109/TLA.2022.9878170}
+  title     = {Evaluation of FOREX trading Strategies based in Random Forest and Support Vector Machines},
+  author    = {Santuci, Armando and Sbruzzi, Elton and Araújo-Filho, Luiz and Leles, Michel},
+  journal   = {IEEE Latin America Transactions},
+  year      = {2022},
+  volume    = {20},
+  number    = {9},
+  pages     = {2146-2152},
+  doi       = {10.1109/TLA.2022.9878170}
 }
 
 @article{techniques,
-  title = {Currency exchange rate forecasting using machine learning techniques},
-  author = {Mohammadi, WAZIR},
-  journal = {Graduate School of Applied Sciences. Near East University},
-  year = {2019}
+  title     = {Currency exchange rate forecasting using machine learning techniques},
+  author    = {Mohammadi, WAZIR},
+  journal   = {Graduate School of Applied Sciences. Near East University},
+  year      = {2019}
 }
 
 % Hybrid
 
 @article{hybrid-model,
-  title = {A hybrid model for exchange rate prediction},
-  author = {Huseyin Ince and Theodore B. Trafalis},
-  journal = {Decision Support Systems},
-  volume = {42},
-  number = {2},
-  pages = {1054-1062},
-  year = {2006},
-  issn = {0167-9236},
-  doi = {10.1016/j.dss.2005.09.001}
+  title     = {A hybrid model for exchange rate prediction},
+  author    = {Huseyin Ince and Theodore B. Trafalis},
+  journal   = {Decision Support Systems},
+  volume    = {42},
+  number    = {2},
+  pages     = {1054-1062},
+  year      = {2006},
+  issn      = {0167-9236},
+  doi       = {10.1016/j.dss.2005.09.001}
 }
 
 @article{cgp-rnn,
-  title = {Foreign Currency Exchange Rates Prediction Using CGP and Recurrent Neural Network},
-  author = {Mehreen Rehman and Gul Muhammad Khan and Sahibzada Ali Mahmud},
-  journal = {IERI Procedia},
-  volume = {10},
-  pages = {239-244},
-  year = {2014},
-  note = {International Conference on Future Information Engineering (FIE 2014)},
-  issn = {2212-6678},
-  doi = {10.1016/j.ieri.2014.09.083}
+  title     = {Foreign Currency Exchange Rates Prediction Using CGP and Recurrent Neural Network},
+  author    = {Mehreen Rehman and Gul Muhammad Khan and Sahibzada Ali Mahmud},
+  journal   = {IERI Procedia},
+  volume    = {10},
+  pages     = {239-244},
+  year      = {2014},
+  note      = {International Conference on Future Information Engineering (FIE 2014)},
+  issn      = {2212-6678},
+  doi       = {10.1016/j.ieri.2014.09.083}
 }
 
 @article{genetic,
-  title = {An Artificial Neural Network Model to Forecast Exchange Rates},
-  author = {Vincenzo Pacelli and Vitoantonio Bevilacqua and Michele Azzollini},
-  journal = {Journal of Intelligent Learning Systems and Applications},
-  year = {2011},
-  volume = {3},
-  pages = {57-69},
-  doi = {10.4236/jilsa.2011.32008}
+  title     = {An Artificial Neural Network Model to Forecast Exchange Rates},
+  author    = {Vincenzo Pacelli and Vitoantonio Bevilacqua and Michele Azzollini},
+  journal   = {Journal of Intelligent Learning Systems and Applications},
+  year      = {2011},
+  volume    = {3},
+  pages     = {57-69},
+  doi       = {10.4236/jilsa.2011.32008}
 }
 
 @article{neuro-fuzzy,
-  title = {Foreign currency exchange rate prediction using neuro-fuzzy systems},
-  author = {Yoke Leng Yong and Yunli Lee and Xiaowei Gu and Plamen P Angelov and David Chek Ling Ngo and Elnaz Shafipour},
-  journal = {Procedia Computer Science},
-  volume = {144},
-  pages = {232-238},
-  year = {2018},
-  note = {INNS Conference on Big Data and Deep Learning},
-  issn = {1877-0509},
-  doi = {10.1016/j.procs.2018.10.523}
+  title     = {Foreign currency exchange rate prediction using neuro-fuzzy systems},
+  author    = {Yoke Leng Yong and Yunli Lee and Xiaowei Gu and Plamen P Angelov and David Chek Ling Ngo and Elnaz Shafipour},
+  journal   = {Procedia Computer Science},
+  volume    = {144},
+  pages     = {232-238},
+  year      = {2018},
+  note      = {INNS Conference on Big Data and Deep Learning},
+  issn      = {1877-0509},
+  doi       = {10.1016/j.procs.2018.10.523}
 }
 
 @article{robust-regression,
-  title = {Forecasting Exchange Rates: A Robust Regression Approach},
-  author = {Arie Preminger and Raphael Franck},
-  journal = {Bar-Ilan University Department of Economics Research Paper Series},
-  year = {2005},
-  doi = {10.2139/ssrn.878276}
+  title     = {Forecasting Exchange Rates: A Robust Regression Approach},
+  author    = {Arie Preminger and Raphael Franck},
+  journal   = {Bar-Ilan University Department of Economics Research Paper Series},
+  year      = {2005},
+  doi       = {10.2139/ssrn.878276}
 }
 
 @article{rf-svr,
-  title ={Predicting multi-horizon currency exchange rates using a stacked ensemble of random forest and SVR},
-  author = {Kian Jazayeri},
-  journal = {Intelligent Decision Technologies},
-  volume = {18},
-  number = {1},
-  pages = {297-325},
-  year = {2024},
-  doi = {10.3233/IDT-230194}
+  title     ={Predicting multi-horizon currency exchange rates using a stacked ensemble of random forest and SVR},
+  author    = {Kian Jazayeri},
+  journal   = {Intelligent Decision Technologies},
+  volume    = {18},
+  number    = {1},
+  pages     = {297-325},
+  year      = {2024},
+  doi       = {10.3233/IDT-230194}
 }
 
 % Neural networks
 
 @inproceedings{ann-1,
   booktitle = {International Conference on Neural Networks and Signal Processing, 2003. Proceedings of the 2003}, 
-  title = {Forecasting of currency exchange rates using ANN: a case study}, 
-  author = {Kamruzzaman, J. and Sarker, R.A.},
-  year = {2003},
-  volume = {1},
-  pages = {793-797},
-  doi = {10.1109/ICNNSP.2003.1279395}
+  title     = {Forecasting of currency exchange rates using ANN: a case study}, 
+  author    = {Kamruzzaman, J. and Sarker, R.A.},
+  year      = {2003},
+  volume    = {1},
+  pages     = {793-797},
+  doi       = {10.1109/ICNNSP.2003.1279395}
 }
 
 @inproceedings{ann-2,
-  title = {Artificial Neural Network Model for Forecasting Foreign Exchange Rate},
-  author = {Adewole T Adetunji and Philip Akinwale Adio and Taofiki Akintomide and Ayo Bidemi},
-  journal = {World of Computer Science and Information Technology Journal (WCSIT)},
-  volume = {1},
-  issue = {3},
-  pages = {110-118},
-  year = {2011},
-  issn = {2221-0741}
+  title     = {Artificial Neural Network Model for Forecasting Foreign Exchange Rate},
+  author    = {Adewole T Adetunji and Philip Akinwale Adio and Taofiki Akintomide and Ayo Bidemi},
+  journal   = {World of Computer Science and Information Technology Journal (WCSIT)},
+  volume    = {1},
+  issue     = {3},
+  pages     = {110-118},
+  year      = {2011},
+  issn      = {2221-0741}
 }
 
 @article{gbp-usd-forecasting,
-  title = {Neural network forecasting of the British Pound/US Dollar exchange rate},
-  author = {Gioqinang Zhang and Michael Y. Hu},
-  journal = {Omega},
-  volume = {26},
-  number = {4},
-  pages = {495-506},
-  year = {1998},
-  issn = {0305-0483},
-  doi = {10.1016/S0305-0483(98)00003-6}
+  title     = {Neural network forecasting of the British Pound/US Dollar exchange rate},
+  author    = {Gioqinang Zhang and Michael Y. Hu},
+  journal   = {Omega},
+  volume    = {26},
+  number    = {4},
+  pages     = {495-506},
+  year      = {1998},
+  issn      = {0305-0483},
+  doi       = {10.1016/S0305-0483(98)00003-6}
 }
 
 @article{performance,
-  title = {Neural networks performance in exchange rate prediction},
-  author = {Svitlana Galeshchuk},
-  journal = {Neurocomputing},
-  volume = {172},
-  pages = {446-452},
-  year = {2016},
-  issn = {0925-2312},
-  doi = {10.1016/j.neucom.2015.03.100}
+  title     = {Neural networks performance in exchange rate prediction},
+  author    = {Svitlana Galeshchuk},
+  journal   = {Neurocomputing},
+  volume    = {172},
+  pages     = {446-452},
+  year      = {2016},
+  issn      = {0925-2312},
+  doi       = {10.1016/j.neucom.2015.03.100}
 }
 
 @misc{scikit-mlpreg,
-  title = {{sklearn.neural_network.MLPRegressor}},
-  author = {scikit-learn 1.3.2},
-  url = {https://scikit-learn.org/1.3/modules/generated/sklearn.neural_network.MLPRegressor.html},
-  date = {2025-06-22}
+  title     = {{sklearn.neural_network.MLPRegressor}},
+  author    = {scikit-learn 1.3.2},
+  url       = {https://scikit-learn.org/1.3/modules/generated/sklearn.neural_network.MLPRegressor.html},
+  date      = {2025-06-22}
 }
 
 @misc{ibm-nn,
-  title = {{What is neural network?}},
-  author = {IBM},
-  url = {https://www.ibm.com/think/topics/neural-networks},
-  date = {2025-06-23}
+  title     = {{What is neural network?}},
+  author    = {IBM},
+  url       = {https://www.ibm.com/think/topics/neural-networks},
+  date      = {2025-06-23}
 }
 
 % Random Forest
 
 @article{bitcoin,
-  title = {Forecasting Bitcoin price direction with random forests: How important are interest rates, inflation, and market volatility?},
-  author = {Syed Abul Basher and Perry Sadorsky},
-  journal = {Machine Learning with Applications},
-  volume = {9},
-  pages = {100355},
-  year = {2022},
-  issn = {2666-8270},
-  doi = {10.1016/j.mlwa.2022.100355},
+  title     = {Forecasting Bitcoin price direction with random forests: How important are interest rates, inflation, and market volatility?},
+  author    = {Syed Abul Basher and Perry Sadorsky},
+  journal   = {Machine Learning with Applications},
+  volume    = {9},
+  pages     = {100355},
+  year      = {2022},
+  issn      = {2666-8270},
+  doi       = {10.1016/j.mlwa.2022.100355},
 }
 
 @article{gold,
-  title = {Gold price prediction using random forest regression}, 
-  author = {Gopi Krishna , T and Sai Lakshmi Manikanta , T and Hari Rajiv, B and Kavitha, M and Devarapalli , Dharmaiah and Kalyani, M and Mythrayee, D},
-  volume = {3},
-  journal = {Edu - Tech Enterprise},
-  year = {2025},
-  pages = {23},
-  doi = {10.71459/edutech202523},
+  title     = {Gold price prediction using random forest regression}, 
+  author    = {Gopi Krishna , T and Sai Lakshmi Manikanta , T and Hari Rajiv, B and Kavitha, M and Devarapalli , Dharmaiah and Kalyani, M and Mythrayee, D},
+  volume    = {3},
+  journal   = {Edu - Tech Enterprise},
+  year      = {2025},
+  pages     = {23},
+  doi       = {10.71459/edutech202523},
 }
 
 @article{prediction,
-  title = {Predicting the direction of stock market prices using random forest},
-  author = {Luckyson Khaidem and Snehanshu Saha and Sudeepa Roy Dey},
-  journal = {CoRR},
-  volume = {abs/1605.00003},
-  year = {2016},
-  url = {http://arxiv.org/abs/1605.00003},
+  title     = {Predicting the direction of stock market prices using random forest},
+  author    = {Luckyson Khaidem and Snehanshu Saha and Sudeepa Roy Dey},
+  journal   = {CoRR},
+  volume    = {abs/1605.00003},
+  year      = {2016},
+  url       = {http://arxiv.org/abs/1605.00003},
 }
 
 @article{wavelet,
-  title = {Predicting Currency Crises: A Novel Approach Combining Random Forests and Wavelet Transform},
-  author = {Xu, Lei and Kinkyo, Takuji and Hamori, Shigeyuki},
-  journal = {Journal of Risk and Financial Management},
-  volume = {11},
-  year = {2018},
-  number = {4},
-  issn = {1911-8074},
-  doi = {10.3390/jrfm11040086}
+  title     = {Predicting Currency Crises: A Novel Approach Combining Random Forests and Wavelet Transform},
+  author    = {Xu, Lei and Kinkyo, Takuji and Hamori, Shigeyuki},
+  journal   = {Journal of Risk and Financial Management},
+  volume    = {11},
+  year      = {2018},
+  number    = {4},
+  issn      = {1911-8074},
+  doi       = {10.3390/jrfm11040086}
 }
 
 @misc{ibm-rf,
-  title = {{What is random forest?}},
-  author = {IBM},
-  url = {https://www.ibm.com/think/topics/random-forest},
-  date = {2025-06-22}
+  title     = {{What is random forest?}},
+  author    = {IBM},
+  url       = {https://www.ibm.com/think/topics/random-forest},
+  date      = {2025-06-22}
 }
 
 @misc{scikit-rf,
-  title = {{sklearn.ensemble.RandomForestRegressor}},
-  author = {scikit-learn 1.3.2},
-  url = {https://scikit-learn.org/1.3/modules/generated/sklearn.ensemble.RandomForestRegressor.html},
-  date = {2025-06-22}
+  title     = {{sklearn.ensemble.RandomForestRegressor}},
+  author    = {scikit-learn 1.3.2},
+  url       = {https://scikit-learn.org/1.3/modules/generated/sklearn.ensemble.RandomForestRegressor.html},
+  date      = {2025-06-22}
 }
 
 % Decision Tree
 
 @misc{ibm-dt,
-  title = {{What is decision tree?}},
-  author = {IBM},
-  url = {https://www.ibm.com/think/topics/decision-trees},
-  date = {2025-06-22}
+  title     = {{What is decision tree?}},
+  author    = {IBM},
+  url       = {https://www.ibm.com/think/topics/decision-trees},
+  date      = {2025-06-22}
 }
 
 @article{dt-overview,
-  title={A survey of decision tree classifier methodology},
-  author={Safavian, S Rasoul and Landgrebe, David},
-  journal={IEEE transactions on systems, man, and cybernetics},
-  volume={21},
-  number={3},
-  pages={660--674},
-  year={1991},
-  publisher={IEEE}
+  title     = {A survey of decision tree classifier methodology},
+  author    = {Safavian, S Rasoul and Landgrebe, David},
+  journal   = {IEEE transactions on systems, man, and cybernetics},
+  volume    = {21},
+  number    = {3},
+  pages     = {660-674},
+  year      = {1991},
+  publisher = {IEEE}
 }
 
 % SVM
 
 @article{svr,
-  title = {Non-Linear Interactions and Exchange Rate Prediction: Empirical Evidence Using Support Vector Regression},
-  author = {Peng Yaohao and Pedro Henrique Melo Albuquerque and},
-  journal = {Applied Mathematical Finance},
-  volume = {26},
-  number = {1},
-  pages = {69-100},
-  year = {2019},
+  title     = {Non-Linear Interactions and Exchange Rate Prediction: Empirical Evidence Using Support Vector Regression},
+  author    = {Peng Yaohao and Pedro Henrique Melo Albuquerque and},
+  journal   = {Applied Mathematical Finance},
+  volume    = {26},
+  number    = {1},
+  pages     = {69-100},
+  year      = {2019},
   publisher = {Routledge},
-  doi = {10.1080/1350486X.2019.1593866},
+  doi       = {10.1080/1350486X.2019.1593866},
 }
 
 @inproceedings{svm-1,
   booktitle = {Third IEEE International Conference on Data Mining}, 
-  title = {SVM based models for predicting foreign currency exchange rates}, 
-  author = {Kamruzzaman, J. and Sarker, R.A. and Ahmad, I.},
-  year = {2003},
-  pages = {557-560},
-  doi = {10.1109/ICDM.2003.1250976}
+  title     = {SVM based models for predicting foreign currency exchange rates}, 
+  author    = {Kamruzzaman, J. and Sarker, R.A. and Ahmad, I.},
+  year      = {2003},
+  pages     = {557-560},
+  doi       = {10.1109/ICDM.2003.1250976}
 }
 
 @article{svm-2,
-  title = {Exchange rate prediction using support vector machines: a comparison with artificial neural networks},
-  author = {Alamili, Mohamad},
-  journal = {Unpublished Master’s thesis). Delft University of Technology, Delft, Netherlands},
-  year = {2011}
+  title     = {Exchange rate prediction using support vector machines: a comparison with artificial neural networks},
+  author    = {Alamili, Mohamad},
+  journal   = {Unpublished Master’s thesis). Delft University of Technology, Delft, Netherlands},
+  year      = {2011}
 }
 
 @article{vapnik-svm,
-  title = {Support-vector networks},
-  author = {Cortes, Corinna and Vapnik, Vladimir},
-  journal = {Machine learning},
-  volume = {20},
-  pages = {273--297},
-  year = {1995},
+  title     = {Support-vector networks},
+  author    = {Cortes, Corinna and Vapnik, Vladimir},
+  journal   = {Machine learning},
+  volume    = {20},
+  pages     = {273-297},
+  year      = {1995},
   publisher = {Springer}
 }
 
 @misc{ibm-svm,
-  title = {{What are support vector machines (SVMs)?}},
-  author = {IBM},
-  url = {https://www.ibm.com/think/topics/support-vector-machine},
-  date = {2025-06-21}
+  title     = {{What are support vector machines (SVMs)?}},
+  author    = {IBM},
+  url       = {https://www.ibm.com/think/topics/support-vector-machine},
+  date      = {2025-06-21}
 }
 
 @inproceedings{non-linear-svm,
-  title = {A training algorithm for optimal margin classifiers},
-  author = {Boser, Bernhard E. and Guyon, Isabelle M. and Vapnik, Vladimir N.},
-  year = {1992},
-  isbn = {089791497X},
+  title     = {A training algorithm for optimal margin classifiers},
+  author    = {Boser, Bernhard E. and Guyon, Isabelle M. and Vapnik, Vladimir N.},
+  year      = {1992},
+  isbn      = {089791497X},
   publisher = {Association for Computing Machinery},
-  address = {New York, NY, USA},
-  doi = {10.1145/130385.130401},
+  address   = {New York, NY, USA},
+  doi       = {10.1145/130385.130401},
   booktitle = {Proceedings of the Fifth Annual Workshop on Computational Learning Theory},
-  pages = {144–152},
-  numpages = {9},
-  location = {Pittsburgh, Pennsylvania, USA},
-  series = {COLT '92}
+  pages     = {144–152},
+  numpages  = {9},
+  location  = {Pittsburgh, Pennsylvania, USA},
+  series    = {COLT '92}
 }
 
 @inproceedings{vapnik-svr,
   booktitle = {Advances in Neural Information Processing Systems},
-  title = {Support Vector Regression Machines},
-  author = {Drucker, Harris and Burges, Christopher J. C. and Kaufman, Linda and Smola, Alex and Vapnik, Vladimir},
-  editor = {M.C. Mozer and M. Jordan and T. Petsche},
+  title     = {Support Vector Regression Machines},
+  author    = {Drucker, Harris and Burges, Christopher J. C. and Kaufman, Linda and Smola, Alex and Vapnik, Vladimir},
+  editor    = {M.C. Mozer and M. Jordan and T. Petsche},
   publisher = {MIT Press},
-  volume = {9},
-  year = {1996}
+  volume    = {9},
+  year      = {1996}
 }
 
 @misc{scikit-svr,
-  title = {{sklearn.svm.SVR}},
-  author = {scikit-learn 1.3.2},
-  url = {https://scikit-learn.org/1.3/modules/generated/sklearn.svm.SVR.html},
-  date = {2025-06-22}
+  title     = {{sklearn.svm.SVR}},
+  author    = {scikit-learn 1.3.2},
+  url       = {https://scikit-learn.org/1.3/modules/generated/sklearn.svm.SVR.html},
+  date      = {2025-06-22}
 }
 
-% References
+%%%%%%%%%%%%%%
+% References %
+%%%%%%%%%%%%%%
 
 @misc{forex,
-  title = {{Forex Market: Definition, How It Works, Types, and Trading Risks}},
-  author = {James Chen},
-  url = {https://www.investopedia.com/terms/forex/f/forex-market.asp},
-  date = {2025-06-21}
+  title     = {{Forex Market: Definition, How It Works, Types, and Trading Risks}},
+  author    = {James Chen},
+  url       = {https://www.investopedia.com/terms/forex/f/forex-market.asp},
+  date      = {2025-06-21}
 }
 
 @article{efficient-market-hypothesis,
- title = {Efficient Capital Markets: A Review of Theory and Empirical Work},
- author = {Eugene F. Fama},
- journal = {The Journal of Finance},
- number = {2},
- pages = {383-417},
- publisher = {[American Finance Association, Wiley]},
- volume = {25},
- year = {1970},
- ISSN = {00221082, 15406261}
+ title      = {Efficient Capital Markets: A Review of Theory and Empirical Work},
+ author     = {Eugene F. Fama},
+ journal    = {The Journal of Finance},
+ number     = {2},
+ pages      = {383-417},
+ publisher  = {[American Finance Association, Wiley]},
+ volume     = {25},
+ year       = {1970},
+ ISSN       = {00221082, 15406261}
 }
 
 @article{adaptive-markets,
-  title = {The Adaptive Markets Hypothesis: Evidence from the Foreign Exchange Market},
-  author = {Neely, Christopher J. and Weller, Paul A. and Ulrich, Joshua M.},
-  journal = {Journal of Financial and Quantitative Analysis}, 
-  volume = {44},
-  number = {2},
-  pages = {467-488},
-  year = {2009},
-  doi = {10.1017/S0022109009090103},
+  title     = {The Adaptive Markets Hypothesis: Evidence from the Foreign Exchange Market},
+  author    = {Neely, Christopher J. and Weller, Paul A. and Ulrich, Joshua M.},
+  journal   = {Journal of Financial and Quantitative Analysis}, 
+  volume    = {44},
+  number    = {2},
+  pages     = {467-488},
+  year      = {2009},
+  doi       = {10.1017/S0022109009090103},
 }
 
 @incollection{event-study-analysis,
   booktitle = {The Econometrics of Financial Markets},
-  title = {Event-Study Analysis},
-  author = {John Y. Campbell and Andrew W. Lo and A. Craig MacKinlay},
-  chapter = {4},
+  title     = {Event-Study Analysis},
+  author    = {John Y. Campbell and Andrew W. Lo and A. Craig MacKinlay},
+  chapter   = {4},
   publisher = {Princeton University Press},
-  address = {Princeton},
-  doi = {doi:10.1515/9781400830213},
-  isbn = {9781400830213},
-  year = {1997}
-}
-
-@article{scikit-learn,
- title={Scikit-learn: Machine Learning in {P}ython},
- author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.  and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.  and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},
- journal={Journal of Machine Learning Research},
- volume={12},
- pages={2825-2830},
- year={2011}
+  address   = {Princeton},
+  doi       = {doi:10.1515/9781400830213},
+  isbn      = {9781400830213},
+  year      = {1997}
 }
 
 @misc{ibm-ensemble,
-  title = {{What ensemble learning?}},
-  author = {IBM},
-  url = {https://www.ibm.com/think/topics/ensemble-learning},
-  date = {2025-06-23}
+  title     = {{What ensemble learning?}},
+  author    = {IBM},
+  url       = {https://www.ibm.com/think/topics/ensemble-learning},
+  date      = {2025-06-23}
 }
 
 @misc{ibm-regularization,
-  title = {{What is regularization?}},
-  author = {IBM},
-  url = {https://www.ibm.com/think/topics/regularization},
-  date = {2025-06-23}
+  title     = {{What is regularization?}},
+  author    = {IBM},
+  url       = {https://www.ibm.com/think/topics/regularization},
+  date      = {2025-06-23}
 }
 
