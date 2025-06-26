@@ -1,10 +1,10 @@
 \section{Model training and evaluation}\label{Model training and evaluation}
 
-This section presents an overview of the primary guideing principals used during the stages of model training and evaluation.
+This section presents an overview of the primary guiding principals used during the stages of model training and evaluation.
 
 \subsection{Bias-Variance dilemma}\label{Bias-Variance dilemma}
 
-The bias-variance dilemma is a fundamental problem in machine learning and involves the issues of model optimization and generalization. In the case of optimization (reducing the model error) a model eventually starts to overfit the training data, this results in high error of the models predictions on the test/validation datasets (high variance). The opposite is aiming to increase model generalization (reduction of model complexity) however this in turn causes underfitting or high error of the models predictions on the training dataset (high bias). This counterposed behaviour of both bias and variance enables the easy assessment of model suitability for use in the prediction of unseen data \cite{ibm-ensemble,ibm-regularization,svm-2}. 
+The bias-variance dilemma is a fundamental problem in machine learning and involves the issues of model optimization and generalization. In the case of optimization (reducing the model error) a model eventually starts to overfit the training data, this results in high error of the models predictions on the test/validation datasets (high variance). The opposite is aiming to increase model generalization (reduction of model complexity) however this in turn causes underfitting or high error of the models predictions on the training dataset (high bias). This counterpoised behaviour of both bias and variance enables the easy assessment of model suitability for use in the prediction of unseen data \cite{ibm-ensemble,ibm-regularization,svm-2}. 
 
 \subsection{Performance metrics}\label{Performance metrics}
 
@@ -155,13 +155,13 @@ The values where the sum of \gls{mape} between the training and test sets was th
 
 \subsubsection{Grid search}\label{Grid search}
 
-With the sample window size selected in the previous step a grid search with 5-fold cross-validation was conducted for each of the models.
+With the sample window size selected in the previous step a grid search with 5-fold cross-validation utilizing the negative \gls{mape} loss function was conducted for each of the models.
 
 \begin{table}[H]
     \centering
     \begin{tabular}{|c|c|c|}
         \hline
-        Parameters & Search grid & Optimium values \\
+        Parameters & Search grid & Optimum values \\
         \hline
         \hline
         hidden\_layer\_sizes & (50), (100), (200) & (100) \\
@@ -190,7 +190,7 @@ For the internal cross-validation the negative \gls{mape} was equal to -2.058. F
     \centering
     \begin{tabular}{|c|c|c|}
         \hline
-        Parameters & Search grid & Optimium values \\
+        Parameters & Search grid & Optimum values \\
         \hline
         \hline
         n\_estimators & 100, 200 & 100 \\
@@ -217,7 +217,7 @@ For the internal cross-validation the negative \gls{mape} was equal to -2.264. F
     \centering
     \begin{tabular}{|c|c|c|}
         \hline
-        Parameters & Search grid & Optimium values \\
+        Parameters & Search grid & Optimum values \\
         \hline
         \hline
         tol & 0.00001, 0.0001, 0.001, 0.01, 0.1 & 0.1 \\

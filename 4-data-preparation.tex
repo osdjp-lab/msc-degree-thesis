@@ -16,11 +16,11 @@ The first step in the preparation of the dataset was the removal of variables wi
 
 \subsubsection{Correlation analysis}\label{Correlation analysis}
 
-Next a Pearson correlation matrix for the remaining exchange rates was constructed and variables with at least one other variable with a high linear correlation $>$ 0.8 were removed: \gls{czk}, \gls{huf}, \gls{nok}, \gls{hkd}, \gls{sgd}, \gls{zar}. This procedure was used in order to reduce the risk of amplifying or distoring effects during the training phases \cite{genetic}.
+Next a Pearson correlation matrix for the remaining exchange rates was constructed and variables with at least one other variable with a high linear correlation $>$ 0.8 were removed: \gls{czk}, \gls{huf}, \gls{nok}, \gls{hkd}, \gls{sgd}, \gls{zar}. This procedure was used in order to reduce the risk of amplifying or distorting effects during the training phases \cite{genetic}.
 
 \subsubsection{Forward fill}\label{Forward fill}
 
-Even though variables with missing values were eliminated in the previous step the remaining exchange rates still had global missing values which were the result of holidays and weekends, days where the exchange markets were closed and no value could be assigned. In order to alleviate this issue blanks were forward filled with the values preceeding them \cite{techniques,rf-svr}.
+Even though variables with missing values were eliminated in the previous step the remaining exchange rates still had global missing values which were the result of holidays and weekends, days where the exchange markets were closed and no value could be assigned. In order to alleviate this issue blanks were forward filled with the values preceding them \cite{techniques,rf-svr}.
 
 \subsubsection{Log transformation}\label{Log transformation}
 
