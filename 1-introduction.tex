@@ -4,13 +4,150 @@
 
 The \gls{forex} market is the largest liquid financial market in the world. It is a global \gls{otc} market (there is no central market place or exchange) closest to the ideal of perfect competition. It operates 24 hours a day 5 days a week and allows banks, businesses, investment firms, hedge funds, retail traders and individuals to buy, sell and exchange currencies \cite{forex}.
 
+\subsection{Time series models}\label{Time series models}
+
+In the domain of time series forecasting many models have been developed. These models can be subdivided into univariate and multivariate models. Univariate track a single variable and make predictions based on the historical values of that same variable. Multivariate track the mutual dependance of multiple variables and make predictions on there future values.
+
+The most important univariate models that have been developed over the years include:
+
+\begin{itemize}
+    \item \Gls{ar} \cite{whittle} - expresses the current value as a linear combination of $p$ historical values. \Glsxtrshort{ar}$(p)$ denotes an \glsxtrlong{ar} model of order $p$. The model is mathematically defined as follows:
+
+        $X_{t} =  \varepsilon_{t} + \sum_{i=1}^{p}\phi_{i}X_{t-i}$
+
+        where:
+        \begin{itemize}
+            \item $X_{t}, X_{t-i}$ are the values of the time series at time $t$ and $t-i$.
+            \item $\phi_{i}$ are the coefficient for values at different time offsets.
+            \item $\varepsilon_{t}$ is the random variable representing white noise.
+        \end{itemize}
+    \item \Gls{ma} \cite{whittle} - expresses the current value as a linear combination of $p$ historical error terms. \Glsxtrshort{ma}$(q)$ denotes an \glsxtrlong{ma} model of order $q$. The model is mathematically defined as follows:
+        
+        $X_{t} = \mu + \varepsilon_{t} + \sum_{i=1}^{q}\theta_{i}\varepsilon_{t-i}$
+        
+        where:
+        \begin{itemize}
+            \item $\mu$ is the the mean of the series.
+            \item $X_{t}, X_{t-i}$ are the values of the time series at time $t$ and $t-i$.
+            \item $\theta_{i}$ are the coefficient for error terms at different time offsets.
+            \item $\varepsilon_{t-i}$ are the the white noise error terms at time $t-i$.
+        \end{itemize}
+
+    \item \Gls{arma} \cite{whittle} - combines the \gls{ar} and \gls{ma} models. \Glsxtrshort{arma}$(p)$ denotes an model with $p$ autoregressive terms and $q$ moving-average terms. \gls{arma} requires the time series to be stationary. The model is mathematically defined as follows:
+
+        $X_{t} =  \varepsilon_{t} + \sum_{i=1}^{p}\phi_{i}X_{t-i} + \sum_{i=1}^{q}\theta_{i}\varepsilon_{t-i}$
+
+    \item \Gls{es} \cite{brown,holt} - expresses the current value in a time series as a exponentially weighted combination of its past values where the most recent values have the most significance. Its mathematical representation is a follows:
+
+        $S_{t} = \alpha X_{t} + (1 - \alpha)S_{t-1}$
+
+        where:
+        \begin{itemize}
+            \item $S_{t}, S_{t-1}$ are the values of the smoothed time series at time $t$ and $t-1$.
+            \item $\alpha$ is the smoothing factor.
+            \item $X_{t}$ is the value of the time series at time $t$.
+        \end{itemize}
+
+    \item \Gls{arima} \cite{box-jenkins} - is a generalization of the \gls{arma} model which requires non-stationary series to be differenced in order for them to achieve stationarity. \gls{arima} models are denoted by: \gls{arima}$(p, d, q)$ where $p$ is the order of the \gls{ar} model, $d$ is the degree of differencing and $q$ is the order of the \gls{ma} model. Using the Box-Jenkins method allows for the selection of optimal parameters for an \gls{arima} model enabling the best fit of the model for the given time series.
+    \item \Gls{rw} \cite{meese-rogoff} - is a naive model with two subvarients:
+        \begin{itemize}
+            \item \gls{rw} without drift defined as:
+
+                $X_t = X_{t-1} + \varepsilon_t$
+
+            \item \gls{rw} with drift defined as:
+        
+                $X_t = X_{t-1} + a + \varepsilon_t$
+
+        \end{itemize}
+
+    where:
+
+    \begin{itemize}
+            \item $X_{t}, X_{t-1}$ is the value of the time series at time $t$ and $t - 1$.
+            \item $\varepsilon_t$ is the random step at time $t$.
+            \item $a$ - is a constant that determines the trend of the series.
+    \end{itemize}
+
+        The \gls{rw} without drift is often used as a benchmark for various forecasting models.
+
+    \item \Gls{arch} \cite{engle} - is a model that describes the conditional variance of a time series as an \gls{ar} combination of past squared errors. \Glsxtrshort{arch}$(p)$ denotes an \glsxtrlong{arch} model of order $p$. The time series is described by the following equation:
+
+        $\sigma_{t}^2 = \alpha_{0} + \sum_{i=1}^{p}\alpha_{i}\varepsilon_{t-i}^2$
+
+    where:
+    \begin{itemize}
+        \item $\sigma_{t}^2$ is the conditional variance.
+        \item $\alpha_{0}$ is a constant term that sets the baseline level of variance.
+        \item $\alpha_{i}$ are the coefficients that determine the weight of previous error terms.
+        \item $\varepsilon_{t-i}$ are values of previous error terms.
+    \end{itemize}
+
+    \item \Gls{garch} \cite{bollerslev} - is an extension of \gls{arch} that allows the conditional variance to be an \gls{arma} process, rather than just an \gls{ar} process as in \gls{arch}. The \Glsxtrshort{garch}(p,q) model is described by the equation:
+
+        $\sigma_{t}^2 = \alpha_{0} + \sum_{i=1}^{p}\alpha_{i}\varepsilon_{t-i}^2 + \sum_{j=1}^{q}\beta_{j}\sigma_{t-j}^2$
+
+        where:
+    \begin{itemize}
+        \item $\sigma_{t}^2$ is the conditional variance.
+        \item $\alpha_{0}$ is a constant term that sets the baseline level of variance.
+        \item $p$ is the order of the \gls{ar} term.
+        \item $q$ is the order of the \gls{ma} term.
+        \item $\alpha_{i}$ are the coefficients of the \gls{ar} terms.
+        \item $\beta_{j}$  are the coefficients of the \gls{ma} terms.
+        \item $\varepsilon_{t-i}$ are values of previous error terms.
+        \item $\sigma_{t-j}$ are the lagged conditional variance terms
+    \end{itemize}
+
+\end{itemize}
+
+Some of the most important multivariate models include:
+
+\begin{itemize}
+    \item \Gls{var} \cite{sims} - are a system of regressions where each variable is modeled as a function of its own lags and the lags of the other variables in the system. A $p$ order \gls{var} is denoted as \gls{var}$(p)$ \cite{deep-learning}. The model can be described as follows:
+
+    $y_{t} = A_{1}y_{t-1} + A_{2}y_{t-2} + ... + A_{p}y_{t-p} + \mu_{t}$
+
+    where:
+        \begin{itemize}
+            \item $y_{t}, y_{t-1}, y_{t-2}, y_{t-p}$ is a selection of endogenous variables.
+            \item $A_{i}$ is an (N x N) matrix of autoregression coefficients.
+            \item $\mu_{t}$ is an (N x 1) vector generalization of white noise.
+        \end{itemize}
+
+    \item \Gls{vec} \cite{johansen} - are a restricted form of VAR models used for non-stationary time series that are cointegrated. VEC models incorporate both the short-run dynamics and the long-run equilibrium relationships between the variables. \gls{vec} can have the following form:
+
+        $\Delta x_{t} =\Pi x_{t-1} + \sum_{l=1}^{p-1}\Gamma_l\Delta x_{t-1} + Cd_{t} + \epsilon_{t}$
+
+        where:
+        \begin{itemize}
+            \item $\Delta x$ is the first difference of the variables in vector $x$.
+            \item $\Pi$ is a coefficient matrix of cointegrating relationships.
+            \item $\Gamma$ is a coefficient matrix of the lags of differenced variables of $x$.
+            \item $d$ is a vector of deterministic terms.
+            \item $C$ coefficient matrix corresponding to $d$.
+            \item $p$ is the lag order of the model in its \gls{var} form
+            \item $\epsilon$ is an error term with zero mean and variance-covariance matrix $\sigma$.
+        \end{itemize}
+\end{itemize}
+
+% \subsection{Econometric models}\label{Econometric models}
+% 
+% \cite{comparing,linear-vs-nn}
+% 
+% \subsubsection{Purchasing Power Parity (PPP)}\label{Purchasing Power Parity (PPP)}
+% 
+% \subsubsection{Uncovered Interest Rate Parity (UIP)}\label{Uncovered Interest Rate Parity (UIP)}
+% 
+% \subsubsection{Sticky Price Monetary (SP)}\label{Sticky Price Monetary (SP)}
+
 \subsection{Exchange rate prediction}\label{Exchange rate prediction}
 
 Since the fall of the Bretton Woods system of fixed exchange rates in 1976 and the establishment of floating exchange rates with the Jamaica Accords, the need for accurate forecasting of exchange rates has become increasingly important. The primary reason for this is the need for effective risk management. Knowing whether the value of a currency will rise or fall ahead of time allows not only for the mitigation of adverse currency movements, but also for well-timed and potentially highly profitable investment decisions \cite{lstm-mlp-rf,deep-learning}.
 
-According to the \gls{emh} \cite{efficient-market-hypothesis} financial markets are efficient and their prices reflect all information available at a given point in time. An implication of this is the inability to predict future prices on the basis of historical values. As such proponents argue that market prices follow a random walk where price movements are random and independent from one another. However this hypothesis is highly contested and numerous papers have shown that currency markets exhibit inefficiencies resulting in a delay between information availability and price adjustment \cite{adaptive-markets,event-study-analysis}.
+According to the \gls{emh} \cite{efficient-market-hypothesis} financial markets are efficient and their prices reflect all information available at a given point in time. An implication of this is the inability to predict future prices on the basis of historical values. As such proponents argue that market prices follow a \gls{rw} where price movements are random and independent from one another. However this hypothesis is highly contested and numerous papers have shown that currency markets exhibit inefficiencies resulting in a delay between information availability and price adjustment \cite{adaptive-markets,event-study-analysis}.
 
-Unfortunately, even so exchange rates are notoriously difficult to predict and rarely outperform a random walk model. They exhibit a complex non-linear nature that is dependant on a wide range of variables including macroeconomic and microeconomic factors \cite{factors}.  As such there is no single model that performs well for all combinations of predictors, forecast horizons, sample periods, forecasting evaluation methods and exchange rates. At short horizons (days, weeks, months) the fluctuations of the exchange rates are significantly greater and harder to predict. At longer horizons (years) various models have been proven to be able to make predictions better than the random walk \cite{predictability}.
+Unfortunately, even so exchange rates are notoriously difficult to predict and rarely outperform a \gls{rw} model. They exhibit a complex non-linear nature that is dependant on a wide range of variables including macroeconomic and microeconomic factors \cite{factors}.  As such there is no single model that performs well for all combinations of predictors, forecast horizons, sample periods, forecasting evaluation methods and exchange rates. At short horizons (days, weeks, months) the fluctuations of the exchange rates are significantly greater and harder to predict. At longer horizons (years) various models have been proven to be able to make predictions better than the \gls{rw} \cite{predictability}.
 
 Given the challenges in forecasting exchange rates using traditional econometric models, in recent years researchers have increasingly turned to the application of \gls{ai} algorithms as a potential solution.
 
