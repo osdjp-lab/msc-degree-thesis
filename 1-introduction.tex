@@ -8,6 +8,8 @@ The \gls{forex} market is the largest liquid financial market in the world. It i
 
 In the domain of time series forecasting many models have been developed. These models can be subdivided into univariate and multivariate models. Univariate track a single variable and make predictions based on the historical values of that same variable. Multivariate track the mutual dependance of multiple variables and make predictions on there future values.
 
+\subsubsection{Univariate}\label{Univariate}
+
 The most important univariate models that have been developed over the years include:
 
 \begin{itemize}
@@ -49,7 +51,7 @@ The most important univariate models that have been developed over the years inc
         \end{itemize}
 
     \item \Gls{arima} \cite{box-jenkins} - is a generalization of the \gls{arma} model which requires non-stationary series to be differenced in order for them to achieve stationarity. \gls{arima} models are denoted by: \gls{arima}$(p, d, q)$ where $p$ is the order of the \gls{ar} model, $d$ is the degree of differencing and $q$ is the order of the \gls{ma} model. Using the Box-Jenkins method allows for the selection of optimal parameters for an \gls{arima} model enabling the best fit of the model for the given time series.
-    \item \Gls{rw} \cite{meese-rogoff} - is a naive model with two subvarients:
+    \item \Gls{rw} \cite{meese-rogoff} - is a naive model that proposes that changes between values in a time series are random and unrelated. There are two subvariants:
         \begin{itemize}
             \item \gls{rw} without drift defined as:
 
@@ -100,6 +102,8 @@ The most important univariate models that have been developed over the years inc
     \end{itemize}
 
 \end{itemize}
+
+\subsubsection{Multivariate}\label{Multivariate}
 
 Some of the most important multivariate models include:
 
@@ -159,19 +163,124 @@ Given the challenges in forecasting exchange rates using traditional econometric
 
 \glsxtrshortpl{ann} are systems composed of interconnected nodes imitating in behaviour and structure a biological system of neurons. They take in a set of input signals and according to a set of rules produce a set of outputs \cite{linear-vs-nn}. Unlike other \glsxtrshort{ai} methods they do not make any assumptions about their input data \cite{ann-1}. \glsxtrshortpl{ann} are categorized as non-parametric (nonlinear) statistical methods and are used as universal function approximators for any continuous function \cite{svm-2}. There are many types of \glsxtrlong{ann} including: \glspl{rnn}, \glspl{cnn}, \gls{lstm} and feedforward networks among others. One of the most commonly used types of \glspl{nn} is the \gls{mlp} which is a type of feedforward \glsxtrshort{ann}.
 
-An \glsxtrshort{mlp} consists of multiple layers made up of nodes (neurons). At its simplest we have a \gls{slp} a \glsxtrshort{nn} which consists of only two layers an input layer and an output layer. In more complex cases where non linear functions need to be modeled one or more intermediary hidden layers are added \cite{lstm-mlp-rf,svm-2}. The neurons of one layer are linked to the neurons of the following layer. Each connection between neurons is assigned a weight. Additionally bias neurons with a positive value of one can be attached to the neurons of the hidden and output layers. The weighted sum of inputs to a neuron is calculated via a propagation function. The calculated value is then fed to the activation function of the neuron which introduces a degree of non-linearity simulating an activation threshold. The most commonly used are: \gls{relu}, sigmoid, \gls{tanh} and linear activation functions \cite{svm-2}.
+An \glsxtrshort{mlp} consists of multiple layers made up of nodes (neurons). At its simplest we have a \gls{slp} a \glsxtrshort{nn} which consists of only two layers an input layer and an output layer. In more complex cases where non linear functions need to be modeled one or more intermediary hidden layers are added \cite{lstm-mlp-rf,svm-2}. A diagram of a simple three layer \gls{ann} is presented in figure \ref{fig:nn}. The neurons of one layer are linked to the neurons of the following layer. Each connection between neurons is assigned a weight. Additionally bias neurons with a positive value of one can be attached to the neurons of the hidden and output layers. The weighted sum of inputs to a neuron is calculated via a propagation function. The calculated value is then fed to the activation function of the neuron which introduces a degree of non-linearity simulating an activation threshold. The most commonly used are: \gls{relu}, sigmoid, \gls{tanh} and linear activation functions \cite{svm-2}.
 
-\subsubsection{Support vector machine }\label{Support vector machine}
+\begin{figure}
+    \includegraphics[width=0.5\textwidth]{images/neural-network.png}
+    \centering
+    \caption{A diagram portraying the structure of a simple three layer \gls{mlp}.}
+    \label{fig:nn}
+\end{figure}
 
-The \glsxtrlong{svm} is a model designed for the supervised classification of labeled data belonging to two classes \cite{vapnik-svm}. It enables the discovery of an optimal line or hyperplane that maximizes the distance between each class in an N-dimensional space. \gls{svm} can handle the linear separation of data as well as the non-linear separation of data via a kernel trick \cite{non-linear-svm}. The most popular non-linear kernels are the: polynomial kernel, \gls{rbf} and sigmoid kernel \cite{ibm-svm}. An extension of the original hard-margin SVM is the soft-margin SVM. The difference between them is that with the hard-margin data points will be perfectly separated outside of the support vectors while soft-margin classification will allow some misclassification through the use of a slack variable \cite{vapnik-svm}. Another extension of the \glsxtrshort{svm} is \gls{svr} which enables the application of \glsxtrshort{svm} to regression problems \cite{vapnik-svr,svr}.
+The training of an \gls{ann} consists of the initial assignment of random weights to each of the neurons connections followed by an iterative minimization of the sum of squared errors over all of the training data. This process is carried out via a learning algorithm. The most commonly used are:
+\begin{itemize}
+    \item \Gls{sbp} which is a steepest gradient descent algorithm. For \gls{sbp} the weight $\omega_{j}$ in iteration $n$ is updated via the following equation:
+
+$\Delta\omega_{j}(n) = -\eta\frac{\partial E}{\partial \omega_{j}}+\alpha\Delta\omega_{j}(n-1)$
+
+    where:
+        \begin{itemize}
+            \item $\omega_{j}$ are the connection weights.
+            \item $eta$ is the learning rate.
+            \item $E$ is the sum of squared error.
+            \item $alpha$ is the momentum factor.
+            \item $n$ is the iteration.
+        \end{itemize}
+
+    \item \Gls{scg} is a method that searches along conjugate directions in successive iterations for faster convergence. Selection of search direction is governed by the following equations:
+
+        $\omega_{k+1} = \omega_{k} + \alpha_{k}p_{k}$ \\
+        $p_{k} = -E'(\omega) + \alpha_{k}p_{k+1}$
+
+        where:
+        \begin{itemize}
+            \item $\omega_{k+1}, \omega_{k}$ are the connection weights.
+            \item $\alpha$ is the momentum factor.
+            \item $p_{k}, p_{k+1}$ are the conjugate directions in successive iterations.
+            \item $E$ is the sum of squared error.
+        \end{itemize}
+
+    \item \Gls{bpr} is an extension of the \gls{sbp} algorithm which constrains network parameters via regularization. A modification is made to the loss function:
+
+        $F = \gamma E + \frac{1 - \gamma}{n} \sum_{j=1}^{n}\omega_{j}^2$
+
+        where:
+        \begin{itemize}
+            \item $F$ is the loss function.
+            \item $\gamma$ is the performance ratio parameter.
+            \item $E$ is the sum squared error.
+            \item $\omega_{j}$ are the connection weights.
+            \item $n$ is the iteration.
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Support vector machine}\label{Support vector machine}
+
+The \glsxtrlong{svm} is a model designed for the supervised classification of labeled data belonging to two classes \cite{vapnik-svm}. It enables the discovery of an optimal line or hyperplane that maximizes the distance between each class in an N-dimensional space. An example of its application for a 2-dimensional space can be seen in figure \ref{fig:svm}. \gls{svm} can handle the linear separation of data as well as the non-linear separation of data via a kernel trick \cite{non-linear-svm}. The most popular non-linear kernels are the: polynomial kernel, \gls{rbf} and sigmoid kernel \cite{ibm-svm}. An extension of the original hard-margin \gls{svm} is the soft-margin \gls{svm}. The difference between them is that with the hard-margin \gls{svm} data points will be perfectly separated outside of the support vectors while soft-margin classification will allow some misclassification through the use of a slack variable \cite{vapnik-svm}.
+The hard-margin \gls{svm} is defined as:\\
+
+    $\underset{w, b}{minimize}\quad \frac{1}{2}\left\| \omega \right\|^2$
+
+    $subject\ to\quad y_{i}(\omega^Tx_{i}-b) \ge 1\quad \forall i \in \{1,...,n\}$ \\
+
+    where:
+    \begin{itemize}
+        \item $\omega$ is the normal vector to the hyperplane.
+        \item $b$ is the distance of the hyperplane from the origin.
+        \item $y_{i}$ is the class label for each training instance.
+        \item $x_{i}$ is the feature vector for each training instance.
+        \item $n$ is the total number of training instances.
+    \end{itemize}
+
+While the soft-margin \gls{svm} is defined as:\\
+
+    $\underset{w, b, \zeta}{minimize}\quad \left\| w \right\|^2 + C\sum_{i=1}^{n}\zeta_{i}$
+
+    $subject\ to\quad y_{i}(w^Tx_{i}-b) \ge 1 - \zeta_{i}$ \\
+
+    where:
+    \begin{itemize}
+        \item $\omega$ is the normal vector to the hyperplane.
+        \item $b$ is the distance of the hyperplane from the origin.
+        \item $y_{i}$ is the class label for each training instance.
+        \item $x_{i}$ is the feature vector for each training instance.
+        \item $n$ is the total number of training instances.
+        \item $C$ is the regularization parameter.
+        \item $\zeta_{i}$ are the slack variables.
+    \end{itemize}
+
+Another extension of the \glsxtrshort{svm} is \gls{svr} which enables the application of \glsxtrshort{svm} to regression problems \cite{vapnik-svr,svr}.
+
+\gls{svr} is defined as:\\
+
+    $minimize\quad \frac{1}{2} \left\| w \right\|^2$
+
+    $subject\ to\quad \left| y_{i} - \langle w,x_{i} \rangle - b \right| \le \varepsilon$\\
+
+    where:
+    \begin{itemize}
+        \item $\omega$ is the normal vector to the hyperplane.
+        \item $b$ is the distance of the hyperplane from the origin.
+        \item $y_{i}$ is the class label for each training instance.
+        \item $x_{i}$ is the feature vector for each training instance.
+        \item $n$ is the total number of training instances.
+        \item $\varepsilon$ is the band of tolerance.
+    \end{itemize}
+
+\begin{figure}
+    \includegraphics[width=0.5\textwidth]{images/svm-margin.png}
+    \centering
+    \caption{Maximum-margin hyperplane and margin for an \gls{svm} trained on two classes \cite{svm-margin}.}
+    \label{fig:svm}
+\end{figure}
 
 The primary tunable parameters of a \glsxtrshort{svm} are \cite{scikit-svr,svr}:
 \begin{itemize}
     \item Kernel function - determines the type of decision boundary. 
     \item Kernel hyperparameters - degree ($d$) for the polynomial kernel, gamma ($\gamma$) for the \glsxtrshort{rbf}, polynomial and sigmoid kernels and Gamma ($\gamma$) and intercept ($r$) for the polynomial and sigmoid kernels.
     \item Regularization strength ($C$) - controls the trade-off between maximizing the margin and minimizing the training error.
-    \item Loss function - hinge loss for \glsxtrshort{svm} classification and $\epsilon$-insensitive loss for \glsxtrshort{svr}.
-    \item Epsilon-insensitive margin ($\epsilon$) - margin of tolerance where no penalty is associated in the training loss function
+    \item Loss function - hinge loss for \glsxtrshort{svm} classification and $\varepsilon$-insensitive loss for \glsxtrshort{svr}.
+    \item Epsilon-insensitive margin ($\varepsilon$) - margin of tolerance where no penalty is associated in the training loss function.
 \end{itemize}
 
 \subsubsection{Decision tree}\label{Decision tree}
@@ -188,20 +297,6 @@ The primary tunable parameters of a \glsxtrlong{rf} are \cite{prediction,ibm-rf}
     \item The maximum number of features to consider at each split.
     \item Splitting criterion - based on impurity measures such as Shannon Entropy or Gini impurity.
 \end{itemize}
-
-% \subsection{Econometric models}\label{Econometric models}
-% 
-% \cite{comparing,linear-vs-nn}
-% 
-% \subsubsection{Purchasing Power Parity (PPP)}\label{Purchasing Power Parity (PPP)}
-% 
-% \subsubsection{Uncovered Interest Rate Parity (UIP)}\label{Uncovered Interest Rate Parity (UIP)}
-% 
-% \subsubsection{Sticky Price Monetary (SP)}\label{Sticky Price Monetary (SP)}
-
-% \subsection{Time series models}\label{Time series models}
-% 
-% \cite{deep-learning,linear-vs-nn}
 
 \subsection{Overview}\label{Overview}
 
