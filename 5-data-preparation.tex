@@ -8,23 +8,23 @@ The data chosen for this study was a set of euro foreign exchange reference rate
 
 \subsection{Preprocessing}\label{Preprocessing}
 
-The cleaning and preparation of the data conducted in order to increase the accuracy of predictions as well as improve the efficiency of model development.
+The cleaning and preparation of the data was conducted in order to increase the accuracy of predictions as well as improve the efficiency of model development.
 
 \subsubsection{Variable selection}\label{Variable selection}
 
-The first step in the preparation of the dataset was the removal of variables with local missing values of which there were 24 leaving behind 17 currency exchange rates: \gls{usd}, \gls{jpy}, \gls{czk}, \gls{dkk}, \gls{gbp}, \gls{huf}, \gls{pln}, \gls{sek}, \gls{chf}, \gls{nok}, \gls{aud}, \gls{cad}, \gls{hkd}, \gls{krw}, \gls{nzd}, \gls{sgd}, \gls{zar}.
+The first step in the preparation of the dataset was the removal of variables with local missing values of which there were 24 leaving behind 17 currency exchange rates: \gls{usd}, \gls{jpy}, \gls{czk}, \gls{dkk}, \gls{gbp}, \gls{huf}, \gls{pln}, \gls{sek}, \gls{chf}, \gls{nok}, \gls{aud}, \gls{cad}, \gls{hkd}, \gls{krw}, \gls{nzd}, \gls{sgd}, \gls{zar}. This step was crucial, as missing data can lead to biased estimates and negatively affect the overall performance of predictive models.
 
 \subsubsection{Correlation analysis}\label{Correlation analysis}
 
-Next a Pearson correlation matrix for the remaining exchange rates was constructed and variables with at least one other variable with a high linear correlation $>$ 0.8 were removed: \gls{czk}, \gls{huf}, \gls{nok}, \gls{hkd}, \gls{sgd}, \gls{zar}. This procedure was used in order to reduce the risk of amplifying or distorting effects during the training phases \cite{genetic}.
+Following the variable selection process, a Pearson correlation analysis was conducted on the remaining exchange rates to assess the linear relationships among them. A correlation matrix was constructed for the selected exchange rates, allowing for the visualization of the relationships among them. The analysis specifically focused on identifying pairs of variables exhibiting a high linear correlation ($> 0.8$). This threshold was chosen to mitigate the risk of multicollinearity, which can lead to inflated standard errors and unreliable coefficient estimates in regression models \cite{genetic}. As a result of this analysis, the following currencies were identified and removed due to their high correlation with at least one other variable: \gls{czk}, \gls{huf}, \gls{nok}, \gls{hkd}, \gls{sgd}, and \gls{zar}.
 
 \subsubsection{Forward fill}\label{Forward fill}
 
-Even though variables with missing values were eliminated in the previous step the remaining exchange rates still had global missing values which were the result of holidays and weekends, days where the exchange markets were closed and no value could be assigned. In order to alleviate this issue blanks were forward filled with the values preceding them \cite{techniques,rf-svr}.
+Even though variables with missing values were eliminated in a previous step the remaining exchange rates still had global missing values which were the result of holidays and weekends, days where the exchange markets were closed and no value could be assigned. In order to alleviate this issue blanks were forward filled with the values preceding them. This was done in order to preserve the continuity of the time series \cite{techniques,rf-svr}.
 
 \subsubsection{Log transformation}\label{Log transformation}
 
-Next a natural logarithm transformation of the data was applied in order to stabilize the variance in the data \cite{nn-vs-chaotic,robust-regression,gbp-usd-forecasting}.
+Next a natural logarithm transformation of the data was applied in order to stabilize the variance and prevent heteroscedacity \cite{nn-vs-chaotic,robust-regression,gbp-usd-forecasting}.
 
 \subsubsection{Differencing}\label{Differencing}
 
