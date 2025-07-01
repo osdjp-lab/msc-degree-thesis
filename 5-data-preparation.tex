@@ -12,7 +12,7 @@ The cleaning and preparation of the data was conducted in order to increase the 
 
 \subsubsection{Variable selection}\label{Variable selection}
 
-The first step in the preparation of the dataset was the removal of variables with local missing values of which there were 24 leaving behind 17 currency exchange rates: \gls{usd}, \gls{jpy}, \gls{czk}, \gls{dkk}, \gls{gbp}, \gls{huf}, \gls{pln}, \gls{sek}, \gls{chf}, \gls{nok}, \gls{aud}, \gls{cad}, \gls{hkd}, \gls{krw}, \gls{nzd}, \gls{sgd}, \gls{zar}. This step was crucial, as missing data can lead to biased estimates and negatively affect the overall performance of predictive models.
+The first step in the preparation of the dataset was the removal of variables with local missing values, caused by insufficient market activity and reporting inconsistencies, of which there were 24, leaving behind 17 currency exchange rates: \gls{usd}, \gls{jpy}, \gls{czk}, \gls{dkk}, \gls{gbp}, \gls{huf}, \gls{pln}, \gls{sek}, \gls{chf}, \gls{nok}, \gls{aud}, \gls{cad}, \gls{hkd}, \gls{krw}, \gls{nzd}, \gls{sgd}, \gls{zar}. This step was crucial, as missing data can lead to biased estimates and can negatively affect the overall performance of predictive models.
 
 \subsubsection{Correlation analysis}\label{Correlation analysis}
 
@@ -20,7 +20,7 @@ Following the variable selection process, a Pearson correlation analysis was con
 
 \subsubsection{Forward fill}\label{Forward fill}
 
-Even though variables with missing values were eliminated in a previous step the remaining exchange rates still had global missing values which were the result of holidays and weekends, days where the exchange markets were closed and no value could be assigned. In order to alleviate this issue blanks were forward filled with the values preceding them. This was done in order to preserve the continuity of the time series \cite{techniques,rf-svr}.
+Even though variables with local missing values were eliminated in a previous step the remaining exchange rates still had global missing values which were the result of holidays and weekends, days where the exchange markets were closed and no value could be assigned. In order to alleviate this issue the global missing values were forward filled with the values preceding them. This was done in order to preserve the continuity of the time series \cite{techniques,rf-svr}.
 
 \subsubsection{Log transformation}\label{Log transformation}
 
