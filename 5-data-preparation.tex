@@ -8,41 +8,103 @@ The data chosen for this study was a set of euro foreign exchange reference rate
 
 \subsection{Preprocessing}\label{Preprocessing}
 
-The cleaning and preparation of the data was conducted in order to increase the accuracy of predictions as well as improve the efficiency of model development.
+The cleaning and preparation of the data was conducted in order to increase the accuracy of predictions as well as improve the efficiency of model training.
 
-\subsubsection{Variable selection}\label{Variable selection}
+\subsubsection{Handling of missing values}\label{Handling of missing values}
 
-The first step in the preparation of the dataset was the removal of variables with local missing values, caused by insufficient market activity and reporting inconsistencies, of which there were 24, leaving behind 17 currency exchange rates: \gls{usd}, \gls{jpy}, \gls{czk}, \gls{dkk}, \gls{gbp}, \gls{huf}, \gls{pln}, \gls{sek}, \gls{chf}, \gls{nok}, \gls{aud}, \gls{cad}, \gls{hkd}, \gls{krw}, \gls{nzd}, \gls{sgd}, \gls{zar}. This step was crucial, as missing data can lead to biased estimates and can negatively affect the overall performance of predictive models.
+The handling of missing values consisted of two steps.
 
-\subsubsection{Correlation analysis}\label{Correlation analysis}
+The first step in the preparation of the dataset was the removal of variables with more than two sequential variable specific missing values, caused by insufficient market activity and reporting inconsistencies, of which there were 24, leaving behind 17 currency exchange rates: \gls{usd}, \gls{jpy}, \gls{czk}, \gls{dkk}, \gls{gbp}, \gls{huf}, \gls{pln}, \gls{sek}, \gls{chf}, \gls{nok}, \gls{aud}, \gls{cad}, \gls{hkd}, \gls{krw}, \gls{nzd}, \gls{sgd}, \gls{zar}.
 
-Following the variable selection process, a Pearson correlation analysis was conducted on the remaining exchange rates to assess the linear relationships among them. A correlation matrix was constructed for the selected exchange rates, allowing for the visualization of the relationships among them. The analysis specifically focused on identifying pairs of variables exhibiting a high linear correlation ($> 0.8$). This threshold was chosen to mitigate the risk of multicollinearity, which can lead to inflated standard errors and unreliable coefficient estimates in regression models \cite{genetic}. As a result of this analysis, the following currencies were identified and removed due to their high correlation with at least one other variable: \gls{czk}, \gls{huf}, \gls{nok}, \gls{hkd}, \gls{sgd}, and \gls{zar}.
+\begin{figure}[h]
+    \includegraphics[width=0.5\textwidth]{images/preprocessing/1-nan/0-nan.png}
+    \centering
+    \caption{A subsection of the raw exchange rate data showing NaN vales for the \gls{bgn} currency.}
+    \label{fig:nan}
+\end{figure}
 
-\subsubsection{Forward fill}\label{Forward fill}
+\begin{figure}[h]
+    \includegraphics[width=0.5\textwidth]{images/preprocessing/1-nan/1-no-nan.png}
+    \centering
+    \caption{A subsection of the exchange rate data showing the removed \gls{bgn} currency in comparison to figure \ref{fig:nan}.}
+    \label{fig:no-nan}
+\end{figure}
 
-Even though variables with local missing values were eliminated in a previous step the remaining exchange rates still had global missing values which were the result of holidays and weekends, days where the exchange markets were closed and no value could be assigned. In order to alleviate this issue the global missing values were forward filled with the values preceding them. This was done in order to preserve the continuity of the time series \cite{techniques,rf-svr}.
+Even though variables with variable specific missing values were eliminated in the previous step and the remaining data appeared continuous the remaining exchange rates still exhibited global missing values which were the result of holidays and weekends, days where the exchange markets were closed and no value could be assigned. In order to alleviate this issue and preserve the continuity of the time series the missing dates were added and the missing values were forward filled with the values preceding them.
 
-\subsubsection{Log transformation}\label{Log transformation}
+\begin{figure}[h]
+    \includegraphics[width=0.5\textwidth]{images/preprocessing/2-ff/1-no-date.png}
+    \centering
+    \caption{A subsection of the exchange rate data showing a series of two missing global values indicated by missing dates.}
+    \label{fig:no-date}
+\end{figure}
 
-Next a natural logarithm transformation of the data was applied in order to stabilize the variance and prevent heteroscedacity \cite{nn-vs-chaotic,robust-regression,gbp-usd-forecasting}.
+\begin{figure}[h]
+    \includegraphics[width=0.5\textwidth]{images/preprocessing/2-ff/2-with-date.png}
+    \centering
+    \caption{A subsection of the exchange rate data showing the added dates and forward filled values in comparison to figure \ref{fig:no-date}.}
+    \label{fig:with-date}
+\end{figure}
 
-\subsubsection{Differencing}\label{Differencing}
+This step was crucial, as missing data can lead to biased estimates and can negatively affect the overall performance of predictive models \cite{techniques,rf-svr}.
 
-In the next step first-order differencing was applied to the dataset. This procedure causes the replacement of successive values with successive variations. This is a necessary step in the preparation of the data enabling the removal of trends, seasonality, and other non-stationary components from the original time series \cite{nn-vs-chaotic,robust-regression,gbp-usd-forecasting}.
+\subsubsection{Feature scaling}\label{Feature scaling}
 
-\subsubsection{Normalization}\label{Normalization}
+Feature scaling is an essential step in the data preparation for many \gls{ai} models which often exhibit better training efficiency and forecasting accuracy with scaled data. This is especially true for \gls{mlp} and \gls{svr}. For the \gls{rf} machine learning model this step is not required due to insensitivity and as a result has been omitted. Two feature scaling methods where used in the data preparation process for different models in this paper. An visual representation of the effects of both can be seen in figure \ref{fig:usd-scaling}.
 
-The next step was the normalization of the data to the range [-1,1] which is a requirement for it's use in \gls{nn} with the \gls{tanh} activation function due to the limitations of how \gls{nn} are structured. The normalization of the data also enables the more efficient training of \gls{svm} \cite{nn-vs-chaotic,genetic,rf-svr,ann-2}.
+\begin{itemize}
+    \item Normalization via scikit-learn's MinMaxScaler \cite{scikit-learn} to the range [-1,1] was used in the preparation of data for use with the \gls{mlp} with the \gls{tanh} activation function \cite{nn-vs-chaotic,ann-2}.
+    \item Standardization via scikit-learn's StandardScaler \cite{scikit-learn} to a mean of zero and a variance of one was used in the data preparation pipeline for use with \gls{svr} \cite{genetic,rf-svr}.
+\end{itemize}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/preprocessing/3-scaling/usd-scaling.png}
+    \centering
+    \caption{A graphical comparison of normalization and standardization on the basis of the \gls{usd} spot exchange rate.}
+    \label{fig:usd-scaling}
+\end{figure}
 
 \subsubsection{Feature extraction}\label{Feature extraction}
 
-In this step each currency alongside its five best predictors was extracted into a new file. Next, time lagged versions of each of the predictors were created in the new files alongside the target column ranging from 1 to 150 days enabling the easy testing of the effects of various sample windows on the forecasting ability of the models \cite{rf-svr,gold}.
+From among all of the available currencies the \gls{usd} currency exchange rate was selected as the target variable. For each feature variable as well as the target variable time lagged versions upto 50 days were created and saved to an output file \cite{rf-svr,gold}.
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/preprocessing/4-usd-shifts-3.png}
+    \centering
+    \caption{An example of the procedure of feature extraction for the target variable \gls{usd} for a series of time shifts upto three.}
+    \label{fig:usd-scaling}
+\end{figure}
+
+% \subsubsection{Feature decorrelation}\label{Feature decorrelation}
+% 
+% In the next step a Pearson correlation analysis was conducted on the remaining exchange rates to assess the linear relationships among them. A correlation matrix was constructed for the selected exchange rates, allowing for the visualization of the relationships among them. The analysis specifically focused on identifying pairs of variables exhibiting a high linear correlation ($> 0.8$). This threshold was chosen to mitigate the risk of multicollinearity, which can lead to inflated standard errors and unreliable coefficient estimates in regression models \cite{genetic}. As a result of this analysis, the following currencies were identified and removed due to their high correlation with at least one other variable: \gls{czk}, \gls{huf}, \gls{nok}, \gls{hkd}, \gls{sgd}, and \gls{zar}.
+
+\subsubsection{Variable selection}\label{Variable selection}
+
+In the next step scikit-learn's \gls{rfecv} \cite{scikit-learn} was used with the \gls{svr} model with a linear kernel as the estimator for feature importance ranking and optimal feature subset selection.
+
+The \gls{cv} results for each dataset are presented in figure \ref{fig:rfecv}.
+
+For the \gls{mlp} dataset for which normalization was employed the optimal number of features selected by the \gls{rfecv} was seven: \gls{hkd}\_shift1, \gls{usd}\_shift1, \gls{hkd}\_shift2, \gls{usd}\_shift2, \gls{hkd}\_shift3, \gls{usd}\_shift3, \gls{krw}\_shift23.
+
+For the \gls{svr} dataset for which Standardization was employed the optimal number of features selected by the \gls{rfecv} was two: \gls{usd}\_shift1, \gls{czk}\_shift34.
+
+For the \gls{rf} dataset for which no scaling procedures were used \gls{rfecv} selected only one feature: \gls{hkd}\_shift1.
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/preprocessing/5-variable-selection/rfecv.png}
+    \centering
+    \caption{\Gls{cv} scores by number of features for normalized (\gls{mlp}), standardized (\gls{svr}), unprocessed (\gls{rf}) datasets.}
+    \label{fig:rfecv}
+\end{figure}
+
+The absence of scaling as well as in the case of scaling the chosen scaling methodology greatly affect the results of \gls{rfecv}.
 
 \subsubsection{Data split}\label{Data split}
 
-For the purpose of model training as well as the better assessment of the predictive accuracy of the models each dataset was split into two subsets with a separation strip equal to the degree of generated time lags (150) in order to prevent information leakage from the training set to the test set:
+For the purpose of model training and forecasting accuracy evaluation each dataset was split into two subsets with a separation strip equal to the degree of generated time lags (150) in order to prevent information leakage from the training set to the test set:
 \begin{itemize}
-    \item training $+$ validation (70\%) - for model training and k-fold cross-validation
-    \item testing (30\%) - for the final evaluation of the selected model in order to prevent overfitting and enable a unbiased evaluation of the model on new unseen data
+    \item training $+$ validation (70\%) - for model training and k-fold cross-validation.
+    \item testing (30\%) - for the final evaluation of the selected model in order to prevent overfitting and enable a unbiased evaluation of the model on new unseen data.
 \end{itemize}
 
