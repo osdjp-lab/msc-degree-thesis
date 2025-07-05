@@ -18,7 +18,7 @@ plt.figure(figsize=(10, 6))
 
 plt.plot(count, nn_fcv['cross_validation_score'].to_numpy(), label='Normalized')
 plt.plot(count, svr_fcv['cross_validation_score'].to_numpy(), label='Standardized')
-plt.plot(count, rf_fcv['cross_validation_score'].to_numpy(), label='None')
+plt.plot(count, rf_fcv['cross_validation_score'].to_numpy(), label='Unscaled')
 
 # Set title and labels
 plt.title('Cross validation scores by number of features', fontsize=textsize)

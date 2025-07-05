@@ -66,39 +66,40 @@ Feature scaling is an essential step in the data preparation for many \gls{ai} m
 
 \subsubsection{Feature extraction}\label{Feature extraction}
 
-From among all of the available currencies the \gls{usd} currency exchange rate was selected as the target variable. For each feature variable as well as the target variable time lagged versions upto 50 days were created and saved to an output file \cite{rf-svr,gold}.
+From among all of the available currencies the \gls{usd} currency exchange rate was selected as the target variable. For each feature variable as well as the target variable time lagged versions upto 500 days were created for each dataset preprocessing variation \cite{rf-svr,gold}.
 
 \begin{figure}[h]
     \includegraphics[width=\textwidth]{images/preprocessing/4-usd-shifts-3.png}
     \centering
     \caption{An example of the procedure of feature extraction for the target variable \gls{usd} for a series of time shifts upto three.}
-    \label{fig:usd-scaling}
+    \label{fig:feature-extraction}
 \end{figure}
 
-% \subsubsection{Feature decorrelation}\label{Feature decorrelation}
-% 
-% In the next step a Pearson correlation analysis was conducted on the remaining exchange rates to assess the linear relationships among them. A correlation matrix was constructed for the selected exchange rates, allowing for the visualization of the relationships among them. The analysis specifically focused on identifying pairs of variables exhibiting a high linear correlation ($> 0.8$). This threshold was chosen to mitigate the risk of multicollinearity, which can lead to inflated standard errors and unreliable coefficient estimates in regression models \cite{genetic}. As a result of this analysis, the following currencies were identified and removed due to their high correlation with at least one other variable: \gls{czk}, \gls{huf}, \gls{nok}, \gls{hkd}, \gls{sgd}, and \gls{zar}.
+\subsubsection{Feature decorrelation}\label{Feature decorrelation}
+
+In the next step a Pearson correlation matrix was constructed on the feature and target exchange rates to assess the linear relationships among them. The threshold for feature rejection was set for values $\ge 0.8$. This threshold was chosen to mitigate the risk of multicollinearity, which can lead to inflated standard errors and unreliable coefficient estimates in regression models. The analysis began with the elimination of feature variables that exhibited a high linear correlation with the target variable. Next feature variables that had a high correlation with at least one other variable were removed. This was done in order to prevent amplifying or distorting effects during model training \cite{genetic}. As a result of this analysis, the initial feature set consisting of 8500 variables was significantly reduced down to 39 variables.
 
 \subsubsection{Variable selection}\label{Variable selection}
 
 In the next step scikit-learn's \gls{rfecv} \cite{scikit-learn} was used with the \gls{svr} model with a linear kernel as the estimator for feature importance ranking and optimal feature subset selection.
 
-The \gls{cv} results for each dataset are presented in figure \ref{fig:rfecv}.
+The \gls{cv} results for each dataset are presented in figure \ref{fig:rfecv}. As can be see the absence of scaling as well as in the case of scaling the chosen scaling methodology greatly affect the results of \gls{rfecv}.
 
-For the \gls{mlp} dataset for which normalization was employed the optimal number of features selected by the \gls{rfecv} was seven: \gls{hkd}\_shift1, \gls{usd}\_shift1, \gls{hkd}\_shift2, \gls{usd}\_shift2, \gls{hkd}\_shift3, \gls{usd}\_shift3, \gls{krw}\_shift23.
+For the \gls{mlp} dataset for which normalization was employed the optimal number of features selected by the \gls{rfecv} was 33:
+\gls{jpy}\_shift1, \gls{czk}\_shift1, \gls{dkk}\_shift1, \gls{huf}\_shift1, \gls{pln}\_shift1, \gls{sek}\_shift1, \gls{aud}\_shift1, \gls{cad}\_shift1, \gls{krw}\_shift1, \gls{nzd}\_shift1, \gls{sgd}\_shift1, \gls{dkk}\_shift76, \gls{cad}\_shift89, \gls{aud}\_shift169, \gls{cad}\_shift176, \gls{nzd}\_shift211, \gls{dkk}\_shift224, \gls{krw}\_shift235, \gls{pln}\_shift240, \gls{hkd}\_shift255, \gls{gbp}\_shift260, \gls{cad}\_shift262, \gls{aud}\_shift336, \gls{cad}\_shift348, \gls{pln}\_shift356, \gls{dkk}\_shift370, \gls{jpy}\_shift423, \gls{nzd}\_shift425, \gls{cad}\_shift434, \gls{krw}\_shift460, \gls{sgd}\_shift464, \gls{pln}\_shift470, \gls{aud}\_shift498.
 
-For the \gls{svr} dataset for which Standardization was employed the optimal number of features selected by the \gls{rfecv} was two: \gls{usd}\_shift1, \gls{czk}\_shift34.
+For the \gls{svr} dataset for which standardization was employed the optimal number of features selected by the \gls{rfecv} was 9:
+\gls{czk}\_shift1, \gls{huf}\_shift1, \gls{sek}\_shift1, \gls{aud}\_shift1, \gls{cad}\_shift1, \gls{nzd}\_shift1, \gls{sgd}\_shift1, \gls{gbp}\_shift260, \gls{aud}\_shift336.
 
-For the \gls{rf} dataset for which no scaling procedures were used \gls{rfecv} selected only one feature: \gls{hkd}\_shift1.
+For the \gls{rf} dataset for which no scaling procedures were used the number of features selected by the \gls{rfecv} was 34:
+\gls{jpy}\_shift1, \gls{czk}\_shift1, \gls{dkk}\_shift1, \gls{pln}\_shift1, \gls{sek}\_shift1, \gls{aud}\_shift1, \gls{cad}\_shift1, \gls{nzd}\_shift1, \gls{sgd}\_shift1, \gls{dkk}\_shift76, \gls{cad}\_shift89, \gls{pln}\_shift122, \gls{dkk}\_shift150, \gls{aud}\_shift169, \gls{cad}\_shift176, \gls{nzd}\_shift211, \gls{dkk}\_shift224, \gls{pln}\_shift240, \gls{hkd}\_shift255, \gls{gbp}\_shift260, \gls{cad}\_shift262, \gls{dkk}\_shift297, \gls{aud}\_shift336, \gls{sek}\_shift346, \gls{cad}\_shift348, \gls{pln}\_shift356, \gls{dkk}\_shift370, \gls{jpy}\_shift423, \gls{nzd}\_shift425, \gls{cad}\_shift434, \gls{dkk}\_shift444, \gls{sgd}\_shift464, \gls{pln}\_shift470, \gls{aud}\_shift498.
 
 \begin{figure}[h]
     \includegraphics[width=\textwidth]{images/preprocessing/5-variable-selection/rfecv.png}
     \centering
-    \caption{\Gls{cv} scores by number of features for normalized (\gls{mlp}), standardized (\gls{svr}), unprocessed (\gls{rf}) datasets.}
+    \caption{\Gls{cv} scores by number of features for normalized (\gls{mlp}), standardized (\gls{svr}) and unscaled (\gls{rf}) datasets.}
     \label{fig:rfecv}
 \end{figure}
-
-The absence of scaling as well as in the case of scaling the chosen scaling methodology greatly affect the results of \gls{rfecv}.
 
 \subsubsection{Data split}\label{Data split}
 
