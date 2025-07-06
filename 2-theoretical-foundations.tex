@@ -156,7 +156,7 @@ Some of the most important multivariate models include:
 An \glsxtrshort{mlp} consists of multiple layers made up of nodes (neurons). At its simplest we have a \gls{slp} a \glsxtrshort{nn} which consists of only two layers an input layer and an output layer. In more complex cases where non linear functions need to be modeled one or more intermediary hidden layers are added \cite{lstm-mlp-rf,svm-2}. A diagram of a simple three layer \gls{ann} is presented in figure \ref{fig:nn}. The neurons of one layer are linked to the neurons of the following layer. Each connection between neurons is assigned a weight. Additionally bias neurons with a positive value of one can be attached to the neurons of the hidden and output layers. The weighted sum of inputs to a neuron is calculated via a propagation function. The calculated value is then fed to the activation function of the neuron which introduces a degree of non-linearity simulating an activation threshold. The most commonly used are: \gls{relu}, sigmoid, \gls{tanh} and linear activation functions \cite{svm-2}.
 
 \begin{figure}
-    \includegraphics[width=0.5\textwidth]{images/neural-network.png}
+    \includegraphics[width=0.5\textwidth]{images/model-diagrams/neural-network.png}
     \centering
     \caption{A diagram portraying the structure of a simple three layer \gls{mlp}.}
     \label{fig:nn}
@@ -258,7 +258,7 @@ Another extension of the \glsxtrshort{svm} is \gls{svr} which enables the applic
     \end{itemize}
 
 \begin{figure}
-    \includegraphics[width=0.5\textwidth]{images/svm-margin.png}
+    \includegraphics[width=0.5\textwidth]{images/model-diagrams/svm-margin.png}
     \centering
     \caption{Maximum-margin hyperplane and margin for an \gls{svm} trained on two classes \cite{svm-margin}.}
     \label{fig:svm}
