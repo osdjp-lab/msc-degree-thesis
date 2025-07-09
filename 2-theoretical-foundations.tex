@@ -13,7 +13,7 @@ The most important univariate models that have been developed over the years inc
 \begin{itemize}
     \item \Gls{ar} \cite{whittle} - expresses the current value as a linear combination of $p$ historical values. \Glsxtrshort{ar}$(p)$ denotes an \glsxtrlong{ar} model of order $p$. The model is mathematically defined as follows:
 
-        $X_{t} =  \varepsilon_{t} + \sum_{i=1}^{p}\phi_{i}X_{t-i}$
+        $$X_{t} =  \varepsilon_{t} + \sum_{i=1}^{p}\phi_{i}X_{t-i}$$
 
         where:
         \begin{itemize}
@@ -23,7 +23,7 @@ The most important univariate models that have been developed over the years inc
         \end{itemize}
     \item \Gls{ma} \cite{whittle} - expresses the current value as a linear combination of $p$ historical error terms. \Glsxtrshort{ma}$(q)$ denotes an \glsxtrlong{ma} model of order $q$. The model is mathematically defined as follows:
         
-        $X_{t} = \mu + \varepsilon_{t} + \sum_{i=1}^{q}\theta_{i}\varepsilon_{t-i}$
+        $$X_{t} = \mu + \varepsilon_{t} + \sum_{i=1}^{q}\theta_{i}\varepsilon_{t-i}$$
         
         where:
         \begin{itemize}
@@ -35,11 +35,11 @@ The most important univariate models that have been developed over the years inc
 
     \item \Gls{arma} \cite{whittle} - combines the \gls{ar} and \gls{ma} models. \Glsxtrshort{arma}$(p)$ denotes an model with $p$ autoregressive terms and $q$ moving-average terms. \gls{arma} requires the time series to be stationary. The model is mathematically defined as follows:
 
-        $X_{t} =  \varepsilon_{t} + \sum_{i=1}^{p}\phi_{i}X_{t-i} + \sum_{i=1}^{q}\theta_{i}\varepsilon_{t-i}$
+        $$X_{t} =  \varepsilon_{t} + \sum_{i=1}^{p}\phi_{i}X_{t-i} + \sum_{i=1}^{q}\theta_{i}\varepsilon_{t-i}$$
 
     \item \Gls{es} \cite{brown,holt} - expresses the current value in a time series as a exponentially weighted combination of its past values where the most recent values have the most significance. Its mathematical representation is a follows:
 
-        $S_{t} = \alpha X_{t} + (1 - \alpha)S_{t-1}$
+        $$S_{t} = \alpha X_{t} + (1 - \alpha)S_{t-1}$$
 
         where:
         \begin{itemize}
@@ -53,11 +53,11 @@ The most important univariate models that have been developed over the years inc
         \begin{itemize}
             \item \gls{rw} without drift defined as:
 
-                $X_t = X_{t-1} + \varepsilon_t$
+                $$X_t = X_{t-1} + \varepsilon_t$$
 
             \item \gls{rw} with drift defined as:
         
-                $X_t = X_{t-1} + a + \varepsilon_t$
+                $$X_t = X_{t-1} + a + \varepsilon_t$$
 
         \end{itemize}
 
@@ -73,7 +73,7 @@ The most important univariate models that have been developed over the years inc
 
     \item \Gls{arch} \cite{engle} - is a model that describes the conditional variance of a time series as an \gls{ar} combination of past squared errors. \Glsxtrshort{arch}$(p)$ denotes an \glsxtrlong{arch} model of order $p$. The time series is described by the following equation:
 
-        $\sigma_{t}^2 = \alpha_{0} + \sum_{i=1}^{p}\alpha_{i}\varepsilon_{t-i}^2$
+        $$\sigma_{t}^2 = \alpha_{0} + \sum_{i=1}^{p}\alpha_{i}\varepsilon_{t-i}^2$$
 
     where:
     \begin{itemize}
@@ -85,7 +85,7 @@ The most important univariate models that have been developed over the years inc
 
     \item \Gls{garch} \cite{bollerslev} - is an extension of \gls{arch} that allows the conditional variance to be an \gls{arma} process, rather than just an \gls{ar} process as in \gls{arch}. The \Glsxtrshort{garch}(p,q) model is described by the equation:
 
-        $\sigma_{t}^2 = \alpha_{0} + \sum_{i=1}^{p}\alpha_{i}\varepsilon_{t-i}^2 + \sum_{j=1}^{q}\beta_{j}\sigma_{t-j}^2$
+        $$\sigma_{t}^2 = \alpha_{0} + \sum_{i=1}^{p}\alpha_{i}\varepsilon_{t-i}^2 + \sum_{j=1}^{q}\beta_{j}\sigma_{t-j}^2$$
 
         where:
     \begin{itemize}
@@ -108,7 +108,7 @@ Some of the most important multivariate models include:
 \begin{itemize}
     \item \Gls{var} \cite{sims} - are a system of regressions where each variable is modeled as a function of its own lags and the lags of the other variables in the system. A $p$ order \gls{var} is denoted as \gls{var}$(p)$ \cite{deep-learning}. The model can be described as follows:
 
-    $y_{t} = A_{1}y_{t-1} + A_{2}y_{t-2} + ... + A_{p}y_{t-p} + \mu_{t}$
+    $$y_{t} = A_{1}y_{t-1} + A_{2}y_{t-2} + ... + A_{p}y_{t-p} + \mu_{t}$$
 
     where:
         \begin{itemize}
@@ -119,7 +119,7 @@ Some of the most important multivariate models include:
 
     \item \Gls{vec} \cite{johansen} - are a restricted form of VAR models used for non-stationary time series that are cointegrated. VEC models incorporate both the short-run dynamics and the long-run equilibrium relationships between the variables. \gls{vec} can have the following form:
 
-        $\Delta x_{t} =\Pi x_{t-1} + \sum_{l=1}^{p-1}\Gamma_l\Delta x_{t-1} + Cd_{t} + \epsilon_{t}$
+        $$\Delta x_{t} =\Pi x_{t-1} + \sum_{l=1}^{p-1}\Gamma_l\Delta x_{t-1} + Cd_{t} + \epsilon_{t}$$
 
         where:
         \begin{itemize}
@@ -166,7 +166,7 @@ The training of an \gls{ann} consists of the initial assignment of random weight
 \begin{itemize}
     \item \Gls{sbp} which is a steepest gradient descent algorithm. For \gls{sbp} the weight $\omega_{j}$ in iteration $n$ is updated via the following equation:
 
-$\Delta\omega_{j}(n) = -\eta\frac{\partial E}{\partial \omega_{j}}+\alpha\Delta\omega_{j}(n-1)$
+$$\Delta\omega_{j}(n) = -\eta\frac{\partial E}{\partial \omega_{j}}+\alpha\Delta\omega_{j}(n-1)$$
 
     where:
         \begin{itemize}
@@ -179,8 +179,8 @@ $\Delta\omega_{j}(n) = -\eta\frac{\partial E}{\partial \omega_{j}}+\alpha\Delta\
 
     \item \Gls{scg} is a method that searches along conjugate directions in successive iterations for faster convergence. Selection of search direction is governed by the following equations:
 
-        $\omega_{k+1} = \omega_{k} + \alpha_{k}p_{k}$ \\
-        $p_{k} = -E'(\omega) + \alpha_{k}p_{k+1}$
+        $$\omega_{k+1} = \omega_{k} + \alpha_{k}p_{k}$$
+        $$p_{k} = -E'(\omega) + \alpha_{k}p_{k+1}$$
 
         where:
         \begin{itemize}
@@ -192,7 +192,7 @@ $\Delta\omega_{j}(n) = -\eta\frac{\partial E}{\partial \omega_{j}}+\alpha\Delta\
 
     \item \Gls{bpr} is an extension of the \gls{sbp} algorithm which constrains network parameters via regularization. A modification is made to the loss function:
 
-        $F = \gamma E + \frac{1 - \gamma}{n} \sum_{j=1}^{n}\omega_{j}^2$
+        $$F = \gamma E + \frac{1 - \gamma}{n} \sum_{j=1}^{n}\omega_{j}^2$$
 
         where:
         \begin{itemize}
@@ -204,14 +204,25 @@ $\Delta\omega_{j}(n) = -\eta\frac{\partial E}{\partial \omega_{j}}+\alpha\Delta\
         \end{itemize}
 \end{itemize}
 
+The primary tunable parameters of a \gls{ann} are:
+\begin{itemize}
+    \item The number of input, hidden and output nodes.
+    \item The number of hidden layers.
+    \item Activation function.
+    \item Optimization algorithm.
+    \item Regularization parameter.
+    \item The learning rate.
+    \item The number of iterations.
+\end{itemize}
+
 \subsubsection{Support vector machine}\label{Support vector machine}
 
 The \glsxtrlong{svm} is a model designed for the supervised classification of labeled data belonging to two classes \cite{vapnik-svm}. It enables the discovery of an optimal line or hyperplane that maximizes the distance between each class in an N-dimensional space. An example of its application for a 2-dimensional space can be seen in figure \ref{fig:svm}. \gls{svm} can handle the linear separation of data as well as the non-linear separation of data via a kernel trick \cite{non-linear-svm}. The most popular non-linear kernels are the: polynomial kernel, \gls{rbf} and sigmoid kernel \cite{ibm-svm}. An extension of the original hard-margin \gls{svm} is the soft-margin \gls{svm}. The difference between them is that with the hard-margin \gls{svm} data points will be perfectly separated outside of the support vectors while soft-margin classification will allow some misclassification through the use of a slack variable \cite{vapnik-svm}.
-The hard-margin \gls{svm} is defined as:\\
+The hard-margin \gls{svm} is defined as:
 
-    $\underset{w, b}{minimize}\quad \frac{1}{2}\left\| \omega \right\|^2$
+    $$\underset{w, b}{minimize}\quad \frac{1}{2}\left\| \omega \right\|^2$$
 
-    $subject\ to\quad y_{i}(\omega^Tx_{i}-b) \ge 1\quad \forall i \in \{1,...,n\}$ \\
+    $$subject\ to\quad y_{i}(\omega^Tx_{i}-b) \ge 1\quad \forall i \in \{1,...,n\}$$
 
     where:
     \begin{itemize}
@@ -222,11 +233,11 @@ The hard-margin \gls{svm} is defined as:\\
         \item $n$ is the total number of training instances.
     \end{itemize}
 
-While the soft-margin \gls{svm} is defined as:\\
+While the soft-margin \gls{svm} is defined as:
 
-    $\underset{w, b, \zeta}{minimize}\quad \left\| w \right\|^2 + C\sum_{i=1}^{n}\zeta_{i}$
+    $$\underset{w, b, \zeta}{minimize}\quad \left\| w \right\|^2 + C\sum_{i=1}^{n}\zeta_{i}$$
 
-    $subject\ to\quad y_{i}(w^Tx_{i}-b) \ge 1 - \zeta_{i}$ \\
+    $$subject\ to\quad y_{i}(w^Tx_{i}-b) \ge 1 - \zeta_{i}$$
 
     where:
     \begin{itemize}
@@ -241,11 +252,11 @@ While the soft-margin \gls{svm} is defined as:\\
 
 Another extension of the \glsxtrshort{svm} is \gls{svr} which enables the application of \glsxtrshort{svm} to regression problems \cite{vapnik-svr,svr}.
 
-\gls{svr} is defined as:\\
+\gls{svr} is defined as:
 
-    $minimize\quad \frac{1}{2} \left\| w \right\|^2$
+    $$minimize\quad \frac{1}{2} \left\| w \right\|^2$$
 
-    $subject\ to\quad \left| y_{i} - \langle w,x_{i} \rangle - b \right| \le \varepsilon$\\
+    $$subject\ to\quad \left| y_{i} - \langle w,x_{i} \rangle - b \right| \le \varepsilon$$
 
     where:
     \begin{itemize}
@@ -284,8 +295,9 @@ The primary tunable parameters of a \glsxtrshort{svm} are \cite{scikit-svr,svr}:
 The primary tunable parameters of a \glsxtrlong{rf} are \cite{prediction,ibm-rf}:
 \begin{itemize}
     \item The number of trees.
+    \item The maximum depth of the trees.
     \item The maximum number of features to consider at each split.
-    \item Splitting criterion - based on impurity measures such as Shannon Entropy or Gini impurity.
+    \item Minimum number of samples per leaf.
 \end{itemize}
 
 \subsection{The foreign exchange market}\label{The foreign exchange market}
