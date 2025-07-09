@@ -4,22 +4,89 @@ This section presents an overview of the primary guiding principals used during 
 
 \subsection{Bias-Variance dilemma}\label{Bias-Variance dilemma}
 
-The bias-variance dilemma is a fundamental problem in machine learning and involves the issues of model optimization and generalization. In the case of optimization (reducing the model error) a model eventually starts to overfit the training data, this results in high error of the models predictions on the test/validation datasets (high variance). The opposite is aiming to increase model generalization (reduction of model complexity) however this in turn causes underfitting or high error of the models predictions on the training dataset (high bias). This counterpoised behaviour of both bias and variance enables the easy assessment of model suitability for use in the prediction of unseen data \cite{ibm-ensemble,ibm-regularization,svm-2}. 
+The bias-variance dilemma is a fundamental problem in machine learning and involves the issues of model optimization and generalization. In the case of optimization (reducing the model error) a model eventually starts to overfit the training data, this results in high error of the models predictions on the test/validation datasets (high variance). The opposite is aiming to increase model generalization (reduction of model complexity) however this in turn causes underfitting or high error of the models predictions on the training dataset (high bias). This counterpoised behaviour of both bias and variance enables the easy assessment of model suitability for use in the prediction of unseen data \cite{ibm-ensemble,ibm-regularization,svm-2}.
+
+% Juxtaposed
+%
+% In the case of generalization (reduction of model complexity) a model starts to underfit the training data, this results in high error of the models predictions on the training dataset (high bias).
+%
+% The opposite is aiming to increase model optimization (reducing the model error) however this in turn pushed to far causes overfitting or high error of the models predictions on the test/validation datasets (high variance).
 
 \subsection{Performance metrics}\label{Performance metrics}
 
 The accuracy of the model forecasts was evaluated on the basis of commonly used measures including:
 \begin{itemize}
-    \item \Gls{mape} - calculates the average of the absolute percentage errors, where the percentage error is the difference between the actual and predicted values, divided by the actual value. MAPE provides a percentage-based error metric that is useful for interpreting the overall accuracy of a model, especially when the scale of the target variable varies \cite{scikit-mape}.
-    \item \Gls{ds} - is a metric that measures the ability of a forecasting model to correctly predict the direction of change in the target variable. It calculates the percentage of times the model correctly predicts whether the value will increase or decrease compared to the previous period \cite{svm-2}.
+    \item \Glsxtrlong{mse} - measures the average squared difference between predicted and actual values, providing a sense of the magnitude of the errors. A lower MSE indicates better fit, but it is sensitive to outliers due to the squaring of errors \cite{scikit-mse}.
+
+        $$MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2$$
+
+        Where:
+        \begin{itemize}
+            \item $n$ is the total number of predictions
+            \item $y_i$ is the actual value at time $i$
+            \item $\hat{y}_i$ is the predicted value at time $i$
+        \end{itemize}
+
+
+    \item \Gls{mae} - measures the average absolute difference between predicted and actual values, providing a straightforward measure of error magnitude. MAE is less sensitive to outliers compared to MSE and is often easier to interpret \cite{scikit-mae}.
+
+        $$MAE = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|$$
+
+        Where:
+        \begin{itemize}
+            \item $n$ is the total number of predictions
+            \item $y_i$ is the actual value at time $i$
+            \item $\hat{y}_i$ is the predicted value at time $i$
+        \end{itemize}
+
+
+    \item \Gls{mape} - is the difference between the actual and predicted values, divided by the actual value. MAPE provides a percentage-based error metric that is useful for interpreting the overall accuracy of a model, especially when the scale of the target variable varies \cite{scikit-mape}.
+
+        $$MAPE = \frac{1}{n} \sum_{i=1}^{n} \left| \frac{y_i - \hat{y}_i}{y_i} \right| \times 100$$
+
+        Where:
+        \begin{itemize}
+            \item $n$ is the total number of predictions
+            \item $y_i$ is the actual value at time $i$
+            \item $\hat{y}_i$ is the predicted value at time $i$
+        \end{itemize}
+
+
+
+    \item \Gls{ds} - also known as the hitrate is a metric that measures the ability of a forecasting model to correctly predict the direction of change in the target variable. It calculates the percentage of times the model correctly predicts whether the value will increase or decrease compared to the previous period \cite{svm-2}.
+
+        $$C = \sum_{i=1}^{n} \begin{cases}
+        1 & \text{if } (y_i - y_{i-1}) \text{ and } (\hat{y}_i - \hat{y}_{i-1}) \text{ have the same sign} \\
+        0 & \text{otherwise}
+        \end{cases}$$
+
+        $$DS = \frac{C}{n} \times 100$$
+
+        Where:
+        \begin{itemize}
+            \item $C$ is the number of correct directional predictions
+            \item $n$ is the total number of predictions
+            \item $y_i$ is the actual value at time $i$
+            \item $\hat{y}_i$ is the predicted value at time $i$
+        \end{itemize}
+
+The DS metric measures the percentage of times the model correctly predicts the direction of change in the target variable.
+
+    \item R2 score (Coefficient of Determination)  - measures the proportion of the variance in the dependent variable that is predictable from the independent variable(s) in the model. An R2 score of 1 indicates a perfect fit, while a score of 0 indicates that the model does not explain any of the variance in the dependent variable \cite{scikit-r2}.
+
+        $$R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}$$
+
+        Where:
+        \begin{itemize}
+            \item $C$ is the number of correct directional predictions
+            \item $n$ is the total number of predictions
+            \item $y_i$ is the actual value at time $i$
+            \item $\hat{y}_i$ is the predicted value at time $i$
+        \end{itemize}
+
     \item \Gls{oob} error - is a method for evaluating the performance of ensemble methods where during training on a random subset of the training data the generated model is evaluated on the data that was not part of its training dataset. It provides an unbiased estimate of the model's generalization performance without the need for a separate validation set \cite{scikit-oob}.
 \end{itemize}
 
-% Juxtaposed
-% 
-% In the case of generalization (reduction of model complexity) a model starts to underfit the training data, this results in high error of the models predictions on the training dataset (high bias).
-% 
-% The opposite is aiming to increase model optimization (reducing the model error) however this in turn pushed to far causes overfitting or high error of the models predictions on the test/validation datasets (high variance).
 
 \subsection{Methodology}\label{Methodology}
 
