@@ -6,7 +6,7 @@ In this paper data preparation for use in \gls{ai} model creation consists of tw
 
 The data chosen for this study was a set of euro foreign exchange reference rates obtained from the website of the \gls{ecb} \cite{forex-data}. The data consists of the daily spot prices for 41 foreign currencies from 04.01.1999 to 02.05.2025. The currencies included in the dataset were: \gls{usd}, \gls{jpy}, \gls{bgn}, \gls{cyp}, \gls{czk}, \gls{dkk}, \gls{eek}, \gls{gbp}, \gls{huf}, \gls{ltl}, \gls{lvl}, \gls{mtl}, \gls{pln}, \gls{rol}, \gls{ron}, \gls{sek}, \gls{sit}, \gls{skk}, \gls{chf}, \gls{isk}, \gls{nok}, \gls{hrk}, \gls{rub}, \gls{trl}, \gls{try}, \gls{aud}, \gls{brl}, \gls{cad}, \gls{cny}, \gls{hkd}, \gls{idr}, \gls{ils}, \gls{inr}, \gls{krw}, \gls{mxn}, \gls{myr}, \gls{nzd}, \gls{php}, \gls{sgd}, \gls{thb}, \gls{zar}.
 
-\subsection{Preprocessing}\label{Preprocessing}
+\subsection{Required preprocessing steps}\label{Required preprocessing steps}
 
 The cleaning and preparation of the data was conducted in order to increase the accuracy of predictions as well as improve the efficiency of model training.
 
@@ -48,62 +48,92 @@ Even though variables with variable specific missing values were eliminated in t
 
 This step was crucial, as missing data can lead to biased estimates and can negatively affect the overall performance of predictive models \cite{techniques,rf-svr}.
 
+\subsection{Optional intermediary steps}\label{Optional intermediary steps}
+
+\subsubsection{Log transformation}\label{Log transformation}
+
+In this step a natural logarithm transformation of the data was applied in order to stabilize the variance and prevent heteroscedacity \cite{nn-vs-chaotic,robust-regression,gbp-usd-forecasting}.
+
+\begin{figure}[h!]
+    \includegraphics[width=\textwidth]{images/preprocessing/3-optional/log-transform/usd-ff-log.png}
+    \centering
+    \caption{A graphical comparison of forward filled and log transformed data on the basis of the \gls{usd} spot exchange rate.}
+    \label{fig:usd-ff-log}
+\end{figure}
+
+\subsubsection{Differencing}\label{Differencing}
+
+In this step first-order differencing was applied to the dataset. This procedure causes the replacement of successive values with successive variations. This is a necessary step in the preparation of the data enabling the removal of trends, seasonality, and other non-stationary components from the original time series \cite{nn-vs-chaotic,robust-regression,gbp-usd-forecasting}.
+
+\begin{figure}[h!]
+    \includegraphics[width=\textwidth]{images/preprocessing/3-optional/differencing/usd-undiff.png}
+    \centering
+    \caption{The undifferenced forward filled \gls{usd} spot exchange rate.}
+    \label{fig:usd-undiff}
+\end{figure}
+
+\begin{figure}[h!]
+    \includegraphics[width=\textwidth]{images/preprocessing/3-optional/differencing/usd-diff.png}
+    \centering
+    \caption{The forward filled differenced \gls{usd} spot exchange rate.}
+    \label{fig:usd-diff}
+\end{figure}
+
 \subsubsection{Feature scaling}\label{Feature scaling}
 
 Feature scaling is an essential step in the data preparation for many \gls{ai} models which often exhibit better training efficiency and forecasting accuracy with scaled data. This is especially true for \gls{mlp} and \gls{svr}. For the \gls{rf} machine learning model this step is not required due to insensitivity and as a result has been omitted. Two feature scaling methods where used in the data preparation process for different models in this paper. An visual representation of the effects of both can be seen in figure \ref{fig:usd-scaling}.
 
 \begin{itemize}
-    \item Normalization via scikit-learn's MinMaxScaler \cite{scikit-learn} to the range [-1,1] was used in the preparation of data for use with the \gls{mlp} with the \gls{tanh} activation function \cite{nn-vs-chaotic,ann-2}.
-    \item Standardization via scikit-learn's StandardScaler \cite{scikit-learn} to a mean of zero and a variance of one was used in the data preparation pipeline for use with \gls{svr} \cite{genetic,rf-svr}.
+    \item Normalization via scikit-learn's MinMaxScaler \cite{scikit-learn} to the range [-1,1] was used in the preparation of data primarily for use with the \gls{mlp} with the \gls{tanh} activation function \cite{nn-vs-chaotic,ann-2}.
+    \item Standardization via scikit-learn's StandardScaler \cite{scikit-learn} to a mean of zero and a variance of one was used primarily in the data preparation pipeline for use with \gls{svr} \cite{genetic,rf-svr}.
 \end{itemize}
 
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/preprocessing/3-scaling/usd-scaling.png}
+\begin{figure}[h!]
+    \includegraphics[width=\textwidth]{images/preprocessing/3-optional/scaling/usd-scaling.png}
     \centering
     \caption{A graphical comparison of normalization and standardization on the basis of the \gls{usd} spot exchange rate.}
     \label{fig:usd-scaling}
 \end{figure}
 
+\subsection{Required postprocessing steps}\label{Required postprocessing steps}
+
+\subsubsection{Feature decorrelation}\label{Feature decorrelation}
+
+In the next step a Pearson correlation matrix was constructed on the feature and target exchange rates to assess the linear relationships among them. The threshold for feature rejection was set for values $\ge 0.8$. This threshold was chosen to mitigate the risk of multicollinearity, which can lead to inflated standard errors and unreliable coefficient estimates in regression models. The analysis began with the elimination of feature variables that exhibited a high linear correlation with the target variable. Next feature variables that had a high correlation with at least one other variable were removed. This was done in order to prevent the occurrence of amplifying or distorting effects during model training \cite{genetic}. As a result of this analysis, the initial feature set for each dataset processing variation was significantly reduced.
+
 \subsubsection{Feature extraction}\label{Feature extraction}
 
-From among all of the available currencies the \gls{usd} currency exchange rate was selected as the target variable. For each feature variable as well as the target variable time lagged versions upto 500 days were created for each dataset preprocessing variation \cite{rf-svr,gold}.
+From among all of the available currencies the \gls{usd} currency exchange rate was selected as the target variable. Time lagged versions of the dataset for each feature variable upto 50 days were created for each preprocessing variation \cite{rf-svr,gold}. An example of the shifting procedure for the \gls{usd} exchange rate is shown in \ref{fig:feature-extraction}.
 
 \begin{figure}[h]
     \includegraphics[width=\textwidth]{images/preprocessing/4-usd-shifts-3.png}
     \centering
-    \caption{An example of the procedure of feature extraction for the target variable \gls{usd} for a series of time shifts upto three.}
+    \caption{An example of a series of time shifts upto three days for the \gls{usd} exchange rate.}
     \label{fig:feature-extraction}
 \end{figure}
 
-\subsubsection{Feature decorrelation}\label{Feature decorrelation}
-
-In the next step a Pearson correlation matrix was constructed on the feature and target exchange rates to assess the linear relationships among them. The threshold for feature rejection was set for values $\ge 0.8$. This threshold was chosen to mitigate the risk of multicollinearity, which can lead to inflated standard errors and unreliable coefficient estimates in regression models. The analysis began with the elimination of feature variables that exhibited a high linear correlation with the target variable. Next feature variables that had a high correlation with at least one other variable were removed. This was done in order to prevent amplifying or distorting effects during model training \cite{genetic}. As a result of this analysis, the initial feature set consisting of 8500 variables was significantly reduced down to 39 variables.
-
-\subsubsection{Variable selection}\label{Variable selection}
-
-In the next step scikit-learn's \gls{rfecv} \cite{scikit-learn} was used with the \gls{svr} model with a linear kernel as the estimator for feature importance ranking and optimal feature subset selection.
-
-The \gls{cv} results for each dataset are presented in figure \ref{fig:rfecv}. As can be see the absence of scaling as well as in the case of scaling the chosen scaling methodology greatly affect the results of \gls{rfecv}.
-
-For the \gls{mlp} dataset for which normalization was employed the optimal number of features selected by the \gls{rfecv} was 33:
-\gls{jpy}\_shift1, \gls{czk}\_shift1, \gls{dkk}\_shift1, \gls{huf}\_shift1, \gls{pln}\_shift1, \gls{sek}\_shift1, \gls{aud}\_shift1, \gls{cad}\_shift1, \gls{krw}\_shift1, \gls{nzd}\_shift1, \gls{sgd}\_shift1, \gls{dkk}\_shift76, \gls{cad}\_shift89, \gls{aud}\_shift169, \gls{cad}\_shift176, \gls{nzd}\_shift211, \gls{dkk}\_shift224, \gls{krw}\_shift235, \gls{pln}\_shift240, \gls{hkd}\_shift255, \gls{gbp}\_shift260, \gls{cad}\_shift262, \gls{aud}\_shift336, \gls{cad}\_shift348, \gls{pln}\_shift356, \gls{dkk}\_shift370, \gls{jpy}\_shift423, \gls{nzd}\_shift425, \gls{cad}\_shift434, \gls{krw}\_shift460, \gls{sgd}\_shift464, \gls{pln}\_shift470, \gls{aud}\_shift498.
-
-For the \gls{svr} dataset for which standardization was employed the optimal number of features selected by the \gls{rfecv} was 9:
-\gls{czk}\_shift1, \gls{huf}\_shift1, \gls{sek}\_shift1, \gls{aud}\_shift1, \gls{cad}\_shift1, \gls{nzd}\_shift1, \gls{sgd}\_shift1, \gls{gbp}\_shift260, \gls{aud}\_shift336.
-
-For the \gls{rf} dataset for which no scaling procedures were used the number of features selected by the \gls{rfecv} was 34:
-\gls{jpy}\_shift1, \gls{czk}\_shift1, \gls{dkk}\_shift1, \gls{pln}\_shift1, \gls{sek}\_shift1, \gls{aud}\_shift1, \gls{cad}\_shift1, \gls{nzd}\_shift1, \gls{sgd}\_shift1, \gls{dkk}\_shift76, \gls{cad}\_shift89, \gls{pln}\_shift122, \gls{dkk}\_shift150, \gls{aud}\_shift169, \gls{cad}\_shift176, \gls{nzd}\_shift211, \gls{dkk}\_shift224, \gls{pln}\_shift240, \gls{hkd}\_shift255, \gls{gbp}\_shift260, \gls{cad}\_shift262, \gls{dkk}\_shift297, \gls{aud}\_shift336, \gls{sek}\_shift346, \gls{cad}\_shift348, \gls{pln}\_shift356, \gls{dkk}\_shift370, \gls{jpy}\_shift423, \gls{nzd}\_shift425, \gls{cad}\_shift434, \gls{dkk}\_shift444, \gls{sgd}\_shift464, \gls{pln}\_shift470, \gls{aud}\_shift498.
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/preprocessing/5-variable-selection/rfecv.png}
-    \centering
-    \caption{\Gls{cv} scores by number of features for normalized (\gls{mlp}), standardized (\gls{svr}) and unscaled (\gls{rf}) datasets.}
-    \label{fig:rfecv}
-\end{figure}
+% \subsubsection{Variable selection}\label{Variable selection}
+% 
+% In the next step scikit-learn's \gls{rfecv} \cite{scikit-learn} was used with the \gls{svr} model with a linear kernel as the estimator for feature importance ranking and optimal feature subset selection.
+% 
+% The \gls{cv} results for each dataset are presented in figure \ref{fig:rfecv}. As can be see the absence of scaling as well as in the case of scaling the chosen scaling methodology greatly affect the results of \gls{rfecv}.
+% 
+% For the \gls{mlp} dataset for which normalization was employed the optimal number of features selected by the \gls{rfecv} was 33.
+% 
+% For the \gls{svr} dataset for which standardization was employed the optimal number of features selected by the \gls{rfecv} was 9.
+% 
+% For the \gls{rf} dataset for which no scaling procedures were used the number of features selected by the \gls{rfecv} was 34.
+% 
+% \begin{figure}[h]
+%     \includegraphics[width=\textwidth]{images/preprocessing/5-variable-selection/rfecv.png}
+%     \centering
+%     \caption{\Gls{cv} scores by number of features for normalized (\gls{mlp}), standardized (\gls{svr}) and unscaled (\gls{rf}) datasets.}
+%     \label{fig:rfecv}
+% \end{figure}
 
 \subsubsection{Data split}\label{Data split}
 
-For the purpose of model training and forecasting accuracy evaluation each dataset was split into two subsets with a separation strip equal to the degree of generated time lags (500) in order to prevent information leakage from the training set to the test set:
+For the purpose of model training and forecasting accuracy evaluation each dataset was split into two subsets with a separation strip equal to the degree of generated time lags (150) in order to prevent information leakage from the training set to the test set:
 \begin{itemize}
     \item training $+$ validation (70\%) - for model training and k-fold cross-validation.
     \item testing (30\%) - for the final evaluation of the selected model in order to prevent overfitting and enable a unbiased evaluation of the model on new unseen data.
