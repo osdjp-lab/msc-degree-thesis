@@ -27,32 +27,6 @@ The accuracy of the model forecasts was evaluated on the basis of commonly used 
             \item $\hat{y}_i$ is the predicted value at time $i$
         \end{itemize}
 
-
-    \item \Gls{mae} - measures the average absolute difference between predicted and actual values, providing a straightforward measure of error magnitude. MAE is less sensitive to outliers compared to MSE and is often easier to interpret \cite{scikit-mae}.
-
-        $$MAE = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|$$
-
-        Where:
-        \begin{itemize}
-            \item $n$ is the total number of predictions
-            \item $y_i$ is the actual value at time $i$
-            \item $\hat{y}_i$ is the predicted value at time $i$
-        \end{itemize}
-
-
-    \item \Gls{mape} - is the difference between the actual and predicted values, divided by the actual value. MAPE provides a percentage-based error metric that is useful for interpreting the overall accuracy of a model, especially when the scale of the target variable varies \cite{scikit-mape}.
-
-        $$MAPE = \frac{1}{n} \sum_{i=1}^{n} \left| \frac{y_i - \hat{y}_i}{y_i} \right| \times 100$$
-
-        Where:
-        \begin{itemize}
-            \item $n$ is the total number of predictions
-            \item $y_i$ is the actual value at time $i$
-            \item $\hat{y}_i$ is the predicted value at time $i$
-        \end{itemize}
-
-
-
     \item \Gls{ds} - also known as the hitrate is a metric that measures the ability of a forecasting model to correctly predict the direction of change in the target variable. It calculates the percentage of times the model correctly predicts whether the value will increase or decrease compared to the previous period \cite{svm-2}.
 
         $$C = \sum_{i=1}^{n} \begin{cases}
@@ -72,187 +46,122 @@ The accuracy of the model forecasts was evaluated on the basis of commonly used 
 
 The DS metric measures the percentage of times the model correctly predicts the direction of change in the target variable.
 
-    \item R2 score (Coefficient of Determination)  - measures the proportion of the variance in the dependent variable that is predictable from the independent variable(s) in the model. An R2 score of 1 indicates a perfect fit, while a score of 0 indicates that the model does not explain any of the variance in the dependent variable \cite{scikit-r2}.
-
-        $$R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}$$
-
-        Where:
-        \begin{itemize}
-            \item $C$ is the number of correct directional predictions
-            \item $n$ is the total number of predictions
-            \item $y_i$ is the actual value at time $i$
-            \item $\hat{y}_i$ is the predicted value at time $i$
-        \end{itemize}
-
     \item \Gls{oob} error - is a method for evaluating the performance of ensemble methods where during training on a random subset of the training data the generated model is evaluated on the data that was not part of its training dataset. It provides an unbiased estimate of the model's generalization performance without the need for a separate validation set \cite{scikit-oob}.
 \end{itemize}
 
 
 \subsection{Methodology}\label{Methodology}
 
-For the purpose of this paper only one of the currency exchange rates was chosen as a target for forecasting alongside five currency exchange rates which were selected as the feature set. The chosen currencies were: \gls{nzd}, \gls{sek}, \gls{cad}, \gls{dkk} and \gls{pln} as predictors and \gls{usd} as the target variable.
+The process of model training and evaluation consisted of the selection of the optimal data processing methodology and offset followed by hyperparameter optimization. In both cases each models accuracy was evaluated on both in-sample (training set) and out-of-sample (test set) data. The minimum average \gls{mse} and maximum average \gls{ds} values of the performance metrics for the training and test set  were selected as exhibiting the best performance.
 
-\subsubsection{Sample window size selection}\label{Sample window size selection}
+\subsubsection{Processing methodology and offset selection}\label{Processing methodology and offset selection}
 
-In the first step the default parameters of each of the models were used. The only exception to this was the \gls{mlp} where the default activation function \gls{relu} was switched out for \gls{tanh} due to the normalization range of the data. Each models accuracy was evaluated on both in-sample (training set) and out-of-sample (test set) data.
+In the first step the performance of each of the models on each of the dataset processing variations was evaluated. Each model was used with its default parameters with some exceptions. For the \gls{mlp} the  activation function was changed to \gls{tanh} due to the normalization range of the data, shuffle was set to false to prevent data shuffling in order to not disrupt the continuous time series nature of the data, random state was set to zero for reproducability of the results and the maximum number of iterations was increased to 1000 in order to allow for model convergence. For the \gls{rf} only the random state was set. For the \gls{svr} non of the default parameters were changed.
 
-\begin{figure}[ht!]
-  \centering
-  \begin{tikzpicture}
-    \begin{groupplot}[
-      group style={
-        group size=1 by 2, % 1 column, 2 rows
-        vertical sep=2cm,  % space between plots
-      },
-      width=\linewidth,
-      height=8cm,
-      grid=major,
-      grid style={dashed,gray!30},
-      xlabel=Sample window,
-      x unit=\si{Days},
-      x tick label style={rotate=90,anchor=east},
-      legend style={at={(0.5,-0.2)}, anchor=north, legend columns=-1},
-      legend to name=sharedlegend
-    ]
-
-    \nextgroupplot[ylabel=\gls{mape}, y unit=\si{\%}]
-    \addplot table[x=Offset,y=MAPE,col sep=comma] {data/usd/nn/test_mape.csv};
-    \addplot table[x=Offset,y=MAPE,col sep=comma] {data/usd/nn/train_mape.csv};
-
-    \nextgroupplot[ylabel=\gls{ds},  y unit=\si{\%}]
-    \addplot table[x=Offset,y=Hitrate,col sep=comma] {data/usd/nn/test_hitrate.csv};
-    \addplot table[x=Offset,y=Hitrate,col sep=comma] {data/usd/nn/train_hitrate.csv};
-
-    \addlegendentry{Test}
-    \addlegendentry{Train}
-
-    \end{groupplot}
-  \end{tikzpicture}
-
-  \vspace{1em}
-  %\ref{sharedlegend}
-  \pgfplotslegendfromname{sharedlegend}
-    \caption{\gls{usd} \gls{mlp}: \gls{mape} and \gls{ds} for different sample windows.}
-\end{figure}
-
-\begin{figure}[ht!]
-  \centering
-  \begin{tikzpicture}
-    \begin{groupplot}[
-      group style={
-        group size=1 by 3, % 1 column, 3 rows
-        vertical sep=2cm,  % space between plots
-      },
-      width=\linewidth,
-      height=6cm,
-      grid=major,
-      grid style={dashed,gray!30},
-      xlabel=Sample window,
-      x unit=\si{Days},
-      x tick label style={rotate=90,anchor=east},
-      legend style={at={(0.5,-0.2)}, anchor=north, legend columns=-1},
-      legend to name=sharedlegend
-    ]
-
-    \nextgroupplot[ylabel=\gls{mape}, y unit=\si{\%}]
-    \addplot table[x=Offset,y=MAPE,col sep=comma] {data/usd/rf/test_mape.csv};
-    \addplot table[x=Offset,y=MAPE,col sep=comma] {data/usd/rf/train_mape.csv};
-
-    \nextgroupplot[ylabel=\gls{ds},  y unit=\si{\%}]
-    \addplot table[x=Offset,y=Hitrate,col sep=comma] {data/usd/rf/test_hitrate.csv};
-    \addplot table[x=Offset,y=Hitrate,col sep=comma] {data/usd/rf/train_hitrate.csv};
-
-    \nextgroupplot[ylabel=\gls{oob} Error]
-    \addplot table[x=Offset,y=OOB Error,col sep=comma] {data/usd/rf/oob_error.csv};
-
-    \addlegendentry{Test}
-    \addlegendentry{Train}
-
-    \end{groupplot}
-  \end{tikzpicture}
-
-  \vspace{1em}
-  %\ref{sharedlegend}
-  \pgfplotslegendfromname{sharedlegend}
-  \caption{\gls{usd} \gls{rf}: \gls{mape} and \gls{ds} for different sample windows.}
-\end{figure}
-
-\begin{figure}[ht!]
-  \centering
-  \begin{tikzpicture}
-    \begin{groupplot}[
-      group style={
-        group size=1 by 2, % 1 column, 2 rows
-        vertical sep=2cm,  % space between plots
-      },
-      width=\linewidth,
-      height=8cm,
-      grid=major,
-      grid style={dashed,gray!30},
-        xlabel=Sample window,
-      x unit=\si{Days},
-      x tick label style={rotate=90,anchor=east},
-      legend style={at={(0.5,-0.2)}, anchor=north, legend columns=-1},
-      legend to name=sharedlegend
-    ]
-
-    \nextgroupplot[ylabel=\gls{mape}, y unit=\si{\%}]
-    \addplot table[x=Offset,y=MAPE,col sep=comma] {data/usd/svm/test_mape.csv};
-    \addplot table[x=Offset,y=MAPE,col sep=comma] {data/usd/svm/train_mape.csv};
-
-    \nextgroupplot[ylabel=\gls{ds},  y unit=\si{\%}]
-    \addplot table[x=Offset,y=Hitrate,col sep=comma] {data/usd/svm/test_hitrate.csv};
-    \addplot table[x=Offset,y=Hitrate,col sep=comma] {data/usd/svm/train_hitrate.csv};
-
-    \addlegendentry{Test}
-    \addlegendentry{Train}
-
-    \end{groupplot}
-  \end{tikzpicture}
-
-  \vspace{1em}
-  %\ref{sharedlegend}
-  \pgfplotslegendfromname{sharedlegend}
-  \caption{\gls{usd} \gls{svr}: \gls{mape} and \gls{ds} for different sample windows.}
-\end{figure}
-
-\newpage
-
-The values where the sum of \gls{mape} between the training and test sets was the smallest were selected as exhibiting the best performance. In the case of the \gls{mlp} there was a significant drop in the value of the \gls{mape} with a 30 day sample window. For the \gls{rf} the sample window appeared to have little effect on the forecasting accuracy of the model, as such the sample window of 30 days was selected on the basis of the minimal \gls{oob} error observed. For \gls{svr} the smallest \gls{mape} was found to be with a 30 day sample window.
-
-\subsubsection{Grid search}\label{Grid search}
-
-With the sample window size selected in the previous step a grid search with 5-fold cross-validation utilizing the negative \gls{mape} loss function was conducted for each of the models.
-
-\begin{table}[H]
-    \centering
-    \begin{tabular}{|c|c|c|}
-        \hline
-        Parameters & Search grid & Optimum values \\
-        \hline
-        \hline
-        hidden\_layer\_sizes & (50), (100), (200) & (100) \\
-        \hline
-        activation & tanh & tanh \\
-        \hline
-        solver & adam, sgd & adam \\
-        \hline
-        alpha & 0.0001, 0.001, 0.01, 0.1 & 0.01 \\
-        \hline
-        learning\_rate\_init & 0.001, 0.01 & 0.001 \\
-        \hline
-        max\_iter & 1000 & 1000 \\
-        \hline
-    \end{tabular}
-    \caption{\gls{usd} \gls{mlp} parameter search grid and found optimum values.}
-\end{table}
-
-For the internal cross-validation the negative \gls{mape} was equal to -2.058. For the test set the results were:
+In the case of the \gls{mlp} for the :
 \begin{itemize}
-    \item \Gls{mape}: 2.960
-    \item \Gls{ds}: 0.83
+    \item \gls{mse} as can be seen in figure \ref{fig:mlp-mse} the best result was found for the differenced and normalized dataset at an offset of seven days.
+    \item \gls{ds} as can be seen in figure \ref{fig:mlp-ds} the best result was found for the log transformed and normalized dataset at an offset of fifty days.
 \end{itemize}
 
+In the case of \gls{svr} for the :
+\begin{itemize}
+    \item \gls{mse} as can be seen in figure \ref{fig:svr-mse} the best result was found for the log transformed and differenced dataset at an offset of five days.
+    \item \gls{ds} as can be seen in figure \ref{fig:svr-ds} the best result was found for the differenced and normalized dataset at an offset of twenty eight days.
+\end{itemize}
+
+In the case of \gls{rf} for the :
+\begin{itemize}
+    \item \gls{mse} as can be seen in figure \ref{fig:rf-mse} the best result was found for the log transformed and differenced dataset at an offset of seven days.
+    \item \gls{ds} as can be seen in figure \ref{fig:rf-ds} the best result was found for the differenced and normalized dataset at an offset of twenty fourteen days.
+\end{itemize}
+
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/offset-selection/mse/mlp.png}
+    \centering
+    \caption{The minimum average \gls{mse} of the \gls{mlp} model evaluated on train and test sets for different data processing methods alongside the optimal offset for each. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized.}
+    \label{fig:mlp-mse}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/offset-selection/hitrate/mlp.png}
+    \centering
+    \caption{The maximum average \gls{ds} of the \gls{mlp} model evaluated on train and test sets for different data processing methods alongside the optimal offset for each. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized.}
+    \label{fig:mlp-ds}
+\end{figure}
+
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/offset-selection/mse/svr.png}
+    \centering
+    \caption{The minimum average \gls{mse} of the \gls{svr} model evaluated on train and test sets for different data processing methods alongside the optimal offset for each. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized, s - standardized, r - raw.}
+    \label{fig:svr-mse}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/offset-selection/hitrate/svr.png}
+    \centering
+    \caption{The maximum average \gls{ds} of the \gls{svr} model evaluated on train and test sets for different data processing merthods alongside the optimal offset for each. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized, s - standardized, r - raw.}
+    \label{fig:svr-ds}
+\end{figure}
+
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/offset-selection/mse/rf.png}
+    \centering
+    \caption{The minimum average \gls{mse} of the \gls{rf} model evaluated on train and test sets for different data processing methods alongside the optimal offset for each. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized, s - standardized, r - raw.}
+    \label{fig:rf-mse}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/offset-selection/hitrate/rf.png}
+    \centering
+    \caption{The maximum average \gls{ds} of the \gls{rf} model evaluated on train and test sets for different data processing methods alongside the optimal offset for each. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized, s - standardized, r - raw.}
+    \label{fig:rf-ds}
+\end{figure}
+
+\subsubsection{Hyperparameter optimization}\label{Hyperparameter optimization}
+
+With the processing methodology and offset size selected in the previous step for each model a grid search with 5-fold cross-validation utilizing the negative \gls{mse} loss function was conducted for a selected set of parameters for each model. First to better understand the dynamics of each model the values of different parameters were manipulated independantly. In the second step a broader grid search was conducted on the same set of ranges for each of the variables but for every possible combination of values.
+
+% Required elements for each model
+% - Table of parameter ranges covered for each paramater
+% - Graph of accuracy for individual parameters where change is visible
+% - Description of observed trends in graphs (accuracy increases / decreases with the value)
+% - For parameters where no change is observed state it in the description
+% - 
+
+For the \gls{mlp} regression model four parameters were varied: hidden layer sizes, alpha, solver and tol. In the case of the independant analysis the size of the hidden layer had a small effect on the accuracy of the model with the greatest error being within the ranges 0 - 10 and 50 - 90 and the smallest for 93 as can be seen in figure \ref{fig:mlp-hidden}. The accuracy of the model was greater for values of alpha above 0.2 however larger values provided a higher accuracy as such the optimal value of alpha was 0.99 as is shown in figure \ref{fig:mlp-alpha}. For the solver the \gls{lbfgs} provided the best accuracy when compared against adam and \gls{sgds} as is shown in figure \ref{fig:mlp-solver}. For the tolerance above the value of 0.00023 the accuracy reaches it's maximum and remains nearly constant upto the end of the search range at 0.0007 as can be seen in figure \ref{fig:mlp-tol}. In the case of the full search space grid search the results were different and are presented in table \ref{table:mlp}.
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/grid-search/mlp/hidden.png}
+    \centering
+    \caption{The negative \gls{mse} for the \gls{mlp} model for a different number of nodes in the single hidden layer.}
+    \label{fig:mlp-hidden}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/grid-search/mlp/alpha.png}
+    \centering
+    \caption{The negative \gls{mse} for the \gls{mlp} model for different values of alpha.}
+    \label{fig:mlp-alpha}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/grid-search/mlp/solver.png}
+    \centering
+    \caption{The negative \gls{mse} for the \gls{mlp} model for different solvers.}
+    \label{fig:mlp-solver}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/grid-search/mlp/tol.png}
+    \centering
+    \caption{The negative \gls{mse} for the \gls{mlp} model for different tolerances.}
+    \label{fig:mlp-tol}
+\end{figure}
+
 \begin{table}[H]
     \centering
     \begin{tabular}{|c|c|c|}
@@ -260,25 +169,90 @@ For the internal cross-validation the negative \gls{mape} was equal to -2.058. F
         Parameters & Search grid & Optimum values \\
         \hline
         \hline
-        n\_estimators & 100, 200 & 100 \\
+        hidden layer sizes & 1 - 100 & 1 \\
         \hline
-        max\_features & 1.0, sqrt, log2, 0.3 & sqrt \\
+        alpha & 0.01 - 1 & 0.3 \\
         \hline
-        max\_depth & 1, 3, 7, 10 & 1 \\
+        solver & adam, \gls{sgds}, \gls{lbfgs} & \gls{lbfgs} \\
         \hline
-        min\_samples\_split & 2, 5, 10 & 2 \\
+        tolerance & 0.00001 - 0.0007 & 0.0001 \\
         \hline
-        min\_samples\_leaf & 1, 2, 4 & 2 \\
+    \end{tabular}
+    \caption{\gls{usd} \gls{mlp} parameter search grid and found optimum values in full grid search over entire search space.}
+    \label{table:mlp}
+\end{table}
+
+For the \gls{rf} model three parameters were varied: the number of estimators, maximum depth of trees and the maximum number of features per split. In the case of the independant analysis the greater the number of estimators the smaller the error of the model resulting in the best accuracy being for a value of 29 as can be seen in figure \ref{fig:rf-trees}. In the case of the maximum depth of trees the greater the depth the greater the error with the best result for a depth of one as shown in figure \ref{fig:rf-depth}. For the maximum number of features per split the sqrt and log2 counts exhibited the worst accurracy, 0.3 better and 1.0 (all features) the best. The accuracy of each is shown in figure \ref{fig:rf-features}. In the case of the full search space grid search the results were different and are presented in table \ref{table:rf}.
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/grid-search/rf/trees.png}
+    \centering
+    \caption{The negative \gls{mse} for the \gls{rf} model for different numbers of estimators.}
+    \label{fig:rf-trees}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/grid-search/rf/depth.png}
+    \centering
+    \caption{The negative \gls{mse} for the \gls{rf} model for different tree depths.}
+    \label{fig:rf-depth}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/grid-search/rf/features.png}
+    \centering
+    \caption{The negative \gls{mse} for the \gls{rf} model for different numbers of features per split.}
+    \label{fig:rf-features}
+\end{figure}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        Parameters & Search grid & Optimum values \\
+        \hline
+        \hline
+        n\_estimators & 1 - 30 & 23 \\
+        \hline
+        max\_features & 1.0, sqrt, log2, 0.3 & 1.0 \\
+        \hline
+        max\_depth & 1 - 50 & 2 \\
         \hline
     \end{tabular}
     \caption{\gls{usd} \gls{rf} parameter search grid and found optimum values.}
+    \label{table:rf}
 \end{table}
 
-For the internal cross-validation the negative \gls{mape} was equal to -2.264. For the test set the results were:
-\begin{itemize}
-    \item \Gls{mape}: 2.521
-    \item \Gls{ds}: 0.83
-\end{itemize}
+For the \gls{svr} model four parameters were varied: C (regularization parameter), epsilon, the kernel and the tolerance for misclassification. Regardless of scope or range the C, kernel and tolerance parameters had no effect on the accuracy of the model. The epsilon variable did with the lowest error for small values where the best value was for zero as can be seen in \ref{fig:svr-epsilon}. In the case of the full search space grid search the results were different and are presented in table \ref{table:svr}.
+
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/grid-search/svr/C.png}
+    \centering
+    \caption{The negative \gls{mse} for the \gls{svr} model for a different number of nodes in the single hidden layer.}
+    \label{fig:svr-C}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/grid-search/svr/epsilon.png}
+    \centering
+    \caption{The negative \gls{mse} for the \gls{svr} model for different values of alpha.}
+    \label{fig:svr-epsilon}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/grid-search/svr/kernel.png}
+    \centering
+    \caption{The negative \gls{mse} for the \gls{svr} model for different solvers.}
+    \label{fig:svr-kernel}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/grid-search/svr/tol.png}
+    \centering
+    \caption{The negative \gls{mse} for the \gls{svr} model for different tolerances.}
+    \label{fig:svr-tol}
+\end{figure}
 
 \begin{table}[H]
     \centering
@@ -287,23 +261,41 @@ For the internal cross-validation the negative \gls{mape} was equal to -2.264. F
         Parameters & Search grid & Optimum values \\
         \hline
         \hline
-        tol & 0.00001, 0.0001, 0.001, 0.01, 0.1 & 0.1 \\
+        C & 1e-100 - 100 & 0.006 \\
         \hline
-        C & 1, 10, 100 & 100 \\
+        epsilon & 0 - 1 & 0.0 \\
         \hline
-        epsilon & 0.1, 0.01, 0.001 & 0.1 \\
+        kernel & linear, poly, rbf & poly \\
         \hline
-        gamma & scale, auto & auto \\
-        \hline
-        kernel & rbf, poly, sigmoid & poly \\
+        tol & 1e-5 - 1 & 1e-5 \\
         \hline
     \end{tabular}
     \caption{\gls{usd} \gls{svr} parameter search grid and found optimum values.}
+    \label{table:svr}
 \end{table}
 
-For the internal cross-validation the negative \gls{mape} was equal to -1.398. For the test set the results were:
-\begin{itemize}
-    \item \Gls{mape}: 1.524
-    \item \Gls{ds}: 0.83
-\end{itemize}
+\subsection{Forecasts}\label{Forecasts}
+
+Each of the model forecasts once reverse transformed via the same procedure used on the initial data for the respective selected dataset but in reverse exhibited nearly no similarity.
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/forecasts/mlp.png}
+    \centering
+    \caption{The best \gls{mlp} forecast.}
+    \label{fig:mlp-forecast}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/forecasts/rf.png}
+    \centering
+    \caption{The best \gls{rf} forecast.}
+    \label{fig:rf-forecast}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/forecasts/svr.png}
+    \centering
+    \caption{The best \gls{svr} forecast.}
+    \label{fig:svr-forecast}
+\end{figure}
 
