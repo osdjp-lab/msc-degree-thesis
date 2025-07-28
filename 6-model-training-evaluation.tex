@@ -60,20 +60,20 @@ In the first step the performance of each of the models on each of the dataset p
 
 In the case of the \gls{mlp} for the :
 \begin{itemize}
-    \item \gls{mse} as can be seen in figure \ref{fig:mlp-mse} the best result was found for the differenced and normalized dataset at an offset of seven days.
-    \item \gls{ds} as can be seen in figure \ref{fig:mlp-ds} the best result was found for the log transformed and normalized dataset at an offset of fifty days.
+    \item \gls{mse} as can be seen in figure \ref{fig:mlp-mse} the best result was found for the differenced and normalized dataset at an offset of 11 days.
+    \item \gls{ds} as can be seen in figure \ref{fig:mlp-ds} the best result was found for the differenced and normalized dataset at an offset of 40 days.
 \end{itemize}
 
 In the case of \gls{svr} for the :
 \begin{itemize}
-    \item \gls{mse} as can be seen in figure \ref{fig:svr-mse} the best result was found for the log transformed and differenced dataset at an offset of five days.
-    \item \gls{ds} as can be seen in figure \ref{fig:svr-ds} the best result was found for the differenced and normalized dataset at an offset of twenty eight days.
+    \item \gls{mse} as can be seen in figure \ref{fig:svr-mse} the best result was found for the log transformed and differenced dataset at an offset of 9 days.
+    \item \gls{ds} as can be seen in figure \ref{fig:svr-ds} the best result was found for the differenced and normalized dataset at an offset of 28 days.
 \end{itemize}
 
 In the case of \gls{rf} for the :
 \begin{itemize}
-    \item \gls{mse} as can be seen in figure \ref{fig:rf-mse} the best result was found for the log transformed and differenced dataset at an offset of seven days.
-    \item \gls{ds} as can be seen in figure \ref{fig:rf-ds} the best result was found for the differenced and normalized dataset at an offset of twenty fourteen days.
+    \item \gls{mse} as can be seen in figure \ref{fig:rf-mse} the best result was found for the log transformed and differenced dataset at an offset of 21 days.
+    \item \gls{ds} as can be seen in figure \ref{fig:rf-ds} the best result was found for the differenced and normalized dataset at an offset of 49 days.
 \end{itemize}
 
 
@@ -273,6 +273,13 @@ For the \gls{svr} model four parameters were varied: C (regularization parameter
     \caption{\gls{usd} \gls{svr} parameter search grid and found optimum values.}
     \label{table:svr}
 \end{table}
+
+The final best values of the performance measures for each model on the test set were:
+\begin{itemize}
+    \item \gls{mlp} - \gls{mse} = 0.005; \gls{ds} = 0.93
+    \item \gls{rf} - \gls{mse} = 0.000; \gls{ds} = 0.36
+    \item \gls{svr} - \gls{mse} = 0.000; \gls{ds} = 0.35
+\end{itemize}
 
 \subsection{Forecasts}\label{Forecasts}
 
