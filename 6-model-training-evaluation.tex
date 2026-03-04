@@ -46,13 +46,13 @@ The accuracy of the model forecasts was evaluated on the basis of commonly used 
 
 The DS metric measures the percentage of times the model correctly predicts the direction of change in the target variable.
 
-    \item \Gls{oob} error - is a method for evaluating the performance of ensemble methods where during training on a random subset of the training data the generated model is evaluated on the data that was not part of its training dataset. It provides an unbiased estimate of the model's generalization performance without the need for a separate validation set \cite{scikit-oob}.
+%    \item \Gls{oob} error - is a method for evaluating the performance of ensemble methods where during training on a random subset of the training data the generated model is evaluated on the data that was not part of its training dataset. It provides an unbiased estimate of the model's generalization performance without the need for a separate validation set \cite{scikit-oob}.
 \end{itemize}
 
 
 \subsection{Methodology}\label{Methodology}
 
-The process of model training and evaluation consisted of the selection of the optimal data processing methodology and offset followed by hyperparameter optimization. In both cases each models accuracy was evaluated on both in-sample (training set) and out-of-sample (test set) data. The minimum average \gls{mse} and maximum average \gls{ds} values of the performance metrics for the training and test set  were selected as exhibiting the best performance.
+The process of model training and evaluation consisted of the selection of the optimal data processing methodology followed by hyperparameter optimization. In both cases each models accuracy was evaluated on both in-sample (training set) and out-of-sample (test set) data. The minimum average \gls{mse} and maximum average \gls{ds} values of the performance metrics for the training and test set were selected as exhibiting the best performance.
 
 \subsubsection{Processing methodology and offset selection}\label{Processing methodology and offset selection}
 

@@ -4,7 +4,7 @@ In this paper data preparation for use in \gls{ai} model creation consists of tw
 
 \subsection{Acquisition}\label{Acquisition}
 
-The data chosen for this study was a set of euro foreign exchange reference rates obtained from the website of the \gls{ecb} \cite{forex-data}. The data consists of the daily spot prices for 41 foreign currencies from 04.01.1999 to 02.05.2025. The currencies included in the dataset were: \gls{usd}, \gls{jpy}, \gls{bgn}, \gls{cyp}, \gls{czk}, \gls{dkk}, \gls{eek}, \gls{gbp}, \gls{huf}, \gls{ltl}, \gls{lvl}, \gls{mtl}, \gls{pln}, \gls{rol}, \gls{ron}, \gls{sek}, \gls{sit}, \gls{skk}, \gls{chf}, \gls{isk}, \gls{nok}, \gls{hrk}, \gls{rub}, \gls{trl}, \gls{try}, \gls{aud}, \gls{brl}, \gls{cad}, \gls{cny}, \gls{hkd}, \gls{idr}, \gls{ils}, \gls{inr}, \gls{krw}, \gls{mxn}, \gls{myr}, \gls{nzd}, \gls{php}, \gls{sgd}, \gls{thb}, \gls{zar}.
+The data chosen for this study was a set of \gls{cpi}-deflated \gls{eer} obtained from the website of the \gls{ecb} \cite{forex-data}. The data consists of three sets of deflated \gls{eer} one on the basis of a group of 13 currencies, one 18 currencies and one 41 currencies. The data is sampled at a monthly frequency and covers the time frame from the 31.01.1993 to 31.10.2025. The currencies included in the dataset are: \gls{aed}, \gls{ars}, \gls{aud}, \gls{bgn}, \gls{brl}, \gls{cad}, \gls{chf}, \gls{clp}, \gls{cny}, \gls{cop}, \gls{czk}, \gls{dkk}, \gls{dzd}, \gls{eur}, \gls{gbp}, \gls{hkd}, \gls{huf}, \gls{idr}, \gls{ils}, \gls{inr}, \gls{isk}, \gls{jpy}, \gls{krw}, \gls{mad}, \gls{mxn}, \gls{myr}, \gls{nok}, \gls{nzd}, \gls{pen}, \gls{php}, \gls{pln}, \gls{ron}, \gls{rub}, \gls{sar}, \gls{sek}, \gls{sgd}, \gls{thb}, \gls{try}, \gls{twd}, \gls{uah}, \gls{usd}, \gls{zar}.
 
 \subsection{Required preprocessing steps}\label{Required preprocessing steps}
 
@@ -12,54 +12,13 @@ The cleaning and preparation of the data was conducted in order to increase the 
 
 \subsubsection{Handling of missing values}\label{Handling of missing values}
 
-The handling of missing values consisted of two steps.
-
-The first step in the preparation of the dataset was the removal of variables with more than two sequential variable specific missing values, caused by insufficient market activity and reporting inconsistencies, of which there were 24, leaving behind 17 currency exchange rates: \gls{usd}, \gls{jpy}, \gls{czk}, \gls{dkk}, \gls{gbp}, \gls{huf}, \gls{pln}, \gls{sek}, \gls{chf}, \gls{nok}, \gls{aud}, \gls{cad}, \gls{hkd}, \gls{krw}, \gls{nzd}, \gls{sgd}, \gls{zar}.
-
-\begin{figure}[h]
-    \includegraphics[width=0.5\textwidth]{images/preprocessing/1-nan/0-nan.png}
-    \centering
-    \caption{A subsection of the raw exchange rate data showing NaN vales for the \gls{bgn} currency.}
-    \label{fig:nan}
-\end{figure}
-
-\begin{figure}[h]
-    \includegraphics[width=0.5\textwidth]{images/preprocessing/1-nan/1-no-nan.png}
-    \centering
-    \caption{A subsection of the exchange rate data showing the removed \gls{bgn} currency in comparison to figure \ref{fig:nan}.}
-    \label{fig:no-nan}
-\end{figure}
-
-Even though variables with variable specific missing values were eliminated in the previous step and the remaining data appeared continuous the remaining exchange rates still exhibited global missing values which were the result of holidays and weekends, days where the exchange markets were closed and no value could be assigned. In order to alleviate this issue and preserve the continuity of the time series the missing dates were added and the missing values were forward filled with the values preceding them.
-
-\begin{figure}[h]
-    \includegraphics[width=0.5\textwidth]{images/preprocessing/2-ff/1-no-date.png}
-    \centering
-    \caption{A subsection of the exchange rate data showing a series of two missing global values indicated by missing dates.}
-    \label{fig:no-date}
-\end{figure}
-
-\begin{figure}[h]
-    \includegraphics[width=0.5\textwidth]{images/preprocessing/2-ff/2-with-date.png}
-    \centering
-    \caption{A subsection of the exchange rate data showing the added dates and forward filled values in comparison to figure \ref{fig:no-date}.}
-    \label{fig:with-date}
-\end{figure}
-
-This step was crucial, as missing data can lead to biased estimates and can negatively affect the overall performance of predictive models \cite{techniques,rf-svr}.
+The handling of missing values consisted of the removal of variables with more than two sequential variable specific missing values, caused by insufficient market activity and reporting inconsistencies, of which there was 1 (41-RUB), leaving behind 73 currency exchange rates. This step was crucial, as missing data can lead to biased estimates and can negatively affect the overall performance of predictive models \cite{techniques,rf-svr}.
 
 \subsection{Optional intermediary steps}\label{Optional intermediary steps}
 
 \subsubsection{Log transformation}\label{Log transformation}
 
 In this step a natural logarithm transformation of the data was applied in order to stabilize the variance and prevent heteroscedacity \cite{nn-vs-chaotic,robust-regression,gbp-usd-forecasting}.
-
-\begin{figure}[h!]
-    \includegraphics[width=\textwidth]{images/preprocessing/3-optional/log-transform/usd-ff-log.png}
-    \centering
-    \caption{A graphical comparison of forward filled and log transformed data on the basis of the \gls{usd} spot exchange rate.}
-    \label{fig:usd-ff-log}
-\end{figure}
 
 \subsubsection{Differencing}\label{Differencing}
 
@@ -75,7 +34,7 @@ In this step first-order differencing was applied to the dataset. This procedure
 \begin{figure}[h!]
     \includegraphics[width=\textwidth]{images/preprocessing/3-optional/differencing/usd-diff.png}
     \centering
-    \caption{The forward filled differenced \gls{usd} spot exchange rate.}
+    \caption{The differenced \gls{usd} spot exchange rate.}
     \label{fig:usd-diff}
 \end{figure}
 
@@ -97,13 +56,9 @@ Feature scaling is an essential step in the data preparation for many \gls{ai} m
 
 \subsection{Required postprocessing steps}\label{Required postprocessing steps}
 
-\subsubsection{Feature decorrelation}\label{Feature decorrelation}
-
-In the next step a Pearson correlation matrix was constructed on the feature and target exchange rates to assess the linear relationships among them. The threshold for feature rejection was set for values $\ge 0.8$. This threshold was chosen to mitigate the risk of multicollinearity, which can lead to inflated standard errors and unreliable coefficient estimates in regression models. The analysis began with the elimination of feature variables that exhibited a high linear correlation with the target variable. Next feature variables that had a high correlation with at least one other variable were removed. This was done in order to prevent the occurrence of amplifying or distorting effects during model training \cite{genetic}. As a result of this analysis, the initial feature set for each dataset processing variation was significantly reduced.
-
 \subsubsection{Feature extraction}\label{Feature extraction}
 
-From among all of the available currencies the \gls{usd} currency exchange rate was selected as the target variable. Time lagged versions of the dataset for each feature variable upto 50 days were created for each preprocessing variation \cite{rf-svr,gold}. An example of the shifting procedure for the \gls{usd} exchange rate is shown in \ref{fig:feature-extraction}.
+For this step three different target variables were chosen each representing the \gls{usd} exchange rate for the different sized groupings of trading partners used for CPI-deflation. Time lagged versions of each dataset for each feature variable upto 12 months were created for each preprocessing variation \cite{rf-svr,gold}. An example of the shifting procedure for the \gls{usd} exchange rate is shown in figure \ref{fig:feature-extraction}.
 
 \begin{figure}[h]
     \includegraphics[width=\textwidth]{images/preprocessing/4-usd-shifts-3.png}
@@ -130,6 +85,10 @@ From among all of the available currencies the \gls{usd} currency exchange rate 
 %     \caption{\Gls{cv} scores by number of features for normalized (\gls{mlp}), standardized (\gls{svr}) and unscaled (\gls{rf}) datasets.}
 %     \label{fig:rfecv}
 % \end{figure}
+
+\subsubsection{Feature decorrelation}\label{Feature decorrelation}
+
+In the next step a Pearson correlation matrix was constructed for the feature and target exchange rates to assess the linear relationships among them. Features exhibiting weak correlation $\le 0.1$ with the target were removed first, as they contribute noise without predictive signal. Next feature variables that had a high mutual correlation $\ge 0.9$ with at least one other feature were removed. This was done to mitigate the risk of multicollinearity, which can lead to the occurrence of amplifying or distorting effects during model training \cite{genetic}. As a result of this analysis, the initial feature set for each dataset processing variation was significantly reduced.
 
 \subsubsection{Data split}\label{Data split}
 
