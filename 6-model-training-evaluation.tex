@@ -49,260 +49,279 @@ The DS metric measures the percentage of times the model correctly predicts the 
 %    \item \Gls{oob} error - is a method for evaluating the performance of ensemble methods where during training on a random subset of the training data the generated model is evaluated on the data that was not part of its training dataset. It provides an unbiased estimate of the model's generalization performance without the need for a separate validation set \cite{scikit-oob}.
 \end{itemize}
 
-
 \subsection{Methodology}\label{Methodology}
 
-The process of model training and evaluation consisted of the selection of the optimal data processing methodology followed by hyperparameter optimization. In both cases each models accuracy was evaluated on both in-sample (training set) and out-of-sample (test set) data. The minimum average \gls{mse} and maximum average \gls{ds} values of the performance metrics for the training and test set were selected as exhibiting the best performance.
+The process of model training and evaluation consisted of model fitting using the Optuna hyperparameter optimization framework followed by data analysis. For each model accuracy was evaluated on both in-sample (training set) and out-of-sample (test set) data. The minimum average \gls{mse} and maximum average \gls{ds} values of the performance metrics for the training and test set were selected as exhibiting the best performance.
 
-\subsubsection{Processing methodology and offset selection}\label{Processing methodology and offset selection}
+\subsubsection{Optuna model fitting}\label{Optuna model fitting}
 
-In the first step the performance of each of the models on each of the dataset processing variations was evaluated. Each model was used with its default parameters with some exceptions. For the \gls{mlp} the  activation function was changed to \gls{tanh} due to the normalization range of the data, shuffle was set to false to prevent data shuffling in order to not disrupt the continuous time series nature of the data, random state was set to zero for reproducability of the results and the maximum number of iterations was increased to 1000 in order to allow for model convergence. For the \gls{rf} only the random state was set. For the \gls{svr} non of the default parameters were changed.
+In the first step each of the models was fitted on different suitable dataset processing variations. For the purpose of efficient and reproducible hyperparameter optimization that exceeds what can be achieved within reasonable time frames using the GridSearchCV class from scikit-learn, an alternative drop-in replacement class OptunaSearchCV provided by the Optuna package was used instead. Unlike grid search's exhaustive enumeration, Optuna's TPE sampler efficiently explores the hyperparameter space through Bayesian optimization, focusing computational effort on promising regions of the hyperparameter space. For the \gls{mlp} only datasets for which normalization was applied as the last step were used. For the \gls{rf} all dataset processing variations were evaluated. For \gls{svr} only datasets processing methods that ended with standardization were used.
 
-In the case of the \gls{mlp} for the :
-\begin{itemize}
-    \item \gls{mse} as can be seen in figure \ref{fig:mlp-mse} the best result was found for the differenced and normalized dataset at an offset of 11 days.
-    \item \gls{ds} as can be seen in figure \ref{fig:mlp-ds} the best result was found for the differenced and normalized dataset at an offset of 40 days.
-\end{itemize}
+Beyond the parameters being optimized each model was used with its default parameters with some exceptions. For the \gls{mlp} the activation function was changed to \gls{tanh} due to the normalization range of the data, shuffle was set to false to prevent data shuffling in order to not disrupt the continuous time series nature of the data, random state was set to zero for reproducability of the results and the maximum number of iterations was increased to 10000 in order to allow for model convergence. For the \gls{rf} only the random state was set. For the \gls{svr} non of the default parameters were changed.
 
-In the case of \gls{svr} for the :
-\begin{itemize}
-    \item \gls{mse} as can be seen in figure \ref{fig:svr-mse} the best result was found for the log transformed and differenced dataset at an offset of 9 days.
-    \item \gls{ds} as can be seen in figure \ref{fig:svr-ds} the best result was found for the differenced and normalized dataset at an offset of 28 days.
-\end{itemize}
+The parameters being optimized via OptunaSearchCV for each model as well as there selected value distributions are presented in table \ref{tab:mlp-hyperparams} for \gls{mlp}, table \ref{tab:rf-hyperparams} for \gls{rf} and table \ref{tab:svr-hyperparams} for \gls{svr}.
 
-In the case of \gls{rf} for the :
-\begin{itemize}
-    \item \gls{mse} as can be seen in figure \ref{fig:rf-mse} the best result was found for the log transformed and differenced dataset at an offset of 21 days.
-    \item \gls{ds} as can be seen in figure \ref{fig:rf-ds} the best result was found for the differenced and normalized dataset at an offset of 49 days.
-\end{itemize}
+OptunaSearchCV was run for 1000 iterations for each model for each applicable dataset variation for each offset from 1 to 12 months. All parameters were retained at default values other than 'scoring' which was set to 'neg\_mean\_squared\_error'.
 
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        Parameter & Distribution \\
+        \hline
+        \hline
+        hidden\_layer\_sizes & $Int(1, 30)$ \\
+        \hline
+        alpha & $Float(10^{-10}, 10^{-1})$ \\
+        \hline
+        tol & $Float(10^{-8}, 10^{-1})$ \\
+        \hline
+    \end{tabular}
+    \caption{Optuna hyperparameter search space for MLPRegressor}
+    \label{tab:mlp-hyperparams}
+\end{table}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        Parameter & Distribution \\
+        \hline
+        \hline
+        n\_estimators & $Int(1, 40)$ \\
+        \hline
+        max\_depth & $Int(1, 40)$ \\
+        \hline
+        max\_features & $Int(1, 44)$ \\
+        \hline
+    \end{tabular}
+    \caption{Optuna hyperparameter search space for RandomForestRegressor}
+    \label{tab:rf-hyperparams}
+\end{table}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        Parameter & Distribution \\
+        \hline
+        \hline
+        tol & $Float(10^{-6}, 10^{-1})$ \\
+        \hline
+        C & $Int(100, 2000)$ \\
+        \hline
+        $\epsilon$ & $Float(10^{-8}, 10^{-1})$ \\
+        \hline
+    \end{tabular}
+    \caption{Optuna hyperparameter search space for SVR}
+    \label{tab:svr-hyperparams}
+\end{table}
+
+\subsubsection{Data analysis}\label{Data analysis}
+
+The forecasts obtained in the previous step were reverse transformed to obtain values in the same range as those of the original \gls{eer}. This was done due to the scale dependant nature of the \gls{mse} metric. Next for each dataset variation the cumulative averages for all offsets of the average \gls{mse} and \gls{ds} for the training and test set forecasts were calculated. As a result multiple rankings were obtained which can be seen in figures \ref{fig:mlp-mse} and \ref{fig:mlp-ds} for \gls{mlp}, figures \ref{fig:rf-mse} and \ref{fig:rf-ds} for \gls{rf} and figures \ref{fig:svr-mse} and \ref{fig:svr-ds} for \gls{svr}.
+
+% Bar charts for the average MSE and Hitrate for different dataset variations for each model
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/offset-selection/mse/mlp.png}
+    \includegraphics[width=\textwidth]{images/metrics-by-dataset/mlp_mse.png}
     \centering
-    \caption{The minimum average \gls{mse} of the \gls{mlp} model evaluated on train and test sets for different data processing methods alongside the optimal offset for each. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized.}
+    \caption{The \gls{mse} for the \gls{mlp} model for various preprocessing steps. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized .}
     \label{fig:mlp-mse}
 \end{figure}
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/offset-selection/hitrate/mlp.png}
+    \includegraphics[width=\textwidth]{images/metrics-by-dataset/mlp_hitrate.png}
     \centering
-    \caption{The maximum average \gls{ds} of the \gls{mlp} model evaluated on train and test sets for different data processing methods alongside the optimal offset for each. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized.}
+    \caption{The \gls{ds} for the \gls{mlp} model for various preprocessing steps. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized.}
     \label{fig:mlp-ds}
 \end{figure}
 
-
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/offset-selection/mse/svr.png}
+    \includegraphics[width=\textwidth]{images/metrics-by-dataset/rf_mse.png}
     \centering
-    \caption{The minimum average \gls{mse} of the \gls{svr} model evaluated on train and test sets for different data processing methods alongside the optimal offset for each. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized, s - standardized, r - raw.}
-    \label{fig:svr-mse}
-\end{figure}
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/offset-selection/hitrate/svr.png}
-    \centering
-    \caption{The maximum average \gls{ds} of the \gls{svr} model evaluated on train and test sets for different data processing merthods alongside the optimal offset for each. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized, s - standardized, r - raw.}
-    \label{fig:svr-ds}
-\end{figure}
-
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/offset-selection/mse/rf.png}
-    \centering
-    \caption{The minimum average \gls{mse} of the \gls{rf} model evaluated on train and test sets for different data processing methods alongside the optimal offset for each. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized, s - standardized, r - raw.}
+    \caption{The \gls{mse} for the \gls{rf} model for various preprocessing steps. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized, s - standardized, r - raw.}
     \label{fig:rf-mse}
 \end{figure}
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/offset-selection/hitrate/rf.png}
+    \includegraphics[width=\textwidth]{images/metrics-by-dataset/rf_hitrate.png}
     \centering
-    \caption{The maximum average \gls{ds} of the \gls{rf} model evaluated on train and test sets for different data processing methods alongside the optimal offset for each. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized, s - standardized, r - raw.}
+    \caption{The \gls{ds} for the \gls{rf} model for various preprocessing steps. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized, s - standardized, r - raw.}
     \label{fig:rf-ds}
 \end{figure}
 
-\subsubsection{Hyperparameter optimization}\label{Hyperparameter optimization}
-
-With the processing methodology and offset size selected in the previous step for each model a grid search with 5-fold cross-validation utilizing the negative \gls{mse} loss function was conducted for a selected set of parameters for each model. First to better understand the dynamics of each model the values of different parameters were manipulated independantly. In the second step a broader grid search was conducted on the same set of ranges for each of the variables but for every possible combination of values.
-
-% Required elements for each model
-% - Table of parameter ranges covered for each paramater
-% - Graph of accuracy for individual parameters where change is visible
-% - Description of observed trends in graphs (accuracy increases / decreases with the value)
-% - For parameters where no change is observed state it in the description
-% - 
-
-For the \gls{mlp} regression model four parameters were varied: hidden layer sizes, alpha, solver and tol. In the case of the independant analysis the size of the hidden layer had a small effect on the accuracy of the model with the greatest error being within the ranges 0 - 10 and 50 - 90 and the smallest for 93 as can be seen in figure \ref{fig:mlp-hidden}. The accuracy of the model was greater for values of alpha above 0.2 however larger values provided a higher accuracy as such the optimal value of alpha was 0.99 as is shown in figure \ref{fig:mlp-alpha}. For the solver the \gls{lbfgs} provided the best accuracy when compared against adam and \gls{sgds} as is shown in figure \ref{fig:mlp-solver}. For the tolerance above the value of 0.00023 the accuracy reaches it's maximum and remains nearly constant upto the end of the search range at 0.0007 as can be seen in figure \ref{fig:mlp-tol}. In the case of the full search space grid search the results were different and are presented in table \ref{table:mlp}.
-
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/grid-search/mlp/hidden.png}
+    \includegraphics[width=\textwidth]{images/metrics-by-dataset/svr_mse.png}
     \centering
-    \caption{The negative \gls{mse} for the \gls{mlp} model for a different number of nodes in the single hidden layer.}
-    \label{fig:mlp-hidden}
+    \caption{The \gls{mse} for the \gls{svr} model for various preprocessing steps. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, s - standardized.}
+    \label{fig:svr-mse}
 \end{figure}
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/grid-search/mlp/alpha.png}
+    \includegraphics[width=\textwidth]{images/metrics-by-dataset/svr_hitrate.png}
     \centering
-    \caption{The negative \gls{mse} for the \gls{mlp} model for different values of alpha.}
-    \label{fig:mlp-alpha}
+    \caption{The \gls{ds} for the \gls{svr} model for various preprocessing steps. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, s - standardized.}
+    \label{fig:svr-ds}
 \end{figure}
 
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/grid-search/mlp/solver.png}
-    \centering
-    \caption{The negative \gls{mse} for the \gls{mlp} model for different solvers.}
-    \label{fig:mlp-solver}
-\end{figure}
+On the basis of the created rankings the best dataset preprocessing variations for each model were selected. The results are displayed in table \ref{tab:best-datasets}.
 
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/grid-search/mlp/tol.png}
-    \centering
-    \caption{The negative \gls{mse} for the \gls{mlp} model for different tolerances.}
-    \label{fig:mlp-tol}
-\end{figure}
+% Metric - Model - Preprocessing steps
+% mse - mlp - log-normalized
+% hitrate - mlp - log-diff-normalized
+% mse - rf - raw
+% hitrate - rf - log-transformed
+% mse - svr - log-diff-standardized
+% hitrate - svr - log-diff-standardized
 
-\begin{table}[H]
+\begin{table}[h]
     \centering
     \begin{tabular}{|c|c|c|}
         \hline
-        Parameters & Search grid & Optimum values \\
+        \textbf{Model} & \textbf{Metric} & \textbf{Preprocessing Steps} \\
         \hline
+        \multirow{2}{*}{\begin{tabular}{@{}c@{}}\gls{mlp}\end{tabular}} & \begin{tabular}{@{}c@{}}\gls{mse}\end{tabular} & log-normalized \\
+        \cline{2-3}
+        \multirow{-1}{*}{} & \begin{tabular}{@{}c@{}}Hitrate\end{tabular} & log-diff-normalized \\
         \hline
-        hidden layer sizes & 1 - 100 & 1 \\
+        \multirow{2}{*}{\begin{tabular}{@{}c@{}}\gls{rf}\end{tabular}} & \begin{tabular}{@{}c@{}}\gls{mse}\end{tabular} & raw \\
+        \cline{2-3}
+        \multirow{-1}{*}{} & \begin{tabular}{@{}c@{}}Hitrate\end{tabular} & log-transformed \\
         \hline
-        alpha & 0.01 - 1 & 0.3 \\
-        \hline
-        solver & adam, \gls{sgds}, \gls{lbfgs} & \gls{lbfgs} \\
-        \hline
-        tolerance & 0.00001 - 0.0007 & 0.0001 \\
-        \hline
-    \end{tabular}
-    \caption{\gls{usd} \gls{mlp} parameter search grid and found optimum values in full grid search over entire search space.}
-    \label{table:mlp}
-\end{table}
-
-For the \gls{rf} model three parameters were varied: the number of estimators, maximum depth of trees and the maximum number of features per split. In the case of the independant analysis the greater the number of estimators the smaller the error of the model resulting in the best accuracy being for a value of 29 as can be seen in figure \ref{fig:rf-trees}. In the case of the maximum depth of trees the greater the depth the greater the error with the best result for a depth of one as shown in figure \ref{fig:rf-depth}. For the maximum number of features per split the sqrt and log2 counts exhibited the worst accurracy, 0.3 better and 1.0 (all features) the best. The accuracy of each is shown in figure \ref{fig:rf-features}. In the case of the full search space grid search the results were different and are presented in table \ref{table:rf}.
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/grid-search/rf/trees.png}
-    \centering
-    \caption{The negative \gls{mse} for the \gls{rf} model for different numbers of estimators.}
-    \label{fig:rf-trees}
-\end{figure}
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/grid-search/rf/depth.png}
-    \centering
-    \caption{The negative \gls{mse} for the \gls{rf} model for different tree depths.}
-    \label{fig:rf-depth}
-\end{figure}
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/grid-search/rf/features.png}
-    \centering
-    \caption{The negative \gls{mse} for the \gls{rf} model for different numbers of features per split.}
-    \label{fig:rf-features}
-\end{figure}
-
-\begin{table}[H]
-    \centering
-    \begin{tabular}{|c|c|c|}
-        \hline
-        Parameters & Search grid & Optimum values \\
-        \hline
-        \hline
-        n\_estimators & 1 - 30 & 23 \\
-        \hline
-        max\_features & 1.0, sqrt, log2, 0.3 & 1.0 \\
-        \hline
-        max\_depth & 1 - 50 & 2 \\
+        \gls{svr} & \gls{mse}/Hitrate & log-diff-standardized \\
+        % \multirow{2}{*}{\begin{tabular}{@{}c@{}}SVR\end{tabular}} & \begin{tabular}{@{}c@{}}MSE\end{tabular} & log-diff-standardized \\
+        % \cline{2-3}
+        % \multirow{-1}{*}{} & \begin{tabular}{@{}c@{}}Hitrate\end{tabular} & log-diff-standardized \\
         \hline
     \end{tabular}
-    \caption{\gls{usd} \gls{rf} parameter search grid and found optimum values.}
-    \label{table:rf}
+    \caption{The best dataset preprocessing steps per model per metric.}
+    \label{tab:best-datasets}
 \end{table}
 
-For the \gls{svr} model four parameters were varied: C (regularization parameter), epsilon, the kernel and the tolerance for misclassification. Regardless of scope or range the C, kernel and tolerance parameters had no effect on the accuracy of the model. The epsilon variable did with the lowest error for small values where the best value was for zero as can be seen in \ref{fig:svr-epsilon}. In the case of the full search space grid search the results were different and are presented in table \ref{table:svr}.
+\newpage
 
+For the purpose of comparing the overall performance of different models the average \gls{mse} and \gls{ds} over both the train and test sets over all offsets was calculated. The results are visible in bar charts in figure \ref{fig:mse-model-cmp} for the \gls{mse} and figure \ref{fig:ds-model-cmp} for the \gls{ds}. On this basis it can be said that for the \gls{mse} the best performing models are the \gls{mlp} followed by the \gls{svr} and the \gls{rf} on the other hand for the \gls{ds} the best performing model is \gls{svr} followed by the \gls{rf} with the worst being the \gls{mlp}.
+
+% Bar chart comparison of the best performing models
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/grid-search/svr/C.png}
+    \includegraphics[width=\textwidth]{images/metrics-by-model/mse.png}
     \centering
-    \caption{The negative \gls{mse} for the \gls{svr} model for a different number of nodes in the single hidden layer.}
-    \label{fig:svr-C}
+    \caption{Comparison of the lowest cumulative average of the average \gls{mse} over train and test sets of all offset forecasts for the best dataset preprocessing variant for each model.}
+    \label{fig:mse-model-cmp}
 \end{figure}
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/grid-search/svr/epsilon.png}
+    \includegraphics[width=\textwidth]{images/metrics-by-model/hitrate.png}
     \centering
-    \caption{The negative \gls{mse} for the \gls{svr} model for different values of alpha.}
-    \label{fig:svr-epsilon}
+    \caption{Comparison of the highest cumulative average of the average \gls{ds} over train and test sets of all offset forecasts for the best dataset preprocessing variant for each model.}
+    \label{fig:ds-model-cmp}
 \end{figure}
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/grid-search/svr/kernel.png}
-    \centering
-    \caption{The negative \gls{mse} for the \gls{svr} model for different solvers.}
-    \label{fig:svr-kernel}
-\end{figure}
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/grid-search/svr/tol.png}
-    \centering
-    \caption{The negative \gls{mse} for the \gls{svr} model for different tolerances.}
-    \label{fig:svr-tol}
-\end{figure}
-
-\begin{table}[H]
-    \centering
-    \begin{tabular}{|c|c|c|}
-        \hline
-        Parameters & Search grid & Optimum values \\
-        \hline
-        \hline
-        C & 1e-100 - 100 & 0.006 \\
-        \hline
-        epsilon & 0 - 1 & 0.0 \\
-        \hline
-        kernel & linear, poly, rbf & poly \\
-        \hline
-        tol & 1e-5 - 1 & 1e-5 \\
-        \hline
-    \end{tabular}
-    \caption{\gls{usd} \gls{svr} parameter search grid and found optimum values.}
-    \label{table:svr}
-\end{table}
-
-The final best values of the performance measures for each model on the test set were:
-\begin{itemize}
-    \item \gls{mlp} - \gls{mse} = 0.005; \gls{ds} = 0.93
-    \item \gls{rf} - \gls{mse} = 0.000; \gls{ds} = 0.36
-    \item \gls{svr} - \gls{mse} = 0.000; \gls{ds} = 0.35
-\end{itemize}
 
 \subsection{Forecasts}\label{Forecasts}
 
-Each of the model forecasts once reverse transformed via the same procedure used on the initial data for the respective selected dataset but in reverse exhibited nearly no similarity.
+In the next step cumulative bar charts of the \gls{mse} figure \ref{fig:cumulative-mse} and the \gls{ds} figure \ref{fig:cumulative-ds} of the forecasts were created to illustrate the relative performance of each model on the basis of it's best dataset preprocessing variant for each offset.
+
+% Bar charts of the offset dependant mse and hitrate of various forecasts
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/forecasts/mlp.png}
+    \includegraphics[width=\textwidth]{images/metrics-by-offset/all-mse.png}
     \centering
-    \caption{The best \gls{mlp} forecast.}
-    \label{fig:mlp-forecast}
+    \caption{Comparison of the \gls{mse} of the forecasts for the best dataset preprocessing variant for each model for each offset.}
+    \label{fig:cumulative-mse}
 \end{figure}
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/forecasts/rf.png}
+    \includegraphics[width=\textwidth]{images/metrics-by-offset/all-ds.png}
     \centering
-    \caption{The best \gls{rf} forecast.}
-    \label{fig:rf-forecast}
+    \caption{Comparison of the \gls{ds} of the forecasts for the best dataset preprocessing variant for each model for each offset.}
+    \label{fig:cumulative-ds}
+\end{figure}
+
+Additionally as can be seen below in figures from \ref{fig:forecast-cmp-1} to \ref{fig:forecast-cmp-12} the reverse transformed forecasts for each model for the USD currency were plotted for each offset.
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/forecast-comparison/1.png}
+    \centering
+    \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 1 month.}
+    \label{fig:forecast-cmp-1}
 \end{figure}
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/forecasts/svr.png}
+    \includegraphics[width=\textwidth]{images/forecast-comparison/2.png}
     \centering
-    \caption{The best \gls{svr} forecast.}
-    \label{fig:svr-forecast}
+    \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 2 months.}
+    \label{fig:forecast-cmp-2}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/forecast-comparison/3.png}
+    \centering
+    \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 3 months.}
+    \label{fig:forecast-cmp-3}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/forecast-comparison/4.png}
+    \centering
+    \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 4 months.}
+    \label{fig:forecast-cmp-4}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/forecast-comparison/5.png}
+    \centering
+    \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 5 months.}
+    \label{fig:forecast-cmp-5}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/forecast-comparison/6.png}
+    \centering
+    \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 6 months.}
+    \label{fig:forecast-cmp-6}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/forecast-comparison/7.png}
+    \centering
+    \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 7 months.}
+    \label{fig:forecast-cmp-7}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/forecast-comparison/8.png}
+    \centering
+    \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 8 months.}
+    \label{fig:forecast-cmp-8}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/forecast-comparison/9.png}
+    \centering
+    \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 9 months.}
+    \label{fig:forecast-cmp-9}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/forecast-comparison/10.png}
+    \centering
+    \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 10 months.}
+    \label{fig:forecast-cmp-10}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/forecast-comparison/11.png}
+    \centering
+    \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 11 months.}
+    \label{fig:forecast-cmp-11}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/forecast-comparison/12.png}
+    \centering
+    \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 12 months.}
+    \label{fig:forecast-cmp-12}
 \end{figure}
 

@@ -1,10 +1,10 @@
 \section{Data preparation}\label{Data preparation}
 
-In this paper data preparation for use in \gls{ai} model creation consists of two steps: acquisition and preprocessing.
+In this paper, data preparation for use in \gls{ai} model creation consists of two steps: acquisition and preprocessing.
 
 \subsection{Acquisition}\label{Acquisition}
 
-The data chosen for this study was a set of \gls{cpi}-deflated \gls{eer} obtained from the website of the \gls{ecb} \cite{forex-data}. The data consists of three sets of deflated \gls{eer} one on the basis of a group of 13 currencies, one 18 currencies and one 41 currencies. The data is sampled at a monthly frequency and covers the time frame from the 31.01.1993 to 31.10.2025. The currencies included in the dataset are: \gls{aed}, \gls{ars}, \gls{aud}, \gls{bgn}, \gls{brl}, \gls{cad}, \gls{chf}, \gls{clp}, \gls{cny}, \gls{cop}, \gls{czk}, \gls{dkk}, \gls{dzd}, \gls{eur}, \gls{gbp}, \gls{hkd}, \gls{huf}, \gls{idr}, \gls{ils}, \gls{inr}, \gls{isk}, \gls{jpy}, \gls{krw}, \gls{mad}, \gls{mxn}, \gls{myr}, \gls{nok}, \gls{nzd}, \gls{pen}, \gls{php}, \gls{pln}, \gls{ron}, \gls{rub}, \gls{sar}, \gls{sek}, \gls{sgd}, \gls{thb}, \gls{try}, \gls{twd}, \gls{uah}, \gls{usd}, \gls{zar}.
+The data chosen for this study was a set of \gls{cpi} deflated \gls{eer} obtained from the website of the \gls{ecb} \cite{forex-data}. Specifically, the dataset consists of the broad EER-41 index comprising 41 trade-weighted partner currencies covering $\sim$93 of euro area external trade. The data is sampled at monthly frequency from 31.01.1993 to 31.10.2025. The 41 partner currencies included are: \gls{aed}, \gls{ars}, \gls{aud}, \gls{bgn}, \gls{brl}, \gls{cad}, \gls{chf}, \gls{clp}, \gls{cny}, \gls{cop}, \gls{czk}, \gls{dkk}, \gls{dzd}, \gls{eur}, \gls{gbp}, \gls{hkd}, \gls{huf}, \gls{idr}, \gls{ils}, \gls{inr}, \gls{isk}, \gls{jpy}, \gls{krw}, \gls{mad}, \gls{mxn}, \gls{myr}, \gls{nok}, \gls{nzd}, \gls{pen}, \gls{php}, \gls{pln}, \gls{ron}, \gls{rub}, \gls{sar}, \gls{sek}, \gls{sgd}, \gls{thb}, \gls{try}, \gls{twd}, \gls{uah}, \gls{usd}, \gls{zar}.
 
 \subsection{Required preprocessing steps}\label{Required preprocessing steps}
 
@@ -12,7 +12,7 @@ The cleaning and preparation of the data was conducted in order to increase the 
 
 \subsubsection{Handling of missing values}\label{Handling of missing values}
 
-The handling of missing values consisted of the removal of variables with more than two sequential variable specific missing values, caused by insufficient market activity and reporting inconsistencies, of which there was 1 (41-RUB), leaving behind 73 currency exchange rates. This step was crucial, as missing data can lead to biased estimates and can negatively affect the overall performance of predictive models \cite{techniques,rf-svr}.
+The handling of missing values consisted of the removal of variables with more than two sequential variable specific missing values, caused by insufficient market activity and reporting inconsistencies, of which there was one \gls{rub}, leaving behind 73 currency exchange rates. This step was crucial, as missing data can lead to biased estimates and can negatively affect the overall performance of predictive models \cite{techniques,rf-svr}.
 
 \subsection{Optional intermediary steps}\label{Optional intermediary steps}
 
@@ -56,39 +56,20 @@ Feature scaling is an essential step in the data preparation for many \gls{ai} m
 
 \subsection{Required postprocessing steps}\label{Required postprocessing steps}
 
-\subsubsection{Feature extraction}\label{Feature extraction}
+\subsubsection{Feature creation}\label{Feature creation}
 
-For this step three different target variables were chosen each representing the \gls{usd} exchange rate for the different sized groupings of trading partners used for CPI-deflation. Time lagged versions of each dataset for each feature variable upto 12 months were created for each preprocessing variation \cite{rf-svr,gold}. An example of the shifting procedure for the \gls{usd} exchange rate is shown in figure \ref{fig:feature-extraction}.
+For this step a single target variable the USD \gls{eer} was chosen. Time lagged versions of each feature variable including the target variable upto 12 months were created for each preprocessing variation \cite{rf-svr,gold}. An example of the shifting procedure for the \gls{usd} exchange rate is shown in figure \ref{fig:feature-creation}.
 
 \begin{figure}[h]
     \includegraphics[width=\textwidth]{images/preprocessing/4-usd-shifts-3.png}
     \centering
     \caption{An example of a series of time shifts upto three days for the \gls{usd} exchange rate.}
-    \label{fig:feature-extraction}
+    \label{fig:feature-creation}
 \end{figure}
 
-% \subsubsection{Variable selection}\label{Variable selection}
-% 
-% In the next step scikit-learn's \gls{rfecv} \cite{scikit-learn} was used with the \gls{svr} model with a linear kernel as the estimator for feature importance ranking and optimal feature subset selection.
-% 
-% The \gls{cv} results for each dataset are presented in figure \ref{fig:rfecv}. As can be see the absence of scaling as well as in the case of scaling the chosen scaling methodology greatly affect the results of \gls{rfecv}.
-% 
-% For the \gls{mlp} dataset for which normalization was employed the optimal number of features selected by the \gls{rfecv} was 33.
-% 
-% For the \gls{svr} dataset for which standardization was employed the optimal number of features selected by the \gls{rfecv} was 9.
-% 
-% For the \gls{rf} dataset for which no scaling procedures were used the number of features selected by the \gls{rfecv} was 34.
-% 
-% \begin{figure}[h]
-%     \includegraphics[width=\textwidth]{images/preprocessing/5-variable-selection/rfecv.png}
-%     \centering
-%     \caption{\Gls{cv} scores by number of features for normalized (\gls{mlp}), standardized (\gls{svr}) and unscaled (\gls{rf}) datasets.}
-%     \label{fig:rfecv}
-% \end{figure}
+\subsubsection{Feature selection and decorrelation}\label{Feature selection and decorrelation}
 
-\subsubsection{Feature decorrelation}\label{Feature decorrelation}
-
-In the next step a Pearson correlation matrix was constructed for the feature and target exchange rates to assess the linear relationships among them. Features exhibiting weak correlation $\le 0.1$ with the target were removed first, as they contribute noise without predictive signal. Next feature variables that had a high mutual correlation $\ge 0.9$ with at least one other feature were removed. This was done to mitigate the risk of multicollinearity, which can lead to the occurrence of amplifying or distorting effects during model training \cite{genetic}. As a result of this analysis, the initial feature set for each dataset processing variation was significantly reduced.
+In the next step a Pearson correlation matrix was constructed for all variables to assess the linear relationships among them. Features exhibiting weak correlation $\le 0.1$ with the target were removed first, as they contribute noise without predictive signal. Next feature variables that had a high mutual correlation $\ge 0.9$ with at least one other feature were removed. This was done to mitigate the risk of multicollinearity, which can lead to the occurrence of amplifying or distorting effects during model training \cite{genetic}. As a result of this analysis, the initial feature set for each dataset processing variation was significantly reduced.
 
 \subsubsection{Data split}\label{Data split}
 
