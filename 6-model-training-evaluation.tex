@@ -59,7 +59,7 @@ In the first step each of the models was fitted on different suitable dataset pr
 
 Beyond the parameters being optimized each model was used with its default parameters with some exceptions. For the \gls{mlp} the activation function was changed to \gls{tanh} due to the normalization range of the data, shuffle was set to false to prevent data shuffling in order to not disrupt the continuous time series nature of the data, random state was set to zero for reproducability of the results and the maximum number of iterations was increased to 10000 in order to allow for model convergence. For the \gls{rf} only the random state was set. For the \gls{svr} non of the default parameters were changed.
 
-The parameters being optimized via OptunaSearchCV for each model as well as there selected value distributions are presented in table \ref{tab:mlp-hyperparams} for \gls{mlp}, table \ref{tab:rf-hyperparams} for \gls{rf} and table \ref{tab:svr-hyperparams} for \gls{svr}.
+The parameters being optimized via OptunaSearchCV for each model as well as there selected value distributions are presented in table \ref{tab:mlp-hyperparams} for \gls{mlp}, table \ref{tab:rf-hyperparams} for \gls{rf}, table \ref{tab:svr-hyperparams} for \gls{svr} and table \ref{tab:arima-hyperparams}.
 
 OptunaSearchCV was run for 1000 iterations for each model for each applicable dataset variation for each offset from 1 to 12 months. All parameters were retained at default values other than 'scoring' which was set to 'neg\_mean\_squared\_error'.
 
@@ -117,9 +117,27 @@ OptunaSearchCV was run for 1000 iterations for each model for each applicable da
     \label{tab:svr-hyperparams}
 \end{table}
 
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        Parameter & Distribution \\
+        \hline
+        \hline
+        p & $Int(0, 6)$ \\
+        \hline
+        d & $Int(0, 6)$ \\
+        \hline
+        q & $Int(0, 6)$ \\
+        \hline
+    \end{tabular}
+    \caption{Optuna hyperparameter search space for ARIMA}
+    \label{tab:arima-hyperparams}
+\end{table}
+
 \subsubsection{Data analysis}\label{Data analysis}
 
-The forecasts obtained in the previous step were reverse transformed to obtain values in the same range as those of the original \gls{eer}. This was done due to the scale dependant nature of the \gls{mse} metric. Next for each dataset variation the cumulative averages for all offsets of the average \gls{mse} and \gls{ds} for the training and test set forecasts were calculated. As a result multiple rankings were obtained which can be seen in figures \ref{fig:mlp-mse} and \ref{fig:mlp-ds} for \gls{mlp}, figures \ref{fig:rf-mse} and \ref{fig:rf-ds} for \gls{rf} and figures \ref{fig:svr-mse} and \ref{fig:svr-ds} for \gls{svr}.
+The forecasts obtained in the previous step were reverse transformed to obtain values in the same range as those of the original \gls{eer}. This was done due to the scale dependant nature of the \gls{mse} metric. Next for each dataset variation the cumulative averages for all offsets of the average \gls{mse} and \gls{ds} for the training and test set forecasts were calculated. As a result multiple rankings were obtained which can be seen in figures \ref{fig:mlp-mse} and \ref{fig:mlp-ds} for \gls{mlp}, figures \ref{fig:rf-mse} and \ref{fig:rf-ds} for \gls{rf}, figures \ref{fig:svr-mse} and \ref{fig:svr-ds} for \gls{svr} and figures \ref{fig:arima-mse} and \ref{fig:arima-ds} for \gls{arima}. For the \gls{rw} model only the raw data was used.
 
 % Bar charts for the average MSE and Hitrate for different dataset variations for each model
 
@@ -165,6 +183,20 @@ The forecasts obtained in the previous step were reverse transformed to obtain v
     \label{fig:svr-ds}
 \end{figure}
 
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/metrics-by-dataset/arima_mse.png}
+    \centering
+    \caption{The \gls{mse} for the \gls{arima} model for various preprocessing steps. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized, s - standardized, r - raw.}
+    \label{fig:arima-mse}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{images/metrics-by-dataset/arima_hitrate.png}
+    \centering
+    \caption{The \gls{ds} for the \gls{arima} model for various preprocessing steps. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized, s - standardized, r - raw.}
+    \label{fig:arima-ds}
+\end{figure}
+
 On the basis of the created rankings the best dataset preprocessing variations for each model were selected. The results are displayed in table \ref{tab:best-datasets}.
 
 % Metric - Model - Preprocessing steps
@@ -194,6 +226,10 @@ On the basis of the created rankings the best dataset preprocessing variations f
         % \cline{2-3}
         % \multirow{-1}{*}{} & \begin{tabular}{@{}c@{}}Hitrate\end{tabular} & log-diff-standardized \\
         \hline
+        \multirow{2}{*}{\begin{tabular}{@{}c@{}}\gls{arima}\end{tabular}} & \begin{tabular}{@{}c@{}}\gls{mse}\end{tabular} & log-differenced \\
+        \cline{2-3}
+        \multirow{-1}{*}{} & \begin{tabular}{@{}c@{}}Hitrate\end{tabular} & diff-standardized \\
+        \hline
     \end{tabular}
     \caption{The best dataset preprocessing steps per model per metric.}
     \label{tab:best-datasets}
@@ -201,7 +237,7 @@ On the basis of the created rankings the best dataset preprocessing variations f
 
 \newpage
 
-For the purpose of comparing the overall performance of different models the average \gls{mse} and \gls{ds} over both the train and test sets over all offsets was calculated. The results are visible in bar charts in figure \ref{fig:mse-model-cmp} for the \gls{mse} and figure \ref{fig:ds-model-cmp} for the \gls{ds}. On this basis it can be said that for the \gls{mse} the best performing models are the \gls{mlp} followed by the \gls{svr} and the \gls{rf} on the other hand for the \gls{ds} the best performing model is \gls{svr} followed by the \gls{rf} with the worst being the \gls{mlp}.
+For the purpose of comparing the overall performance of different models the average \gls{mse} and \gls{ds} over both the train and test sets over all offsets was calculated. The results are visible in bar charts in figure \ref{fig:mse-model-cmp} for the \gls{mse} and figure \ref{fig:ds-model-cmp} for the \gls{ds}.
 
 % Bar chart comparison of the best performing models
 
@@ -228,98 +264,98 @@ In the next step cumulative bar charts of the \gls{mse} figure \ref{fig:cumulati
 \begin{figure}[h]
     \includegraphics[width=\textwidth]{images/metrics-by-offset/all-mse.png}
     \centering
-    \caption{Comparison of the \gls{mse} of the forecasts for the best dataset preprocessing variant for each model for each offset.}
+    \caption{Comparison of the \gls{mse} of the forecasts for the best dataset preprocessing variant for each model for each offset. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized, s - standardized, r - raw.}
     \label{fig:cumulative-mse}
 \end{figure}
 
 \begin{figure}[h]
     \includegraphics[width=\textwidth]{images/metrics-by-offset/all-ds.png}
     \centering
-    \caption{Comparison of the \gls{ds} of the forecasts for the best dataset preprocessing variant for each model for each offset.}
+    \caption{Comparison of the \gls{ds} of the forecasts for the best dataset preprocessing variant for each model for each offset. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized, s - standardized, r - raw.}
     \label{fig:cumulative-ds}
 \end{figure}
 
 Additionally as can be seen below in figures from \ref{fig:forecast-cmp-1} to \ref{fig:forecast-cmp-12} the reverse transformed forecasts for each model for the USD currency were plotted for each offset.
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/forecast-comparison/1.png}
+    \includegraphics[width=\textwidth]{images/forecast-comparison/mse/1.png}
     \centering
     \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 1 month.}
     \label{fig:forecast-cmp-1}
 \end{figure}
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/forecast-comparison/2.png}
+    \includegraphics[width=\textwidth]{images/forecast-comparison/mse/2.png}
     \centering
     \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 2 months.}
     \label{fig:forecast-cmp-2}
 \end{figure}
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/forecast-comparison/3.png}
+    \includegraphics[width=\textwidth]{images/forecast-comparison/mse/3.png}
     \centering
     \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 3 months.}
     \label{fig:forecast-cmp-3}
 \end{figure}
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/forecast-comparison/4.png}
+    \includegraphics[width=\textwidth]{images/forecast-comparison/mse/4.png}
     \centering
     \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 4 months.}
     \label{fig:forecast-cmp-4}
 \end{figure}
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/forecast-comparison/5.png}
+    \includegraphics[width=\textwidth]{images/forecast-comparison/mse/5.png}
     \centering
     \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 5 months.}
     \label{fig:forecast-cmp-5}
 \end{figure}
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/forecast-comparison/6.png}
+    \includegraphics[width=\textwidth]{images/forecast-comparison/mse/6.png}
     \centering
     \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 6 months.}
     \label{fig:forecast-cmp-6}
 \end{figure}
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/forecast-comparison/7.png}
+    \includegraphics[width=\textwidth]{images/forecast-comparison/mse/7.png}
     \centering
     \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 7 months.}
     \label{fig:forecast-cmp-7}
 \end{figure}
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/forecast-comparison/8.png}
+    \includegraphics[width=\textwidth]{images/forecast-comparison/mse/8.png}
     \centering
     \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 8 months.}
     \label{fig:forecast-cmp-8}
 \end{figure}
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/forecast-comparison/9.png}
+    \includegraphics[width=\textwidth]{images/forecast-comparison/mse/9.png}
     \centering
     \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 9 months.}
     \label{fig:forecast-cmp-9}
 \end{figure}
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/forecast-comparison/10.png}
+    \includegraphics[width=\textwidth]{images/forecast-comparison/mse/10.png}
     \centering
     \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 10 months.}
     \label{fig:forecast-cmp-10}
 \end{figure}
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/forecast-comparison/11.png}
+    \includegraphics[width=\textwidth]{images/forecast-comparison/mse/11.png}
     \centering
     \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 11 months.}
     \label{fig:forecast-cmp-11}
 \end{figure}
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/forecast-comparison/12.png}
+    \includegraphics[width=\textwidth]{images/forecast-comparison/mse/12.png}
     \centering
     \caption{The best \gls{mse} forecasts per selected dataset per model for an offset of 12 months.}
     \label{fig:forecast-cmp-12}
