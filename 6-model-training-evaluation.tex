@@ -65,6 +65,7 @@ OptunaSearchCV was run for 1000 iterations for each model for each applicable da
 
 \begin{table}[h]
     \centering
+    \caption{Optuna hyperparameter search space for MLPRegressor}
     \begin{tabular}{|c|c|}
         \hline
         Parameter & Distribution \\
@@ -77,12 +78,12 @@ OptunaSearchCV was run for 1000 iterations for each model for each applicable da
         tol & $Float(10^{-8}, 10^{-1})$ \\
         \hline
     \end{tabular}
-    \caption{Optuna hyperparameter search space for MLPRegressor}
     \label{tab:mlp-hyperparams}
 \end{table}
 
 \begin{table}[h]
     \centering
+    \caption{Optuna hyperparameter search space for RandomForestRegressor}
     \begin{tabular}{|c|c|}
         \hline
         Parameter & Distribution \\
@@ -95,12 +96,12 @@ OptunaSearchCV was run for 1000 iterations for each model for each applicable da
         max\_features & $Int(1, 44)$ \\
         \hline
     \end{tabular}
-    \caption{Optuna hyperparameter search space for RandomForestRegressor}
     \label{tab:rf-hyperparams}
 \end{table}
 
 \begin{table}[h]
     \centering
+    \caption{Optuna hyperparameter search space for SVR}
     \begin{tabular}{|c|c|}
         \hline
         Parameter & Distribution \\
@@ -113,12 +114,12 @@ OptunaSearchCV was run for 1000 iterations for each model for each applicable da
         $\epsilon$ & $Float(10^{-8}, 10^{-1})$ \\
         \hline
     \end{tabular}
-    \caption{Optuna hyperparameter search space for SVR}
     \label{tab:svr-hyperparams}
 \end{table}
 
 \begin{table}[h]
     \centering
+    \caption{Optuna hyperparameter search space for ARIMA}
     \begin{tabular}{|c|c|}
         \hline
         Parameter & Distribution \\
@@ -131,7 +132,6 @@ OptunaSearchCV was run for 1000 iterations for each model for each applicable da
         q & $Int(0, 6)$ \\
         \hline
     \end{tabular}
-    \caption{Optuna hyperparameter search space for ARIMA}
     \label{tab:arima-hyperparams}
 \end{table}
 
@@ -209,6 +209,7 @@ On the basis of the created rankings the best dataset preprocessing variations f
 
 \begin{table}[h]
     \centering
+    \caption{The best dataset preprocessing steps per model per metric.}
     \begin{tabular}{|c|c|c|}
         \hline
         \textbf{Model} & \textbf{Metric} & \textbf{Preprocessing Steps} \\
@@ -231,7 +232,6 @@ On the basis of the created rankings the best dataset preprocessing variations f
         \multirow{-1}{*}{} & \begin{tabular}{@{}c@{}}Hitrate\end{tabular} & diff-standardized \\
         \hline
     \end{tabular}
-    \caption{The best dataset preprocessing steps per model per metric.}
     \label{tab:best-datasets}
 \end{table}
 
