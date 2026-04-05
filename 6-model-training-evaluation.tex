@@ -12,46 +12,22 @@ The bias-variance dilemma is a fundamental problem in machine learning and invol
 %
 % The opposite is aiming to increase model optimization (reducing the model error) however this in turn pushed to far causes overfitting or high error of the models predictions on the test/validation datasets (high variance).
 
-\subsection{Performance metrics}\label{Performance metrics}
+\subsection{Performance metric}\label{Performance metric}
 
-The accuracy of the model forecasts was evaluated on the basis of commonly used measures including:
+The accuracy of the model forecasts was evaluated on the basis of the \glsxtrlong{mse} this metric measures the average squared difference between predicted and actual values, providing a sense of the magnitude of the errors. A lower \gls{mse} indicates better fit, but it is sensitive to outliers due to the squaring of errors \cite{scikit-mse}.
+
+$$MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2$$
+
+Where:
 \begin{itemize}
-    \item \Glsxtrlong{mse} - measures the average squared difference between predicted and actual values, providing a sense of the magnitude of the errors. A lower MSE indicates better fit, but it is sensitive to outliers due to the squaring of errors \cite{scikit-mse}.
-
-        $$MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2$$
-
-        Where:
-        \begin{itemize}
-            \item $n$ is the total number of predictions
-            \item $y_i$ is the actual value at time $i$
-            \item $\hat{y}_i$ is the predicted value at time $i$
-        \end{itemize}
-
-    \item \Gls{ds} - also known as the hitrate is a metric that measures the ability of a forecasting model to correctly predict the direction of change in the target variable. It calculates the percentage of times the model correctly predicts whether the value will increase or decrease compared to the previous period \cite{svm-2}.
-
-        $$C = \sum_{i=1}^{n} \begin{cases}
-        1 & \text{if } (y_i - y_{i-1}) \text{ and } (\hat{y}_i - \hat{y}_{i-1}) \text{ have the same sign} \\
-        0 & \text{otherwise}
-        \end{cases}$$
-
-        $$DS = \frac{C}{n} \times 100$$
-
-        Where:
-        \begin{itemize}
-            \item $C$ is the number of correct directional predictions
-            \item $n$ is the total number of predictions
-            \item $y_i$ is the actual value at time $i$
-            \item $\hat{y}_i$ is the predicted value at time $i$
-        \end{itemize}
-
-The DS metric measures the percentage of times the model correctly predicts the direction of change in the target variable.
-
-%    \item \Gls{oob} error - is a method for evaluating the performance of ensemble methods where during training on a random subset of the training data the generated model is evaluated on the data that was not part of its training dataset. It provides an unbiased estimate of the model's generalization performance without the need for a separate validation set \cite{scikit-oob}.
+    \item $n$ is the total number of predictions
+    \item $y_i$ is the actual value at time $i$
+    \item $\hat{y}_i$ is the predicted value at time $i$
 \end{itemize}
 
 \subsection{Methodology}\label{Methodology}
 
-The process of model training and evaluation consisted of model fitting using the Optuna hyperparameter optimization framework followed by data analysis. For each model accuracy was evaluated on both in-sample (training set) and out-of-sample (test set) data. The minimum average \gls{mse} and maximum average \gls{ds} values of the performance metrics for the training and test set were selected as exhibiting the best performance.
+The process of model training and evaluation consisted of model fitting using the Optuna hyperparameter optimization framework followed by data analysis. During analysis for each model accuracy was evaluated on both in-sample (training set) and out-of-sample (test set) data. The preprocessing variant yielding the minimum average \gls{mse} across all offsets (train and test sets combined) was selected as optimal.
 
 \subsubsection{Optuna model fitting}\label{Optuna model fitting}
 
@@ -59,7 +35,9 @@ In the first step each of the models was fitted on different suitable dataset pr
 
 Beyond the parameters being optimized each model was used with its default parameters with some exceptions. For the \gls{mlp} the activation function was changed to \gls{tanh} due to the normalization range of the data, shuffle was set to false to prevent data shuffling in order to not disrupt the continuous time series nature of the data, random state was set to zero for reproducability of the results and the maximum number of iterations was increased to 10000 in order to allow for model convergence. For the \gls{rf} only the random state was set. For the \gls{svr} non of the default parameters were changed.
 
-%The parameters being optimized via OptunaSearchCV for each model as well as their selected value distributions are presented in table \ref{tab:mlp-hyperparams} for \gls{mlp}, table \ref{tab:rf-hyperparams} for \gls{rf}, table \ref{tab:svr-hyperparams} for \gls{svr} and table \ref{tab:arima-hyperparams} for \gls{arima}.
+The parameters being optimized via OptunaSearchCV for each model as well as their selected value distributions are presented in table \ref{tab:mlp-hyperparams} for \gls{mlp}, table \ref{tab:rf-hyperparams} for \gls{rf}, table \ref{tab:svr-hyperparams} for \gls{svr} and table \ref{tab:arima-hyperparams} for \gls{arima}.
+
+The range of values selected for each model was selected through manual experimentation to be broad an provide ample search space for optimization of each model.
 
 OptunaSearchCV was run for 1000 iterations for each model for each applicable dataset variation for each offset from 1 to 12 months. All parameters were retained at default values other than 'scoring' which was set to 'neg\_mean\_squared\_error'.
 
@@ -137,7 +115,7 @@ OptunaSearchCV was run for 1000 iterations for each model for each applicable da
 
 \subsubsection{Data analysis}\label{Data analysis}
 
-The forecasts obtained in the previous step were reverse transformed to obtain values in the same range as those of the original \gls{eer}. This was done due to the scale dependant nature of the \gls{mse} metric. Next for each dataset variation the cumulative averages for all offsets of the average \gls{mse} and \gls{ds} for both the training and test set forecasts were calculated.
+The forecasts obtained in the previous step were reverse transformed to obtain values in the same range as those of the original \gls{eer}. This was done due to the scale dependant nature of the \gls{mse} metric. Next for each dataset variation the cumulative averages for all offsets of the average \gls{mse} for both the training and test set forecasts were calculated.
 
 % Step not intended for:
 % - Comparing the MSE vs Hitrate not viable
@@ -168,7 +146,7 @@ The forecasts obtained in the previous step were reverse transformed to obtain v
 % - \gls{svr} \gls{ds}
 
 
-As a result multiple rankings were obtained which can be seen in figures \ref{fig:mlp-mse} and \ref{fig:mlp-ds} for \gls{mlp}, figures \ref{fig:rf-mse} and \ref{fig:rf-ds} for \gls{rf}, figures \ref{fig:svr-mse} and \ref{fig:svr-ds} for \gls{svr} and figures \ref{fig:arima-mse} and \ref{fig:arima-ds} for \gls{arima}. For the \gls{rw} model only the raw data was used.
+As a result multiple rankings were obtained which can be seen in figure \ref{fig:mlp-mse} for \gls{mlp}, figure \ref{fig:rf-mse} for \gls{rf}, figure \ref{fig:svr-mse} for \gls{svr} and figure \ref{fig:arima-mse} for \gls{arima}. For the \gls{rw} model only the raw data was used.
 
 % Bar charts for the average MSE and Hitrate for different dataset variations for each model
 
@@ -180,24 +158,10 @@ As a result multiple rankings were obtained which can be seen in figures \ref{fi
 \end{figure}
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/metrics-by-dataset/mlp_hitrate.png}
-    \centering
-    \caption{The \gls{ds} for the \gls{mlp} model for various preprocessing steps. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized.}
-    \label{fig:mlp-ds}
-\end{figure}
-
-\begin{figure}[h]
     \includegraphics[width=\textwidth]{images/metrics-by-dataset/rf_mse.png}
     \centering
     \caption{The \gls{mse} for the \gls{rf} model for various preprocessing steps. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized, s - standardized, r - raw.}
     \label{fig:rf-mse}
-\end{figure}
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/metrics-by-dataset/rf_hitrate.png}
-    \centering
-    \caption{The \gls{ds} for the \gls{rf} model for various preprocessing steps. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized, s - standardized, r - raw.}
-    \label{fig:rf-ds}
 \end{figure}
 
 \begin{figure}[h]
@@ -208,24 +172,10 @@ As a result multiple rankings were obtained which can be seen in figures \ref{fi
 \end{figure}
 
 \begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/metrics-by-dataset/svr_hitrate.png}
-    \centering
-    \caption{The \gls{ds} for the \gls{svr} model for various preprocessing steps. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, s - standardized.}
-    \label{fig:svr-ds}
-\end{figure}
-
-\begin{figure}[h]
     \includegraphics[width=\textwidth]{images/metrics-by-dataset/arima_mse.png}
     \centering
     \caption{The \gls{mse} for the \gls{arima} model for various preprocessing steps. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized, s - standardized, r - raw.}
     \label{fig:arima-mse}
-\end{figure}
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/metrics-by-dataset/arima_hitrate.png}
-    \centering
-    \caption{The \gls{ds} for the \gls{arima} model for various preprocessing steps. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized, s - standardized, r - raw.}
-    \label{fig:arima-ds}
 \end{figure}
 
 On the basis of the created rankings the best dataset preprocessing variations for each model were selected. The results are displayed in table \ref{tab:best-datasets}.
@@ -240,27 +190,19 @@ On the basis of the created rankings the best dataset preprocessing variations f
 
 \begin{table}[h]
     \centering
-    \caption{The best dataset preprocessing steps per model per metric.}
-    \begin{tabular}{|c|c|c|}
+    \caption{The best dataset preprocessing steps per model by \gls{mse}.}
+    \begin{tabular}{|c|c|}
         \hline
-        \textbf{Model} & \textbf{Metric} & \textbf{Preprocessing Steps} \\
+        Model & Preprocessing Steps \\
         \hline
-        \multirow{2}{*}{\begin{tabular}{@{}c@{}}\gls{mlp}\end{tabular}} & \begin{tabular}{@{}c@{}}\gls{mse}\end{tabular} & log-normalized \\
-        \cline{2-3}
-        \multirow{-1}{*}{} & \begin{tabular}{@{}c@{}}Hitrate\end{tabular} & log-diff-normalized \\
         \hline
-        \multirow{2}{*}{\begin{tabular}{@{}c@{}}\gls{rf}\end{tabular}} & \begin{tabular}{@{}c@{}}\gls{mse}\end{tabular} & raw \\
-        \cline{2-3}
-        \multirow{-1}{*}{} & \begin{tabular}{@{}c@{}}Hitrate\end{tabular} & log-transformed \\
+        \gls{mlp} & log-normalized \\
         \hline
-        \gls{svr} & \gls{mse}/Hitrate & log-diff-standardized \\
-        % \multirow{2}{*}{\begin{tabular}{@{}c@{}}SVR\end{tabular}} & \begin{tabular}{@{}c@{}}MSE\end{tabular} & log-diff-standardized \\
-        % \cline{2-3}
-        % \multirow{-1}{*}{} & \begin{tabular}{@{}c@{}}Hitrate\end{tabular} & log-diff-standardized \\
+        \gls{rf} & raw \\
         \hline
-        \multirow{2}{*}{\begin{tabular}{@{}c@{}}\gls{arima}\end{tabular}} & \begin{tabular}{@{}c@{}}\gls{mse}\end{tabular} & log-differenced \\
-        \cline{2-3}
-        \multirow{-1}{*}{} & \begin{tabular}{@{}c@{}}Hitrate\end{tabular} & diff-standardized \\
+        \gls{svr} & log-diff-standardized \\
+        \hline
+        \gls{arima} & log-differenced \\
         \hline
     \end{tabular}
     \label{tab:best-datasets}
@@ -268,7 +210,7 @@ On the basis of the created rankings the best dataset preprocessing variations f
 
 \newpage
 
-For the purpose of comparing the overall performance of different models the average \gls{mse} and \gls{ds} over both the train and test sets over all offsets was calculated. The results are visible in bar charts in figure \ref{fig:mse-model-cmp} for the \gls{mse} and figure \ref{fig:ds-model-cmp} for the \gls{ds}.
+For the purpose of comparing the overall performance of different models the average \gls{mse} over both the train and test sets over all offsets was calculated. The results are visible in the bar chart in figure \ref{fig:mse-model-cmp}.
 
 % Bar chart comparison of the best performing models
 
@@ -279,16 +221,9 @@ For the purpose of comparing the overall performance of different models the ave
     \label{fig:mse-model-cmp}
 \end{figure}
 
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/metrics-by-model/hitrate.png}
-    \centering
-    \caption{Comparison of the highest cumulative average of the average \gls{ds} over train and test sets of all offset forecasts for the best dataset preprocessing variant for each model.}
-    \label{fig:ds-model-cmp}
-\end{figure}
-
 \subsection{Forecasts}\label{Forecasts}
 
-In the next step cumulative bar charts of the \gls{mse} figure \ref{fig:cumulative-mse} and the \gls{ds} figure \ref{fig:cumulative-ds} of the forecasts were created to illustrate the relative performance of each model on the basis of it's best dataset preprocessing variant for each offset.
+In the next step a cumulative bar chart of the \gls{mse} shown in figure \ref{fig:cumulative-mse} of the forecasts was created to illustrate the relative performance of each model on the basis of it's best dataset preprocessing variant for each offset.
 
 % Bar charts of the offset dependant mse and hitrate of various forecasts
 
@@ -297,13 +232,6 @@ In the next step cumulative bar charts of the \gls{mse} figure \ref{fig:cumulati
     \centering
     \caption{Comparison of the \gls{mse} of the forecasts for the best dataset preprocessing variant for each model for each offset. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized, s - standardized, r - raw.}
     \label{fig:cumulative-mse}
-\end{figure}
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{images/metrics-by-offset/all-ds.png}
-    \centering
-    \caption{Comparison of the \gls{ds} of the forecasts for the best dataset preprocessing variant for each model for each offset. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized, s - standardized, r - raw.}
-    \label{fig:cumulative-ds}
 \end{figure}
 
 Additionally as can be seen below in figures from \ref{fig:forecast-cmp-1} to \ref{fig:forecast-cmp-12} the reverse transformed forecasts for each model for the USD currency were plotted for each offset.
