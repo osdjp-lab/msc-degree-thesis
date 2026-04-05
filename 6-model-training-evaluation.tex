@@ -27,7 +27,7 @@ Where:
 
 \subsection{Methodology}\label{Methodology}
 
-The process of model training and evaluation consisted of model fitting using the Optuna hyperparameter optimization framework followed by data analysis. During analysis for each model accuracy was evaluated on both in-sample (training set) and out-of-sample (test set) data. The preprocessing variant yielding the minimum average \gls{mse} across all offsets (train and test sets combined) was selected as optimal.
+The process of model training and evaluation consisted of model fitting using the Optuna hyperparameter optimization framework with the goal of minimizing the \gls{mse} followed by data analysis of the obtained optized forecasts. During analysis for each model accuracy was evaluated on both in-sample (training set) and out-of-sample (test set) data. The preprocessing variant yielding the minimum average \gls{mse} across all offsets (train and test sets combined) was selected as optimal.
 
 \subsubsection{Optuna model fitting}\label{Optuna model fitting}
 
@@ -35,9 +35,7 @@ In the first step each of the models was fitted on different suitable dataset pr
 
 Beyond the parameters being optimized each model was used with its default parameters with some exceptions. For the \gls{mlp} the activation function was changed to \gls{tanh} due to the normalization range of the data, shuffle was set to false to prevent data shuffling in order to not disrupt the continuous time series nature of the data, random state was set to zero for reproducability of the results and the maximum number of iterations was increased to 10000 in order to allow for model convergence. For the \gls{rf} only the random state was set. For the \gls{svr} non of the default parameters were changed.
 
-The parameters being optimized via OptunaSearchCV for each model as well as their selected value distributions are presented in table \ref{tab:mlp-hyperparams} for \gls{mlp}, table \ref{tab:rf-hyperparams} for \gls{rf}, table \ref{tab:svr-hyperparams} for \gls{svr} and table \ref{tab:arima-hyperparams} for \gls{arima}.
-
-The range of values selected for each model was selected through manual experimentation to be broad an provide ample search space for optimization of each model.
+The parameters being optimized via OptunaSearchCV for each model as well as their selected value distributions are presented in table \ref{tab:mlp-hyperparams} for \gls{mlp}, table \ref{tab:rf-hyperparams} for \gls{rf}, table \ref{tab:svr-hyperparams} for \gls{svr} and table \ref{tab:arima-hyperparams} for \gls{arima}. The variable ranges were selected through manual experimentation to be broad and provide an ample search space for optimization.
 
 OptunaSearchCV was run for 1000 iterations for each model for each applicable dataset variation for each offset from 1 to 12 months. All parameters were retained at default values other than 'scoring' which was set to 'neg\_mean\_squared\_error'.
 
