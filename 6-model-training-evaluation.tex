@@ -55,11 +55,11 @@ The process of model training and evaluation consisted of model fitting using th
 
 \subsubsection{Optuna model fitting}\label{Optuna model fitting}
 
-In the first step each of the models was fitted on different suitable dataset processing variations. For the purpose of efficient and reproducible hyperparameter optimization that exceeds what can be achieved within reasonable time frames using the GridSearchCV class from scikit-learn, an alternative drop-in replacement class OptunaSearchCV provided by the Optuna package was used instead. Unlike grid search's exhaustive enumeration, Optuna's TPE sampler efficiently explores the hyperparameter space through Bayesian optimization, focusing computational effort on promising regions of the hyperparameter space. For the \gls{mlp} only datasets for which normalization was applied as the last step were used. For the \gls{rf} all dataset processing variations were evaluated. For \gls{svr} only datasets processing methods that ended with standardization were used.
+In the first step each of the models was fitted on different suitable dataset processing variations. For the purpose of efficient and reproducible hyperparameter optimization that exceeds what can be achieved within reasonable time frames using the GridSearchCV class from scikit-learn, an alternative drop-in replacement class OptunaSearchCV provided by the Optuna package was used instead. Unlike grid search's exhaustive enumeration, Optuna's \gls{tpe} sampler efficiently explores the hyperparameter space through Bayesian optimization, focusing computational effort on promising regions of the hyperparameter space. For the \gls{mlp} only datasets for which normalization was applied as the last step were used. For the \gls{rf} all dataset processing variations were evaluated. For \gls{svr} only datasets processing methods that ended with standardization were used.
 
 Beyond the parameters being optimized each model was used with its default parameters with some exceptions. For the \gls{mlp} the activation function was changed to \gls{tanh} due to the normalization range of the data, shuffle was set to false to prevent data shuffling in order to not disrupt the continuous time series nature of the data, random state was set to zero for reproducability of the results and the maximum number of iterations was increased to 10000 in order to allow for model convergence. For the \gls{rf} only the random state was set. For the \gls{svr} non of the default parameters were changed.
 
-The parameters being optimized via OptunaSearchCV for each model as well as there selected value distributions are presented in table \ref{tab:mlp-hyperparams} for \gls{mlp}, table \ref{tab:rf-hyperparams} for \gls{rf}, table \ref{tab:svr-hyperparams} for \gls{svr} and table \ref{tab:arima-hyperparams}.
+%The parameters being optimized via OptunaSearchCV for each model as well as their selected value distributions are presented in table \ref{tab:mlp-hyperparams} for \gls{mlp}, table \ref{tab:rf-hyperparams} for \gls{rf}, table \ref{tab:svr-hyperparams} for \gls{svr} and table \ref{tab:arima-hyperparams} for \gls{arima}.
 
 OptunaSearchCV was run for 1000 iterations for each model for each applicable dataset variation for each offset from 1 to 12 months. All parameters were retained at default values other than 'scoring' which was set to 'neg\_mean\_squared\_error'.
 
@@ -137,14 +137,45 @@ OptunaSearchCV was run for 1000 iterations for each model for each applicable da
 
 \subsubsection{Data analysis}\label{Data analysis}
 
-The forecasts obtained in the previous step were reverse transformed to obtain values in the same range as those of the original \gls{eer}. This was done due to the scale dependant nature of the \gls{mse} metric. Next for each dataset variation the cumulative averages for all offsets of the average \gls{mse} and \gls{ds} for the training and test set forecasts were calculated. As a result multiple rankings were obtained which can be seen in figures \ref{fig:mlp-mse} and \ref{fig:mlp-ds} for \gls{mlp}, figures \ref{fig:rf-mse} and \ref{fig:rf-ds} for \gls{rf}, figures \ref{fig:svr-mse} and \ref{fig:svr-ds} for \gls{svr} and figures \ref{fig:arima-mse} and \ref{fig:arima-ds} for \gls{arima}. For the \gls{rw} model only the raw data was used.
+The forecasts obtained in the previous step were reverse transformed to obtain values in the same range as those of the original \gls{eer}. This was done due to the scale dependant nature of the \gls{mse} metric. Next for each dataset variation the cumulative averages for all offsets of the average \gls{mse} and \gls{ds} for both the training and test set forecasts were calculated.
+
+% Step not intended for:
+% - Comparing the MSE vs Hitrate not viable
+% - Comparing models not viable
+
+% Step intended for:
+% - Comparing the results for various dataset preprocessing steps for each model in order to find best dataset processing variant
+% - Basic trend observation
+
+% General notes:
+% - Models were optimized by MSE not Hitrate
+% - Possible trends for description: best to worst
+
+% Observations by case:
+% - \gls{arima} \gls{mse}
+%     + Best ld
+%     + Worst ld that had been additionally scaled either via standardization of normalization.
+%     + The best variation had a significantly smaller error than any other dataset variation
+%     + The worst two ldn and lds had a significantly greater error than the rest of the dataset processing variations
+%
+% - \gls{arima} \gls{ds}
+%     + The difference in \gls{ds} between the various dataset varients was not significant
+% - \gls{mlp} \gls{mse}
+% - \gls{mlp} \gls{ds}
+% - \gls{rf} \gls{mse}
+% - \gls{rf} \gls{ds}
+% - \gls{svr} \gls{mse}
+% - \gls{svr} \gls{ds}
+
+
+As a result multiple rankings were obtained which can be seen in figures \ref{fig:mlp-mse} and \ref{fig:mlp-ds} for \gls{mlp}, figures \ref{fig:rf-mse} and \ref{fig:rf-ds} for \gls{rf}, figures \ref{fig:svr-mse} and \ref{fig:svr-ds} for \gls{svr} and figures \ref{fig:arima-mse} and \ref{fig:arima-ds} for \gls{arima}. For the \gls{rw} model only the raw data was used.
 
 % Bar charts for the average MSE and Hitrate for different dataset variations for each model
 
 \begin{figure}[h]
     \includegraphics[width=\textwidth]{images/metrics-by-dataset/mlp_mse.png}
     \centering
-    \caption{The \gls{mse} for the \gls{mlp} model for various preprocessing steps. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized .}
+    \caption{The \gls{mse} for the \gls{mlp} model for various preprocessing steps. The sets of processing steps are indicated in shorthand as follows: l - log transformed, d - differenced, n - normalized.}
     \label{fig:mlp-mse}
 \end{figure}
 
