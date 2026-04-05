@@ -1,6 +1,6 @@
 \section{Data preparation}\label{Data preparation}
 
-In this paper, data preparation for use in \gls{ai} model creation consists of two steps: acquisition and preprocessing.
+In this paper, data preparation for use in \gls{ai} model creation consists of two steps: acquisition and preprocessing. Acquisition involves the sourcing of suitable data from open access repositories while preprocessing involves the cleaning and preparation of the data conducted in order to increase the accuracy of predictions as well as improve the efficiency of model training.
 
 \subsection{Acquisition}\label{Acquisition}
 
@@ -8,13 +8,15 @@ The data chosen for this study was a set of \gls{cpi} deflated \gls{eer} obtaine
 
 \subsection{Required preprocessing steps}\label{Required preprocessing steps}
 
-The cleaning and preparation of the data was conducted in order to increase the accuracy of predictions as well as improve the efficiency of model training.
+Include common steps which cannot be ommited carried out before any other preprocessing proceedures.
 
 \subsubsection{Handling of missing values}\label{Handling of missing values}
 
 The handling of missing values consisted of the removal of variables with more than two sequential variable specific missing values, caused by insufficient market activity and reporting inconsistencies, of which there was one \gls{rub}, leaving behind 73 currency exchange rates. This step was crucial, as missing data can lead to biased estimates and can negatively affect the overall performance of predictive models \cite{techniques,rf-svr}.
 
 \subsection{Optional intermediary steps}\label{Optional intermediary steps}
+
+These steps are not required in the data preparation pipeline for use with the \gls{ai} models however they may provide improvements in their performance or accuracy depending on the dataset and model used.
 
 \subsubsection{Log transformation}\label{Log transformation}
 
@@ -55,6 +57,8 @@ Feature scaling is an essential step in the data preparation for many \gls{ai} m
 \end{figure}
 
 \subsection{Required postprocessing steps}\label{Required postprocessing steps}
+
+Include common steps which cannot be ommited carried out after other optional preprocessing proceedures.
 
 \subsubsection{Feature creation}\label{Feature creation}
 
