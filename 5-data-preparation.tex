@@ -6,21 +6,25 @@ In this paper, data preparation for use in \gls{ai} model creation consists of t
 
 The data chosen for this study was a set of \gls{cpi} deflated \gls{eer} obtained from the website of the \gls{ecb} \cite{forex-data}. Specifically, the dataset consists of the broad EER-41 index comprising 41 trade-weighted partner currencies covering $\sim$93 of euro area external trade. The data is sampled at monthly frequency from 31.01.1993 to 31.10.2025. The 41 partner currencies included are: \gls{aed}, \gls{ars}, \gls{aud}, \gls{bgn}, \gls{brl}, \gls{cad}, \gls{chf}, \gls{clp}, \gls{cny}, \gls{cop}, \gls{czk}, \gls{dkk}, \gls{dzd}, \gls{eur}, \gls{gbp}, \gls{hkd}, \gls{huf}, \gls{idr}, \gls{ils}, \gls{inr}, \gls{isk}, \gls{jpy}, \gls{krw}, \gls{mad}, \gls{mxn}, \gls{myr}, \gls{nok}, \gls{nzd}, \gls{pen}, \gls{php}, \gls{pln}, \gls{ron}, \gls{rub}, \gls{sar}, \gls{sek}, \gls{sgd}, \gls{thb}, \gls{try}, \gls{twd}, \gls{uah}, \gls{usd}, \gls{zar}.
 
-\subsection{Required preprocessing steps}\label{Required preprocessing steps}
+\subsection{Preprocessing}\label{Preprocessing}
 
-Include common steps which cannot be ommited carried out before any other preprocessing proceedures.
+% \subsection{Required preprocessing steps}\label{Required preprocessing steps}
+% 
+% Include common steps which cannot be ommited carried out before any other preprocessing proceedures.
+
+The following is a summary of all preprocessing steps applied and evaluated in this research. Not all steps are required in the data preparation pipeline for every models however depending on the dataset they may improve performance and accuracy. The steps that were applied in all cases were the handling of missing values, feature creation, feature selection, decorrelation and data split. For the remaining various combinations of log transformation, differencing and scaling were applied to the dataset depending on the target model.
 
 \subsubsection{Handling of missing values}\label{Handling of missing values}
 
 The handling of missing values consisted of the removal of variables with more than two sequential variable specific missing values, caused by insufficient market activity and reporting inconsistencies, of which there was one \gls{rub}, leaving behind 73 currency exchange rates. This step was crucial, as missing data can lead to biased estimates and can negatively affect the overall performance of predictive models \cite{techniques,rf-svr}.
 
-\subsection{Optional intermediary steps}\label{Optional intermediary steps}
-
-These steps are not required in the data preparation pipeline for use with the \gls{ai} models however they may provide improvements in their performance or accuracy depending on the dataset and model used.
+% \subsection{Optional intermediary steps}\label{Optional intermediary steps}
+% 
+% These steps are not required in the data preparation pipeline for use with the \gls{ai} models however they may provide improvements in their performance or accuracy depending on the dataset and model used.
 
 \subsubsection{Log transformation}\label{Log transformation}
 
-In this step a natural logarithm transformation of the data was applied in order to stabilize the variance and prevent heteroscedacity \cite{nn-vs-chaotic,robust-regression,gbp-usd-forecasting}.
+In this step a natural logarithm transformation of the data was applied in order to stabilize the variance and prevent \gls{heteroscedasticity} \cite{nn-vs-chaotic,robust-regression,gbp-usd-forecasting}.
 
 \subsubsection{Differencing}\label{Differencing}
 
@@ -56,13 +60,13 @@ Feature scaling is an essential step in the data preparation for many \gls{ai} m
     \label{fig:usd-scaling}
 \end{figure}
 
-\subsection{Required postprocessing steps}\label{Required postprocessing steps}
-
-Include common steps which cannot be ommited carried out after other optional preprocessing proceedures.
+% \subsection{Required postprocessing steps}\label{Required postprocessing steps}
+% 
+% Include common steps which cannot be ommited carried out after other optional preprocessing proceedures.
 
 \subsubsection{Feature creation}\label{Feature creation}
 
-For this step a single target variable the USD \gls{eer} was chosen. Time lagged versions of each feature variable including the target variable upto 12 months were created for each preprocessing variation \cite{rf-svr,gold}. An example of the shifting procedure for the \gls{usd} exchange rate is shown in figure \ref{fig:feature-creation}.
+For this step a single target variable the \gls{usd} \gls{eer} was chosen. Time lagged versions of each feature variable including the target variable upto 12 months were created for each preprocessing variation \cite{rf-svr,gold}. An example of the shifting procedure for the \gls{usd} exchange rate is shown in figure \ref{fig:feature-creation}.
 
 \begin{figure}[h]
     \includegraphics[width=\textwidth]{images/preprocessing/4-usd-shifts-3.png}
@@ -73,11 +77,11 @@ For this step a single target variable the USD \gls{eer} was chosen. Time lagged
 
 \subsubsection{Feature selection and decorrelation}\label{Feature selection and decorrelation}
 
-In the next step a Pearson correlation matrix was constructed for all variables to assess the linear relationships among them. Features exhibiting weak correlation $\le 0.1$ with the target were removed first, as they contribute noise without predictive signal. Next feature variables that had a high mutual correlation $\ge 0.9$ with at least one other feature were removed. This was done to mitigate the risk of multicollinearity, which can lead to the occurrence of amplifying or distorting effects during model training \cite{genetic}. As a result of this analysis, the initial feature set for each dataset processing variation was significantly reduced.
+In the next step a Pearson correlation matrix was constructed for all variables to assess the linear relationships among them. Features exhibiting weak correlation $\le 0.1$ with the target were removed first, as they contribute noise without predictive signal. Next feature variables that had a high mutual correlation $\ge 0.9$ with at least one other feature were removed. This was done to mitigate the risk of \gls{multicollinearity}, which can lead to the occurrence of amplifying or distorting effects during model training \cite{genetic}. As a result of this analysis, the initial feature set for each dataset processing variation was significantly reduced.
 
 \subsubsection{Data split}\label{Data split}
 
-For the purpose of model training and forecasting accuracy evaluation each dataset was split into two subsets with a separation strip equal to the degree of generated time lags (150) in order to prevent information leakage from the training set to the test set:
+For the purpose of model training and forecasting accuracy evaluation, each dataset was split into two sequential subsets, with a gap between them equal to the length of the time lag used, in order to prevent information leakage from the training set to the test set. The proportion of the split for both parts was as follows:
 \begin{itemize}
     \item training $+$ validation (70\%) - for model training and k-fold cross-validation.
     \item testing (30\%) - for the final evaluation of the selected model in order to prevent overfitting and enable a unbiased evaluation of the model on new unseen data.
