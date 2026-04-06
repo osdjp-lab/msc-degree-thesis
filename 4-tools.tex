@@ -1,32 +1,104 @@
-\section{Tools}\label{Tools}
+\section{Experimental setup}\label{Experimental setup}
 
-The following is a list of the tools used in the data preprocessing, training and evaluation steps of the paper.
+A concise description of the computing environment used for the experiments is given below. First the hardware platform is summarised, followed by the software stack required for data‑processing, training and evaluation.
 
-\subsection*{Python 3}\label{Python 3}
+\subsection{Hardware specifications}\label{Hardware specifications}
 
-The programming language used in all steps of this research paper was python. The primary reason for this was its simple but powerful syntax wide spread use, the broad availability of various libraries and frameworks for data processing, analysis and \gls{ai} modeling including scikit-learn, keras and pytorch among many others as well as the associated availability of information on the use of these various tools provided by the extensive community surrounding them \cite{python}.
+The experiments were conducted on a standard Intel NUC workstation running NixOS.
 
-\subsection*{Numpy}\label{Numpy}
+\begin{table}[h!]
+    \centering
+    \caption{Core hardware parameters}
+    \label{tab:hardware-specs}
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Component} & \textbf{Value} \\
+        \hline
+        \hline
+        Operating system & NixOS 25.11 (Xantusia) \\
+        \hline
+        Kernel & 6.18.8 \\
+        \hline
+        Host & Intel NUC8v5PNB \\
+        \hline
+        \Glsxtrshort{cpu} & Intel i5‑8365U (8 cores) @ 4.1 GHz \\
+        \hline
+        \Glsxtrshort{gpu} & Intel UHD Graphics 620 \\
+        \hline
+        \Glsxtrshort{ram} & 16 GiB \\
+        \hline
+    \end{tabular}
+\end{table}
 
-A python package for accelerated array based scientific computing utilizing a C based backend implementation with various optimizations \cite{numpy}.
+\subsection{Software stack}\label{Software stack}
 
-\subsection*{Pandas}\label{Pandas}
+All data‑preprocessing, model training and evaluation were performed with Python 3 and the open‑source libraries listed below.  Exact library versions are provided in table \ref{tab:software-versions} to support reproducibility.
 
-A python software library for data manipulation and analysis \cite{pandas}.
+\begin{table}[h!]
+    \centering
+    \caption{Software versions used in the study}
+    \label{tab:software-versions}
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Package} & \textbf{Version} \\
+        \hline
+        \hline
+        Python & 3.13.11 \\
+        \hline
+        NumPy & 2.3.4 \\
+        \hline
+        pandas & 2.3.1 \\
+        \hline
+        scikit‑learn & 1.7.1 \\
+        \hline
+        statsmodels & 0.14.5 \\
+        \hline
+        Optuna & 4.8.0 \\
+        \hline
+        pmdarima & 2.1.1 \\
+        \hline
+    \end{tabular}
+\end{table}
 
-\subsection*{Scikit-learn}\label{Scikit-learn}
+\subsubsection*{Python 3}
 
-A python library for the training and verification of machine learning models for predictive data analysis \cite{scikit-learn}.
+%The programming language used in all steps of this research paper was Python. The primary reason for this was its simple but powerful syntax wide spread use, the broad availability of various libraries and frameworks for data processing, analysis and \gls{ai} modeling including scikit-learn, keras and pytorch among many others as well as the associated availability of information on the use of these various tools provided by the extensive community surrounding them \cite{python}.
 
-\subsection*{Statsmodels}\label{Statsmodels}
+The primary programming language; chosen for its readability, large ecosystem and extensive community support \cite{python}.
 
-A python module for the estimation of many different statistical models, conducting statistical tests and statistical data exploration \cite{statsmodels}.
+\subsubsection*{NumPy}
 
-\subsection*{Optuna}\label{Optuna}
+% A python package for accelerated array based scientific computing utilizing a C based backend implementation with various optimizations \cite{numpy}.
 
-An automatic hyperparameter optimization software framework, particularly designed for machine learning. It features an imperative, define-by-run style user API \cite{optuna}.
+A high‑performance array library with a C backend for scientific computing \cite{numpy}.
 
-\subsection*{Pmdarima}\label{Pmdarima}
+\subsubsection*{pandas}
 
-A statistical library for time series analysis and forecasting \cite{pmdarima}.
+% A python software library for data manipulation and analysis \cite{pandas}.
+
+A data‑manipulation and analysis toolkit for tabular data \cite{pandas}.
+
+\subsubsection*{scikit‑learn}
+
+% A python library for the training and verification of machine learning models for predictive data analysis \cite{scikit-learn}.
+
+A collection of algorithms for training and validating machine‑learning models \cite{scikit-learn}.
+
+\subsubsection*{statsmodels}
+
+% A python module for the estimation of many different statistical models, conducting statistical tests and statistical data exploration \cite{statsmodels}.
+
+Provides statistical model estimation, tests and exploratory tools \cite{statsmodels}.
+
+\subsubsection*{Optuna}
+
+% An automatic hyperparameter optimization software framework, particularly designed for machine learning. It features an imperative, define-by-run style user API \cite{optuna}.
+
+Framework for automatic hyper‑parameter optimisation using a define‑by‑run API \cite{optuna}.
+
+\subsubsection*{pmdarima}
+
+% A statistical library for time series analysis and forecasting \cite{pmdarima}.
+
+Statistical library specialised in time‑series analysis and forecasting \cite{pmdarima}.
 
