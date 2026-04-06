@@ -43,6 +43,25 @@
 
 \newabbreviation{rfecv}{RFECV}{recursive feature elimination with \glsxtrshort{cv}}
 
+\newglossaryentry{multicollinearity}
+{
+    name=multicollinearity,
+    description={A condition in regression analysis where two or more predictor variables are highly linearly correlated, rendering their separate effects on the response ambiguous}
+}
+
+\newglossaryentry{heteroscedasticity}
+{
+    name=heteroscedasticity,
+    description={The presence of non‑constant variance in the errors of a regression model, meaning that the spread of residuals changes systematically across levels of the predictor(s)}
+}
+
+% Computer abbreviations
+
+\newabbreviation{cpu}{CPU}{central processing unit}
+\newabbreviation{gpu}{GPU}{graphics processing unit}
+\newabbreviation{ram}{RAM}{random-access memory}
+
+
 % Time series prediction models
 
 \newabbreviation{ar}{AR}{autoregressive}
@@ -51,8 +70,8 @@
 \newabbreviation{es}{ES}{exponential smoothing}
 \newabbreviation{arima}{ARIMA}{autoregressive integrated moving average}
 \newabbreviation{rw}{RW}{random walk}
-\newabbreviation{arch}{ARCH}{auto-regressive conditional heteroskedasticity}
-\newabbreviation{garch}{GARCH}{general auto-regressive conditional heteroskedasticity}
+\newabbreviation{arch}{ARCH}{auto-regressive conditional \gls{heteroscedasticity}}
+\newabbreviation{garch}{GARCH}{general auto-regressive conditional \gls{heteroscedasticity}}
 \newabbreviation{var}{VAR}{vector autoregressive}
 \newabbreviation{vec}{VEC}{vector error correction}
 
