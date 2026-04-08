@@ -43,24 +43,11 @@
 
 \newabbreviation{rfecv}{RFECV}{recursive feature elimination with \glsxtrshort{cv}}
 
-\newglossaryentry{multicollinearity}
-{
-    name=multicollinearity,
-    description={A condition in regression analysis where two or more predictor variables are highly linearly correlated, rendering their separate effects on the response ambiguous}
-}
-
-\newglossaryentry{heteroscedasticity}
-{
-    name=heteroscedasticity,
-    description={The presence of non‑constant variance in the errors of a regression model, meaning that the spread of residuals changes systematically across levels of the predictor(s)}
-}
-
 % Computer abbreviations
 
 \newabbreviation{cpu}{CPU}{central processing unit}
 \newabbreviation{gpu}{GPU}{graphics processing unit}
 \newabbreviation{ram}{RAM}{random-access memory}
-
 
 % Time series prediction models
 
@@ -72,7 +59,7 @@
 \newabbreviation{rw}{RW}{random walk}
 \newabbreviation{arch}{ARCH}{auto-regressive conditional \gls{heteroscedasticity}}
 \newabbreviation{garch}{GARCH}{general auto-regressive conditional \gls{heteroscedasticity}}
-\newabbreviation{var}{VAR}{vector autoregressive}
+\newabbreviation{var}{VAR}{vector autoregression}
 \newabbreviation{vec}{VEC}{vector error correction}
 
 % Activation functions
@@ -152,4 +139,32 @@
 \newabbreviation{mape}{MAPE}{mean absolute percentage error}
 \newabbreviation{ds}{DS}{directional symmetry}
 \newabbreviation{oob}{OOB}{out-of-bag}
+
+% Other definitions
+
+\newglossaryentry{multicollinearity}
+{
+    name=multicollinearity,
+    description={A condition in regression analysis where two or more predictor variables are highly linearly correlated, rendering their separate effects on the response ambiguous}
+}
+
+\newglossaryentry{heteroscedasticity}
+{
+    name=heteroscedasticity,
+    description={The presence of non‑constant variance in the errors of a regression model, meaning that the spread of residuals changes systematically across levels of the predictor(s)}
+}
+
+\newglossaryentry{cointegration}
+{
+    name=cointegration,
+    description={A statistical relationship in which two or more non‑stationary time series move together over time such that a linear combination of them is stationary}
+}
+
+\newglossaryentry{cointegrated}
+{
+    name=cointegrated,
+    description={},
+    see={cointegration}
+}
+\newcommand{\cointegrated}{\glslink{cointegration}{cointegrated}}
 

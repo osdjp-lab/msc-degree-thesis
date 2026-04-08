@@ -28,9 +28,9 @@ The most important univariate models that have been developed over the years inc
         where:
         \begin{itemize}
             \item $\mu$ is the the mean of the series.
-            \item $X_{t}, X_{t-i}$ are the values of the time series at time $t$ and $t-i$.
+            \item $X_{t}$ is the value of the time series at time $t$.
             \item $\theta_{i}$ are the coefficient for error terms at different time offsets.
-            \item $\varepsilon_{t-i}$ are the the white noise error terms at time $t-i$.
+            \item $\varepsilon_{t}, \varepsilon_{t-i}$ are the the white noise error terms at time $t$ and $t-i$.
         \end{itemize}
 
     \item \Gls{arma} \cite{whittle} - combines the \gls{ar} and \gls{ma} models. \Glsxtrshort{arma}$(p)$ denotes an model with $p$ autoregressive terms and $q$ moving-average terms. \gls{arma} requires the time series to be stationary. The model is mathematically defined as follows:
@@ -103,10 +103,10 @@ The most important univariate models that have been developed over the years inc
 
 \subsubsection{Multivariate}\label{Multivariate}
 
-Some of the most important multivariate models include:
+The following are a few important mulitvariate models:
 
 \begin{itemize}
-    \item \Gls{var} \cite{sims} - are a system of regressions where each variable is modeled as a function of its own lags and the lags of the other variables in the system. A $p$ order \gls{var} is denoted as \gls{var}$(p)$ \cite{deep-learning}. The model can be described as follows:
+    \item \Gls{var} \cite{sims} - is a system of regressions where each variable is modeled as a function of its own lags and the lags of the other variables in the system. A $p$ order \gls{var} is denoted as \gls{var}$(p)$ \cite{deep-learning}. The model can be described as follows:
 
     $$y_{t} = A_{1}y_{t-1} + A_{2}y_{t-2} + ... + A_{p}y_{t-p} + \mu_{t}$$
 
@@ -117,7 +117,7 @@ Some of the most important multivariate models include:
             \item $\mu_{t}$ is an (N x 1) vector generalization of white noise.
         \end{itemize}
 
-    \item \Gls{vec} \cite{johansen} - are a restricted form of VAR models used for non-stationary time series that are cointegrated. VEC models incorporate both the short-run dynamics and the long-run equilibrium relationships between the variables. \gls{vec} can have the following form:
+    \item \Gls{vec} \cite{johansen} - are a restricted form of VAR models used for non-stationary time series that are \cointegrated. VEC models incorporate both the short-run dynamics and the long-run equilibrium relationships between the variables. \gls{vec} can have the following form:
 
         $$\Delta x_{t} =\Pi x_{t-1} + \sum_{l=1}^{p-1}\Gamma_l\Delta x_{t-1} + Cd_{t} + \epsilon_{t}$$
 
@@ -217,7 +217,7 @@ The primary tunable parameters of a \gls{ann} are:
 
 \subsubsection{Support vector machine}\label{Support vector machine}
 
-The \glsxtrlong{svm} is a model designed for the supervised classification of labeled data belonging to two classes \cite{vapnik-svm}. It enables the discovery of an optimal line or hyperplane that maximizes the distance between each class in an N-dimensional space. An example of its application for a 2-dimensional space can be seen in figure \ref{fig:svm}. \gls{svm} can handle the linear separation of data as well as the non-linear separation of data via a kernel trick \cite{non-linear-svm}. The most popular non-linear kernels are the: polynomial kernel, \gls{rbf} and sigmoid kernel \cite{ibm-svm}. An extension of the original hard-margin \gls{svm} is the soft-margin \gls{svm}. The difference between them is that with the hard-margin \gls{svm} data points will be perfectly separated outside of the support vectors while soft-margin classification will allow some misclassification through the use of a slack variable \cite{vapnik-svm}.
+The \glsxtrlong{svm} is a model designed for the supervised classification of labeled data belonging to two classes \cite{vapnik-svm}. It enables the discovery of an optimal line or hyperplane that maximizes the distance between each class in an N-dimensional space. An example of its application for a 2-dimensional space can be seen in figure \ref{fig:svm}. The \gls{svm} model can handle the linear separation of data as well as the non-linear separation of data via a kernel trick \cite{non-linear-svm}. The most popular non-linear kernels are the: polynomial kernel, \gls{rbf} and sigmoid kernel \cite{ibm-svm}. An extension of the original hard-margin \gls{svm} is the soft-margin \gls{svm}. The difference between them is that with the hard-margin \gls{svm} data points will be perfectly separated outside of the support vectors while soft-margin classification will allow some misclassification through the use of a slack variable \cite{vapnik-svm}.
 The hard-margin \gls{svm} is defined as:
 
     $$\underset{w, b}{minimize}\quad \frac{1}{2}\left\| \omega \right\|^2$$
@@ -290,7 +290,7 @@ The primary tunable parameters of a \glsxtrshort{svm} are \cite{scikit-svr,svr}:
 
 \subsubsection{Random forest}\label{Random forest}
 
-\Glsxtrlongpl{rf} are an instance of ensemble learning techniques. Ensemble learning involves the aggregate use of more than one model in order to produce better results \cite{ibm-ensemble}. The base unit of a \glsxtrlong{rf} is a \glsxtrlong{dt}. A large number of \glsxtrlongpl{dt} is trained and evaluated on different subsets of the data obtained from different splits of the training set. Initial randomization is done via bootstrap samples drawn from the training set with replacement. Further randomization is then added via feature bagging which selects random subsets of features. The final output of the model is the majority vote or average of the outputs of all the trees. The biggest advantages of \glsxtrlong{rf} are a reduced risk of overfitting and the easy determination of feature importance. Their greatest disadvantages are a more resource intensive and time consuming process of model training due to the use of multiple models and greater model complexity \cite{prediction, ibm-rf}.
+\Glsxtrlongpl{rf} are an instance of ensemble learning techniques. Ensemble learning involves the aggregate use of more than one model in order to produce better results \cite{ibm-ensemble}. The base unit of a \glsxtrlong{rf} is a \glsxtrlong{dt}. A large number of \glsxtrlongpl{dt} are trained and evaluated on different subsets of the data obtained from different splits of the training set. Initial randomization is done via bootstrap samples drawn from the training set with replacement. Further randomization is then added via feature bagging which selects random subsets of features. The final output of the model is the majority vote or average of the outputs of all the trees. The biggest advantages of \glsxtrlong{rf} are a reduced risk of overfitting and the easy determination of feature importance. Their greatest disadvantages are a more resource intensive and time consuming process of model training due to the use of multiple models and greater model complexity \cite{prediction, ibm-rf}.
 
 The primary tunable parameters of a \glsxtrlong{rf} are \cite{prediction,ibm-rf}:
 \begin{itemize}
